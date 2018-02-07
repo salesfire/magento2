@@ -1,0 +1,7 @@
+<?php
+$helper = $block->getHelper();
+$site_id = $helper->getSiteId();
+if(! $helper->isEnabled() || empty($site_id)) return;
+?>
+
+<script async src="https://cdn.salesfire.co.uk/code/<?php echo $site_id;?>.js"></script>
