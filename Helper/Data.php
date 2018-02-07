@@ -12,7 +12,7 @@ class Data extends AbstractHelper
     public function isEnabled($storeId = null)
     {
         return $this->scopeConfig->getValue(
-            self::XML_PATH_GENERAL_SITE_ID,
+            self::XML_PATH_GENERAL_ENABLED,
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
