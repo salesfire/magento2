@@ -1,36 +1,15 @@
-## How to install
+## Documentation
 
-### Method 1: Install via composer
+- Installation guide: https://cdn.salesfire.co.uk/docs/magento2_instructions.pdf
+- Get Support: https://github.com/salesfire/magento2/issues
+- Contribute on Github: https://github.com/salesfire/magento2
+- Changelog: https://github.com/salesfire/magento2/blob/master/CHANGELOG.md
+- License: https://opensource.org/licenses/OSL-3.0
 
-```
-composer require salesfire/magento2
-php bin/magento setup:upgrade
-php bin/magento setup:static-content:deploy
-```
 
-### Method 2: Manually install via composer
+## FAQs
 
-1. Access to your server via SSH
-2. Create a folder (Not Magento root directory) in called: `salesfire`, then upload the zip package to salesfire folder.
-Download the zip package at https://github.com/salesfire/magento2/archive/master.zip
+#### Q: Is there any additional costs?
+A: Yes, we provide the software which helps increase sales for a fee which is tailored to your business. This is to provide you with the best ROI as possible.
 
-3. Add the following snippet to `composer.json`
-
-```
-    {
-        "repositories": [
-            {
-                "type": "artifact",
-                "url": "path/to/root/directory/salesfire/"
-            }
-        ]
-    }
-```
-
-4. Run composer command line
-
-```
-composer require salesfire/magento2
-php bin/magento setup:upgrade
-php bin/magento setup:static-content:deploy
-```
+You can find out more information and even get a free trial at https://www.salesfire.co.uk/
