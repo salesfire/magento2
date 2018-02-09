@@ -1,4 +1,4 @@
-# Magento 2 Salesfire Module
+# Magento 2.x Salesfire Module
 Salesfire is a service that provides a number of tools that help to increase sales using various on site methods.
 
 https://www.salesfire.co.uk/
