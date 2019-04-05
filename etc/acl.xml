@@ -7,7 +7,7 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Salesfire_Core::salesfire_config" title="Salesfire"/>
+                            <resource id="Salesfire_Salesfire::salesfire_config" title="Salesfire"/>
                         </resource>
                     </resource>
                 </resource>

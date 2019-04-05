@@ -4,7 +4,7 @@
     </head>
     <body>
         <referenceBlock name="head.additional">
-            <block class="Salesfire\Core\Block\Script" name="salesfire_script" template="Salesfire_Core::script.phtml"/>
+            <block class="Salesfire\Salesfire\Block\Script" name="salesfire_script"/>
         </referenceBlock>
     </body>
 </page>

@@ -8,7 +8,7 @@
             <class>separator-top</class>
             <label>General</label>
             <tab>salesfire</tab>
-            <resource>Salesfire_Core::salesfire</resource>
+            <resource>Salesfire_Salesfire::salesfire</resource>
             <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>General</label>
 
