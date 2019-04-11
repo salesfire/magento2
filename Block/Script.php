@@ -8,25 +8,25 @@ use Magento\Framework\ObjectManagerInterface;
 
 class Script extends Template
 {
-    protected $helperData;
-    protected $product;
-    protected $order;
+    public $helperData;
+    public $product = null;
+    public $order   = null;
     /**
      * @var \Magento\Framework\App\Request\Http
      */
-    protected $_request;
+    public $request;
     /**
      * @var \Magento\Framework\Registry
      */
-    protected $_registry;
+    public $registry;
     /**
      * @var \Magento\Checkout\Model\Session
      */
-    protected $_checkoutSession;
+    public $checkoutSession;
     /**
      * @var \Magento\Catalog\Helper\Data
      */
-    protected $_taxHelper;
+    public $taxHelper;
 
     public function __construct(
         Context $context,
@@ -36,13 +36,12 @@ class Script extends Template
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Data $taxHelper,
         array $data = []
-    )
-    {
-        $this->helperData       = $helperData;
-        $this->_checkoutSession = $checkoutSession;
-        $this->_request         = $request;
-        $this->_registry        = $registry;
-        $this->_taxHelper       = $taxHelper;
+    ) {
+        $this->helperData      = $helperData;
+        $this->checkoutSession = $checkoutSession;
+        $this->request         = $request;
+        $this->registry        = $registry;
+        $this->taxHelper       = $taxHelper;
         parent::__construct($context, $data);
     }
 
@@ -53,8 +52,8 @@ class Script extends Template
 
     public function getOrder()
     {
-        if (is_null($this->order)) {
-            $order = $this->_checkoutSession->getLastRealOrder();
+        if ($this->order === null) {
+            $order = $this->checkoutSession->getLastRealOrder();
 
             if (! $order->getIncrementId()) {
                 return null;
@@ -68,8 +67,8 @@ class Script extends Template
 
     public function getProduct()
     {
-        if (is_null($this->product)) {
-            $this->product = $this->_registry->registry('product');
+        if ($this->product === null) {
+            $this->product = $this->registry->registry('product');
 
             if (! $this->product || ! $this->product->getId()) {
                 return null;
@@ -88,7 +87,7 @@ class Script extends Template
         $formatter = new \Salesfire\Formatter($this->getHelper()->getSiteId());
 
         // Display transaction
-        if ($this->_request->getFullActionName() == 'checkout_onepage_success' && $order = $this->getOrder()) {
+        if ($this->request->getFullActionName() == 'checkout_onepage_success' && $order = $this->getOrder()) {
             $transaction = new \Salesfire\Types\Transaction([
                 'id'       => $order->getIncrementId(),
                 'shipping' => round($order->getShippingAmount(), 2),
@@ -104,7 +103,9 @@ class Script extends Template
                     'price'      => round($product->getPrice(), 2),
                     'tax'        => round($product->getTaxAmount(), 2),
                     'quantity'   => round($product->getQtyOrdered()),
-                    'variant'    => implode(", ", array_map(function($item) {return $item['label'].': '.$item['value'];}, $product->getProductOptions()['attributes_info']))
+                    'variant'    => implode(", ", array_map(function ($item) {
+                        return $item['label'].': '.$item['value'];
+                    }, $product->getProductOptions()['attributes_info']))
                 ]));
             }
 
@@ -114,8 +115,8 @@ class Script extends Template
         // Display product view
         if ($product = $this->getProduct()) {
             // Calculate product tax
-            $price = round($this->_taxHelper->getTaxPrice($product, $product->getFinalPrice(), false), 2);
-            $tax = round($this->_taxHelper->getTaxPrice($product, $product->getFinalPrice(), true), 2) - $price;
+            $price = round($this->taxHelper->getTaxPrice($product, $product->getFinalPrice(), false), 2);
+            $tax = round($this->taxHelper->getTaxPrice($product, $product->getFinalPrice(), true), 2) - $price;
 
             $formatter->addProductView(new \Salesfire\Types\Product([
                 'sku'        => $product->getId(),
@@ -128,4 +129,5 @@ class Script extends Template
 
         return $formatter->toScriptTag();
     }
+
 }
