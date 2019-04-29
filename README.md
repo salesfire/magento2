@@ -81,3 +81,7 @@ docker-compose up -d
 docker exec -ti <magento web container> install-magento
 docker exec -ti <magento web container> install-sampledata
 ```
+
+Admin login details:
+
+admin / magentorocks1
