@@ -6,6 +6,13 @@ use Magento\Framework\View\Element\Template\Context;
 use Salesfire\Salesfire\Helper\Data as HelperData;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Salesfire Script Block
+ *
+ * @category   Salesfire
+ * @package    Salesfire_Salesfire
+ * @version.   1.1.2
+ */
 class Script extends Template
 {
     public $helperData;

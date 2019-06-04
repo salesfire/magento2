@@ -4,6 +4,13 @@ namespace Salesfire\Salesfire\Helper;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Salesfire Data Helper
+ *
+ * @category   Salesfire
+ * @package    Salesfire_Salesfire
+ * @version.   1.1.1
+ */
 class Data extends AbstractHelper
 {
     const XML_PATH_GENERAL_ENABLED = 'salesfire/general/is_enabled';
