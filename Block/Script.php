@@ -96,6 +96,14 @@ class Script extends Template
             ]);
 
             foreach ($order->getAllVisibleItems() as $product) {
+                $variant = '';
+                $options = $product->getProductOptions();
+                if (!empty($options) && !empty($options['attribute_info'])) {
+                    $variant = implode(', ', array_map(function ($item) {
+                        return $item['label'].': '.$item['value'];
+                    }, $options);
+                }
+
                 $transaction->addProduct(new \Salesfire\Types\Product([
                     'sku'        => $product->getProductId(),
                     'parent_sku' => $product->getProductId(),
@@ -103,9 +111,7 @@ class Script extends Template
                     'price'      => round($product->getPrice(), 2),
                     'tax'        => round($product->getTaxAmount(), 2),
                     'quantity'   => round($product->getQtyOrdered()),
-                    'variant'    => implode(", ", array_map(function ($item) {
-                        return $item['label'].': '.$item['value'];
-                    }, $product->getProductOptions()['attributes_info']))
+                    'variant'    => $variant,
                 ]));
             }
 
