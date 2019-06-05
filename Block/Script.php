@@ -108,7 +108,7 @@ class Script extends Template
                 if (!empty($options) && !empty($options['attribute_info'])) {
                     $variant = implode(', ', array_map(function ($item) {
                         return $item['label'].': '.$item['value'];
-                    }, $options);
+                    }, $options['attribute_info']));
                 }
 
                 $transaction->addProduct(new \Salesfire\Types\Product([
