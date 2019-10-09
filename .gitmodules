@@ -1,0 +1,3 @@
+[submodule "lib/Salesfire/Salesfire"]
+	path = lib/Salesfire/Salesfire
+	url = git@github.com:salesfire/salesfire.git

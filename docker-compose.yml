@@ -10,10 +10,14 @@ services:
       - env
     volumes:
       - ./:/var/www/html/app/code/Salesfire/Salesfire
+      - ./cronLaunch.php:/var/www/html/pub/cronLaunch.php
+      - ./logs:/var/www/html/var/log
   db:
     image: mysql:5.6.23
     volumes:
       - db-data:/var/lib/mysql/data
+    ports:
+      - "3306:3306"
     env_file:
       - env
   phpmyadmin:

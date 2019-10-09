@@ -3,15 +3,18 @@ namespace Salesfire\Salesfire\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Salesfire\Salesfire\Helper\Data as HelperData;
 use Magento\Framework\ObjectManagerInterface;
+
+require_once dirname(__FILE__)."/../lib/Salesfire/Salesfire/src/Formatter.php";
+require_once dirname(__FILE__)."/../lib/Salesfire/Salesfire/src/Types/Product.php";
+require_once dirname(__FILE__)."/../lib/Salesfire/Salesfire/src/Types/Transaction.php";
 
 /**
  * Salesfire Script Block
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.1.2
+ * @version.   1.2.1
  */
 class Script extends Template
 {
@@ -37,7 +40,7 @@ class Script extends Template
 
     public function __construct(
         Context $context,
-        HelperData $helperData,
+        \Salesfire\Salesfire\Helper\Data $helperData,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\Registry $registry,
