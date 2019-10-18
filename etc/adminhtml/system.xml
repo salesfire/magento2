@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="salesfire" translate="label" sortOrder="10">
+        <tab id="salesfire" translate="label" sortOrder="300">
             <label>Salesfire</label>
         </tab>
         <section id="salesfire" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -47,14 +47,17 @@
                 <field id="gender_code" translate="label" type="text" sortOrder="40" showInDefault="0" showInWebsite="0" showInStore="1">
                     <label>Gender Attribute Code</label>
                 </field>
-                <field id="colour_code" translate="label" type="text" sortOrder="50" showInDefault="0" showInWebsite="0" showInStore="1">
+                <field id="age_group_code" translate="label" type="text" sortOrder="50" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Age Group Attribute Code</label>
+                </field>
+                <field id="colour_code" translate="label" type="text" sortOrder="60" showInDefault="0" showInWebsite="0" showInStore="1">
                     <label>Colour Attribute Code</label>
                 </field>
-                <field id="attribute_codes" translate="label" type="text" sortOrder="60" showInDefault="0" showInWebsite="0" showInStore="1">
+                <field id="attribute_codes" translate="label" type="text" sortOrder="70" showInDefault="0" showInWebsite="0" showInStore="1">
                     <label>Additional Attribute Codes</label>
                     <comment>Comma separated list of attribute codes to put in feed. E.g: material,size</comment>
                 </field>
-                <field id="feed_url" translate="label" sortOrder="70" showInDefault="0" showInWebsite="0" showInStore="1">
+                <field id="feed_url" translate="label" sortOrder="80" showInDefault="0" showInWebsite="0" showInStore="1">
                     <label>Feed Url</label>
                     <frontend_model>Salesfire\Salesfire\Block\Adminhtml\FeedUrl</frontend_model>
                 </field>

@@ -23,6 +23,7 @@ class Data extends AbstractHelper
     const XML_PATH_FEED_BRAND_CODE      = 'salesfire/feed/brand_code';
     const XML_PATH_FEED_GENDER_CODE     = 'salesfire/feed/gender_code';
     const XML_PATH_FEED_COLOUR_CODE     = 'salesfire/feed/colour_code';
+    const XML_PATH_FEED_AGE_GROUP_CODE  = 'salesfire/feed/age_group_code';
     const XML_PATH_FEED_ATTRIBUTE_CODES = 'salesfire/feed/attribute_codes';
 
     /**
@@ -132,6 +133,21 @@ class Data extends AbstractHelper
     {
         return trim($this->scopeConfig->getValue(
             self::XML_PATH_FEED_GENDER_CODE,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        ));
+    }
+
+    /**
+     * Get the product age group attribute code
+     *
+     * @param string $storeId
+     * @return string
+     */
+    public function getAgeGroupCode($storeId = null)
+    {
+        return trim($this->scopeConfig->getValue(
+            self::XML_PATH_FEED_AGE_GROUP_CODE,
             ScopeInterface::SCOPE_STORE,
             $storeId
         ));

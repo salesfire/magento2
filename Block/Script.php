@@ -5,10 +5,6 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\ObjectManagerInterface;
 
-require_once dirname(__FILE__)."/../lib/Salesfire/Salesfire/src/Formatter.php";
-require_once dirname(__FILE__)."/../lib/Salesfire/Salesfire/src/Types/Product.php";
-require_once dirname(__FILE__)."/../lib/Salesfire/Salesfire/src/Types/Transaction.php";
-
 /**
  * Salesfire Script Block
  *

@@ -2,12 +2,6 @@
 
 namespace Salesfire\Salesfire\Cron;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
-require_once dirname(__FILE__)."/../lib/Salesfire/Salesfire/src/Formatter.php";
-require_once dirname(__FILE__)."/../lib/Salesfire/Salesfire/src/Types/Product.php";
-require_once dirname(__FILE__)."/../lib/Salesfire/Salesfire/src/Types/Transaction.php";
-
 /**
  * Salesfire Feed
  *
@@ -21,9 +15,12 @@ class Feed
     private $_storeManager;
     private $_productCollectionFactory;
     private $_filesystem;
+    private $_file;
     private $_escaper;
     private $_taxHelper;
     private $_stockItem;
+
+    private $mediaPath;
 
     public function __construct(
         \Salesfire\Salesfire\Helper\Data $helperData,
@@ -32,6 +29,7 @@ class Feed
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Filesystem\Driver\File $file,
         \Magento\Catalog\Helper\Data $taxHelper,
         \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItem
     ) {
@@ -40,16 +38,19 @@ class Feed
         $this->_productCollectionFactory  = $productCollectionFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_filesystem                = $filesystem;
+        $this->_file                      = $file;
         $this->_escaper                   = $escaper;
         $this->_taxHelper                 = $taxHelper;
         $this->_stockItem                 = $stockItem;
 
-        $this->mediapath = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath().'catalog/';
+        $this->mediaPath = $this->_filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)->getAbsolutePath() . 'catalog/';
+
     }
 
     public function printLine($siteId, $text, $tab=0)
     {
-        file_put_contents($this->mediapath.$siteId.'.temp.xml', str_repeat("\t", $tab) . $text . "\n", FILE_APPEND);
+        $test = $this->_file->filePutContents($this->mediaPath . $siteId . '.temp.xml', str_repeat("\t", $tab) . $text . "\n", FILE_APPEND);
+
     }
 
     public function escapeString($text)
@@ -59,10 +60,6 @@ class Feed
 
     public function execute()
     {
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/salesfire.log');
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($writer);
-
         $storeCollection = $this->_storeManager->getStores();
         foreach ($storeCollection as $store)
         {
@@ -80,6 +77,7 @@ class Feed
             $siteId = $this->_helperData->getSiteId($storeId);
             $brand_code = $this->_helperData->getBrandCode($storeId);
             $gender_code = $this->_helperData->getGenderCode($storeId);
+            $age_group_code = $this->_helperData->getAgeGroupCode($storeId);
             $colour_code = $this->_helperData->getColourCode($storeId);
             $attribute_codes = $this->_helperData->getAttributeCodes($storeId);
             $default_brand = $this->_helperData->getDefaultBrand($storeId);
@@ -162,10 +160,10 @@ class Feed
                         }
                     }
 
-                    if (! empty($colour_code)) {
-                        $colour = $product->getResource()->getAttribute($colour_code)->setStoreId($storeId)->getFrontend()->getValue($product);
-                        if (! empty($colour)) {
-                            $this->printLine($siteId, '<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 3);
+                    if (! empty($age_group_code)) {
+                        $age_group = $product->getResource()->getAttribute($age_group_code)->setStoreId($storeId)->getFrontend()->getValue($product);
+                        if (! empty($age_group)) {
+                            $this->printLine($siteId, '<age_group><![CDATA['.$this->escapeString($age_group).']]></age_group>', 3);
                         }
                     }
 
@@ -198,7 +196,13 @@ class Feed
 
                     $this->printLine($siteId, '<variants>', 3);
 
-                    if ($product->getTypeId() === 'configurable' && !empty($product->getOptions())) {
+                    if ($product->getTypeId() === 'configurable') {
+                        $product_attributes = [];
+                        $product_options = $product->getTypeInstance()->getConfigurableAttributesAsArray($product);
+                        foreach ($product_options as $option) {
+                            $product_attributes[] = $option['attribute_code'];
+                        }
+
                         $childProducts = $product->getTypeInstance()->getUsedProducts($product);
 
                         if (count($childProducts) > 0) {
@@ -207,11 +211,13 @@ class Feed
 
                                 $this->printLine($siteId, '<id>' . $childProduct->getId() . '</id>', 5);
 
-                                if (! empty($attribute_codes)) {
+                                $attributes_to_show = array_merge($product_attributes, $attribute_codes);
+
+                                if (! empty($attributes_to_show)) {
                                     $attributes = [];
 
-                                    foreach($attribute_codes as $attribute) {
-                                        if (empty($attribute) || in_array($attribute, array('id', 'mpn', 'stock', 'link', 'image'))) {
+                                    foreach($attributes_to_show as $attribute) {
+                                        if (empty($attribute) || in_array($attribute, array('id', 'mpn', 'stock', 'link', 'image', $age_group_code, $gender_code, $brand_code, $colour_code))) {
                                             continue;
                                         }
 
@@ -230,6 +236,13 @@ class Feed
                                         }
 
                                         $this->printLine($siteId, '</attributes>', 5);
+                                    }
+                                }
+
+                                if (! empty($colour_code)) {
+                                    $colour = $childProduct->getResource()->getAttribute($colour_code)->setStoreId($storeId)->getFrontend()->getValue($childProduct);
+                                    if (! empty($colour)) {
+                                        $this->printLine($siteId, '<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5);
                                     }
                                 }
 
@@ -257,7 +270,7 @@ class Feed
                             $attributes = [];
 
                             foreach($attribute_codes as $attribute) {
-                                if (empty($attribute) || in_array($attribute, array('id', 'mpn', 'stock', 'link', 'image'))) {
+                                if (empty($attribute) || in_array($attribute, array('id', 'mpn', 'stock', 'link', 'image', $age_group_code, $gender_code, $brand_code, $colour_code))) {
                                     continue;
                                 }
 
@@ -265,6 +278,13 @@ class Feed
 
                                 if (! empty($text)) {
                                     $attributes[$attribute] = $text;
+                                }
+                            }
+
+                            if (! empty($colour_code)) {
+                                $colour = $product->getResource()->getAttribute($colour_code)->setStoreId($storeId)->getFrontend()->getValue($product);
+                                if (! empty($colour)) {
+                                    $this->printLine($siteId, '<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5);
                                 }
                             }
 
@@ -308,253 +328,17 @@ class Feed
 
             $this->printLine($siteId, '</productfeed>', 0);
 
-            @rename($this->mediapath.$siteId.'.temp.xml', $this->mediapath.$siteId.'.xml');
-            @unlink($this->mediapath.$siteId.'.temp.xml');
-        }
-
-        return;
-
-        $attributeSetModel = Mage::getModel("eav/entity_attribute_set");
-        $bundlePriceModel = Mage::getModel('bundle/product_price');
-
-        $entityTypeId = Mage::getModel('eav/entity')
-                ->setType('catalog_product')
-                ->getTypeId();
-        $attributeSetName = 'Default';
-        $defaultAttributeSetId = Mage::getModel('eav/entity_attribute_set')
-                ->getCollection()
-                ->setEntityTypeFilter($entityTypeId)
-                ->addFieldToFilter('attribute_set_name', $attributeSetName)
-                ->getFirstItem()
-                ->getAttributeSetId();
-
-        $defaultAttributes = Mage::getModel('catalog/product_attribute_api')->items($defaultAttributeSetId);
-        $defaultAttributeCodes = array();
-        foreach ($defaultAttributes as $attributes) {
-            $defaultAttributeCodes[] = $attributes['code'];
-        }
-
-        $storeCollection = Mage::getModel('core/store')->getCollection();
-        foreach ($storeCollection as $store)
-        {
-            $storeId = $store->getId();
-            Mage::app()->setCurrentStore($storeId);
-
-            if (! Mage::helper('salesfire')->isAvailable($storeId)) {
-                continue;
+            if ($this->_file->isExists($this->mediaPath . $siteId . '.xml')) {
+                $this->_file->deleteFile($this->mediaPath . $siteId . '.xml');
             }
 
-            if (! Mage::helper('salesfire')->isFeedEnabled($storeId)) {
-                continue;
-            }
-            $siteId = Mage::helper('salesfire')->getSiteId($storeId);
-            $brand_code = Mage::helper('salesfire')->getBrandCode($storeId);
-            $gender_code = Mage::helper('salesfire')->getGenderCode($storeId);
-            $default_brand = Mage::helper('salesfire')->getDefaultBrand($storeId);
-
-            @unlink(Mage::getBaseDir('media').'/catalog/'.$siteId.'.temp.xml');
-
-            $mediaUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
-
-            $currency = $store->getCurrentCurrencyCode();
-
-            $this->printLine($siteId, '<?xml version="1.0" encoding="utf-8" ?>', 0);
-            $this->printLine($siteId, '<productfeed site="'.Mage::getBaseUrl().'" date-generated="'.gmdate('c').'">', 0);
-
-            $categories = $this->getCategories($storeId);
-
-            if (! empty($categories)) {
-                $this->printLine($siteId, '<categories>', 1);
-                foreach ($categories as $category) {
-                    $parent = $category->getParentCategory()->setStoreId($storeId);
-                    if ($category->getLevel() <= 1) {
-                        continue;
-                    }
-
-                    $this->printLine($siteId, '<category id="category_' . $category->getId() . '"' . ($parent && $parent->getLevel() > 1 ? ' parent="category_'.$parent->getId(). '"' : '') . '>', 2);
-
-                    $this->printLine($siteId, '<id>' . $this->escapeString($category->getId()) . '</id>', 3);
-
-                    $this->printLine($siteId, '<name><![CDATA['.$this->escapeString($category->getName()).']]></name>', 3);
-
-                    $this->printLine($siteId, '<breadcrumb><![CDATA['.$this->escapeString($this->getCategoryBreadcrumb($storeId, $category)).']]></breadcrumb>', 3);
-
-                    $description = $category->getDescription();
-                    if (! empty($description)) {
-                        $this->printLine($siteId, '<description><![CDATA['.$this->escapeString($description).']]></description>', 3);
-                    }
-
-                    $this->printLine($siteId, '<link>' . $category->getUrl() . '</link>', 3);
-
-                    $keywords = $category->getMetaKeywords();
-                    if (! empty($keywords)) {
-                        $this->printLine($siteId, '<keywords>', 3);
-                        foreach (explode(',', $keywords) as $keyword) {
-                            $this->printLine($siteId, '<keyword><![CDATA['.$this->escapeString($keyword).']]></keyword>', 4);
-                        }
-                        $this->printLine($siteId, '</keywords>', 3);
-                    }
-
-                    $this->printLine($siteId, '</category>', 2);
-                }
-                $this->printLine($siteId, '</categories>', 1);
+            if ($this->_file->isExists($this->mediaPath . $siteId . '.temp.xml')) {
+                $this->_file->rename($this->mediaPath . $siteId . '.temp.xml', $this->mediaPath . $siteId . '.xml');
             }
 
-            $page = 1;
-            do {
-                $products = $this->getVisibleProducts($storeId, $page);
-                $count = count($products);
-
-                if ($page == 1 && $count) {
-                    $this->printLine($siteId, '<products>', 1);
-                }
-
-                foreach ($products as $product) {
-                    $this->printLine($siteId, '<product id="product_'.$product->getId().'">', 2);
-
-                    $this->printLine($siteId, '<id><' . $product->getId() . '</id>', 3);
-
-                    $this->printLine($siteId, '<title><![CDATA[' . $this->escapeString($product->getName()) . ']]></title>', 3);
-
-                    $this->printLine($siteId, '<description><![CDATA[' . $this->escapeString(substr($this->_escaper->escapeHtml(strip_tags($product->getDescription())), 0, 5000)) . ']]></description>', 3);
-
-                    $this->printLine($siteId, '<price currency="' . $currency . '">' . $this->getProductPrice($product, $currency, $bundlePriceModel) . '</price>', 3);
-
-                    $this->printLine($siteId, '<sale_price currency="' . $currency . '">' . $this->getProductSalePrice($product, $currency, $bundlePriceModel) . '</sale_price>', 3);
-
-                    $this->printLine($siteId, '<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 3);
-
-                    $this->printLine($siteId, '<link>' . $product->getProductUrl() . '</link>', 3);
-
-                    if (! empty($gender_code)) {
-                        $gender = $product->getResource()->getAttribute($gender_code)->setStoreId($storeId)->getFrontend()->getValue($product);
-                        if ($gender != 'No') {
-                            $this->printLine($siteId, '<gender><![CDATA['.$this->escapeString($gender).']]></gender>', 3);
-                        }
-                    }
-
-                    if (! empty($brand_code)) {
-                        $brand = $product->getResource()->getAttribute($brand_code)->setStoreId($storeId)->getFrontend()->getValue($product);
-                        if ($brand != 'No') {
-                            $this->printLine($siteId, '<brand>' . $this->escapeString($brand) . '</brand>', 3);
-                        }
-                    } else if (! empty($default_brand)) {
-                        $this->printLine($siteId, '<brand>' . $this->escapeString($default_brand) . '</brand>', 3);
-                    }
-
-                    $categories = $product->getCategoryIds();
-                    if (! empty($categories)) {
-                        $this->printLine($siteId, '<categories>', 3);
-                        foreach ($categories as $categoryId) {
-                            $this->printLine($siteId, '<category id="category_'.$categoryId.'" />', 4);
-                        }
-                        $this->printLine($siteId, '</categories>', 3);
-                    }
-
-                    $keywords = $product->getMetaKeywords();
-                    if (! empty($keywords)) {
-                        $this->printLine($siteId, '<keywords>', 3);
-                        foreach (explode(',', $keywords) as $keyword) {
-                            $this->printLine($siteId, '<keyword><![CDATA['.$this->escapeString($keyword).']]></keyword>', 4);
-                        }
-                        $this->printLine($siteId, '</keywords>', 3);
-                    }
-
-                    $attributeSetId = $product->getAttributeSetId();
-                    $specificAttributes = Mage::getModel('catalog/product_attribute_api')->items($attributeSetId);
-                    $attributeCodes = array();
-                    foreach ($specificAttributes as $attributes) {
-                        $attributeCodes[] = $attributes['code'];
-                    }
-
-                    $currentAttributes = array_diff($attributeCodes, $defaultAttributeCodes);
-
-                    $this->printLine($siteId, '<variants>', 3);
-
-                    if ($product->isConfigurable()) {
-                        $childProducts = Mage::getModel('catalog/product_type_configurable')
-                            ->getUsedProductCollection($product)
-                            ->addAttributeToSelect('*');
-
-                        if (count($childProducts) > 0) {
-                            foreach ($childProducts as $childProduct) {
-                                $this->printLine($siteId, '<variant>', 4);
-
-                                $this->printLine($siteId, '<id>' . $childProduct->getId() . '</id>', 5);
-
-                                foreach($currentAttributes as $attribute) {
-                                    $attribute = trim($attribute);
-
-                                    if (in_array($attribute, ['id', 'mpn', 'link', 'image', 'stock'])) {
-                                        continue;
-                                    }
-
-                                    $text = $childProduct->getResource()->getAttribute($attribute)->setStoreId($storeId)->getFrontend()->getValue($childProduct);
-
-                                    if ($text != 'No') {
-                                        $this->printLine($siteId, '<'.$attribute.'><![CDATA['.$this->escapeString($text).']]></'.$attribute.'>', 5);
-                                    }
-                                }
-
-                                $this->printLine($siteId, '<mpn><![CDATA['.$this->escapeString($childProduct->getSku()).']]></mpn>', 5);
-
-                                $this->printLine($siteId, '<stock>'.($childProduct->getStockItem() && $childProduct->getStockItem()->getIsInStock() ? ($childProduct->getStockItem()->getQty() > 0 ? (int) $childProduct->getData('stock_item')->getData('qty') : 1) : 0).'</stock>', 5);
-
-                                $this->printLine($siteId, '<link>' . $product->getProductUrl() . '</link>', 5);
-
-                                $image = $childProduct->getImage();
-                                if (! empty($image)) {
-                                    $this->printLine($siteId, '<image>' . $mediaUrl.'catalog/product'.$image . '</image>', 5);
-                                }
-
-                                $this->printLine($siteId, '</variant>', 4);
-                            }
-                        }
-                    } else {
-                        $this->printLine($siteId, '<variant>', 4);
-
-                        $this->printLine($siteId, '<id>' . $product->getId() . '</id>', 5);
-
-                        foreach($currentAttributes as $attribute) {
-                            $attribute = trim($attribute);
-
-                            $text = $product->getResource()->getAttribute($attribute)->setStoreId($storeId)->getFrontend()->getValue($product);
-
-                            if ($text != 'No') {
-                                $this->printLine($siteId, '<'.$attribute.'><![CDATA['.$this->escapeString($text).']]></'.$attribute.'>', 5);
-                            }
-                        }
-
-                        $this->printLine($siteId, '<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 5);
-
-                        $this->printLine($siteId, '<stock>'.($product->getStockItem() && $product->getStockItem()->getIsInStock() ? ($product->getStockItem()->getQty() > 0 ? (int) $product->getData('stock_item')->getData('qty') : 1) : 0).'</stock>', 5);
-
-                        $this->printLine($siteId, '<link>' . $product->getProductUrl() . '</link>', 5);
-
-                        $image = $product->getImage();
-                        if (! empty($image)) {
-                            $this->printLine($siteId, '<image>' . $mediaUrl.'catalog/product'.$image . '</image>', 5);
-                        }
-
-                        $this->printLine($siteId, '</variant>', 4);
-                    }
-
-                    $this->printLine($siteId, '</variants>', 3);
-
-                    $this->printLine($siteId, '</product>', 2);
-                }
-
-                $page++;
-            } while ($count >= 100);
-
-            if ($count || $page > 1) {
-                $this->printLine($siteId, '</products>', 1);
+            if ($this->_file->isExists($this->mediaPath . $siteId . '.temp.xml')) {
+                $this->_file->deleteFile($this->mediaPath . $siteId . '.temp.xml');
             }
-
-            $this->printLine($siteId, '</productfeed>', 0);
-
-            @rename(Mage::getBaseDir('media').'/catalog/'.$siteId.'.temp.xml', Mage::getBaseDir('media').'/catalog/'.$siteId.'.xml');
-            @unlink(Mage::getBaseDir('media').'/catalog/'.$siteId.'.temp.xml');
         }
     }
 
@@ -591,7 +375,7 @@ class Feed
         $collection = $this->_productCollectionFactory->create()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('status', 1)
-            ->addAttributeToFilter('visibility', 4)
+            ->addAttributeToFilter('visibility', array('neq' => 1))
             ->setStoreId($storeId)
             ->addStoreFilter($storeId)
             ->addMinimalPrice()

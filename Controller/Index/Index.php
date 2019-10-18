@@ -1,8 +1,6 @@
 <?php
 namespace Salesfire\Salesfire\Controller\Index;
 
-use Exception;
-
 /**
  * Salesfire Controller
  *
@@ -12,19 +10,20 @@ use Exception;
  */
 class Index extends \Magento\Framework\App\Action\Action
 {
-    protected $_pageFactory;
+    protected $_jsonFactory;
     protected $_productMetadata;
     public $helperData;
 
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $pageFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $jsonFactory,
         \Salesfire\Salesfire\Helper\Data $helperData,
         \Magento\Framework\App\ProductMetadataInterface $productMetadata
     ) {
-        $this->_pageFactory     = $pageFactory;
-        $this->_productMetadata = $productMetadata;
-        $this->helperData       = $helperData;
+        $this->_jsonFactory      = $jsonFactory;
+        $this->_productMetadata  = $productMetadata;
+        $this->helperData        = $helperData;
+
         return parent::__construct($context);
     }
 
@@ -35,13 +34,18 @@ class Index extends \Magento\Framework\App\Action\Action
 
     public function execute()
     {
-        echo implode(',', [
-            $this->getHelper()->getVersion(),
-            $this->getHelper()->isEnabled() ? '1' : '0',
-            $this->getHelper()->getSiteId(),
-            $this->getHelper()->isFeedEnabled() ? '1' : '0',
-            $this->_productMetadata->getVersion(),
-        ]);
-        exit;
+        $result = $this->_jsonFactory->create();
+
+        $data = [
+            'version'         => $this->getHelper()->getVersion(),
+            'is_enabled'      => $this->getHelper()->isEnabled() ? true : false,
+            'site_id'         => $this->getHelper()->getSiteId(),
+            'is_feed_enabled' => $this->getHelper()->isFeedEnabled() ? true : false,
+            'magento_version' => $this->_productMetadata->getVersion(),
+        ];
+
+        $result->setData($data);
+
+        return $result;
     }
 }
