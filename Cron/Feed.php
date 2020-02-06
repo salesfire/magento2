@@ -154,21 +154,21 @@ class Feed
                     $this->printLine($siteId, '<link>' . $product->getProductUrl(true) . '</link>', 3);
 
                     if (! empty($gender_code)) {
-                        $gender = $this->getAttributeValue($product, $gender_code, $storeId);
+                        $gender = $this->getAttributeValue($storeId, $product, $gender_code);
                         if ($gender) {
                             $this->printLine($siteId, '<gender><![CDATA['.$this->escapeString($gender).']]></gender>', 3);
                         }
                     }
 
                     if (! empty($age_group_code)) {
-                        $age_group = $this->getAttributeValue($product, $age_group_code, $storeId);
+                        $age_group = $this->getAttributeValue($storeId, $product, $age_group_code);
                         if ($age_group) {
                             $this->printLine($siteId, '<age_group><![CDATA['.$this->escapeString($age_group).']]></age_group>', 3);
                         }
                     }
 
                     if (! empty($brand_code)) {
-                        $brand = $this->getAttributeValue($product, $age_group_code, $storeId);
+                        $brand = $this->getAttributeValue($storeId, $product, $age_group_code);
                         if ($brand) {
                             $this->printLine($siteId, '<brand>' . $this->escapeString($brand) . '</brand>', 3);
                         }
@@ -221,7 +221,7 @@ class Feed
                                             continue;
                                         }
 
-                                        $attribute_text = $this->getAttributeValue($childProduct, $attribute, $storeId);
+                                        $attribute_text = $this->getAttributeValue($storeId, $childProduct, $attribute);
                                         if ($attribute_text) {
                                             $attributes[$attribute] = $attribute_text;
                                         }
@@ -239,7 +239,7 @@ class Feed
                                 }
 
                                 if (! empty($colour_code)) {
-                                    $colour = $this->getAttributeValue($childProduct, $colour_code, $storeId);
+                                    $colour = $this->getAttributeValue($storeId, $childProduct, $colour_code);
                                     if ($colour) {
                                         $this->printLine($siteId, '<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5);
                                     }
@@ -273,14 +273,14 @@ class Feed
                                     continue;
                                 }
 
-                                $attribute_text = $this->getAttributeValue($product, $attribute, $storeId);
+                                $attribute_text = $this->getAttributeValue($storeId, $product, $attribute);
                                 if ($attribute_text) {
                                     $attributes[$attribute] = $attribute_text;
                                 }
                             }
 
                             if (! empty($colour_code)) {
-                                $colour = $this->getAttributeValue($product, $colour_code, $storeId);
+                                $colour = $this->getAttributeValue($storeId, $product, $colour_code);
                                 if ($colour) {
                                     $this->printLine($siteId, '<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5);
                                 }
@@ -426,7 +426,7 @@ class Feed
         }
     }
 
-    protected function getAttributeValue($product, $attribute, $storeId) {
+    protected function getAttributeValue($storeId, $product, $attribute) {
         $attribute_obj = $product->getResource()->getAttribute($attribute);
 
         if(! empty($attribute_obj)) {
