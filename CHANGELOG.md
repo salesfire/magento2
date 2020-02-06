@@ -1,5 +1,12 @@
 # Changelog
 
+### Salesfire v1.2.2
+Released on 2020-02-06
+Release notes:
+
+- Fix feed attributes issue
+
+
 ### Salesfire v1.2.1
 Released on 2019-09-23
 Release notes:
