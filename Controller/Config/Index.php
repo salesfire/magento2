@@ -1,12 +1,12 @@
 <?php
-namespace Salesfire\Salesfire\Controller\Index;
+namespace Salesfire\Salesfire\Controller\Config;
 
 /**
  * Salesfire Controller
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.1
+ * @version.   1.2.2
  */
 class Index extends \Magento\Framework\App\Action\Action
 {

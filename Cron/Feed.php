@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Cron;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.1
+ * @version.   1.2.2
  */
 class Feed
 {
@@ -154,22 +154,22 @@ class Feed
                     $this->printLine($siteId, '<link>' . $product->getProductUrl(true) . '</link>', 3);
 
                     if (! empty($gender_code)) {
-                        $gender = $product->getResource()->getAttribute($gender_code)->setStoreId($storeId)->getFrontend()->getValue($product);
-                        if (! empty($gender)) {
+                        $gender = $this->getAttributeValue($storeId, $product, $gender_code);
+                        if ($gender) {
                             $this->printLine($siteId, '<gender><![CDATA['.$this->escapeString($gender).']]></gender>', 3);
                         }
                     }
 
                     if (! empty($age_group_code)) {
-                        $age_group = $product->getResource()->getAttribute($age_group_code)->setStoreId($storeId)->getFrontend()->getValue($product);
-                        if (! empty($age_group)) {
+                        $age_group = $this->getAttributeValue($storeId, $product, $age_group_code);
+                        if ($age_group) {
                             $this->printLine($siteId, '<age_group><![CDATA['.$this->escapeString($age_group).']]></age_group>', 3);
                         }
                     }
 
                     if (! empty($brand_code)) {
-                        $brand = $product->getResource()->getAttribute($brand_code)->setStoreId($storeId)->getFrontend()->getValue($product);
-                        if (! empty($brand)) {
+                        $brand = $this->getAttributeValue($storeId, $product, $age_group_code);
+                        if ($brand) {
                             $this->printLine($siteId, '<brand>' . $this->escapeString($brand) . '</brand>', 3);
                         }
                     } else if (! empty($default_brand)) {
@@ -221,10 +221,9 @@ class Feed
                                             continue;
                                         }
 
-                                        $text = $childProduct->getResource()->getAttribute($attribute)->setStoreId($storeId)->getFrontend()->getValue($childProduct);
-
-                                        if (! empty($text)) {
-                                            $attributes[$attribute] = $text;
+                                        $attribute_text = $this->getAttributeValue($storeId, $childProduct, $attribute);
+                                        if ($attribute_text) {
+                                            $attributes[$attribute] = $attribute_text;
                                         }
                                     }
 
@@ -240,8 +239,8 @@ class Feed
                                 }
 
                                 if (! empty($colour_code)) {
-                                    $colour = $childProduct->getResource()->getAttribute($colour_code)->setStoreId($storeId)->getFrontend()->getValue($childProduct);
-                                    if (! empty($colour)) {
+                                    $colour = $this->getAttributeValue($storeId, $childProduct, $colour_code);
+                                    if ($colour) {
                                         $this->printLine($siteId, '<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5);
                                     }
                                 }
@@ -274,16 +273,15 @@ class Feed
                                     continue;
                                 }
 
-                                $text = $product->getResource()->getAttribute($attribute)->setStoreId($storeId)->getFrontend()->getValue($product);
-
-                                if (! empty($text)) {
-                                    $attributes[$attribute] = $text;
+                                $attribute_text = $this->getAttributeValue($storeId, $product, $attribute);
+                                if ($attribute_text) {
+                                    $attributes[$attribute] = $attribute_text;
                                 }
                             }
 
                             if (! empty($colour_code)) {
-                                $colour = $product->getResource()->getAttribute($colour_code)->setStoreId($storeId)->getFrontend()->getValue($product);
-                                if (! empty($colour)) {
+                                $colour = $this->getAttributeValue($storeId, $product, $colour_code);
+                                if ($colour) {
                                     $this->printLine($siteId, '<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5);
                                 }
                             }
@@ -426,5 +424,19 @@ class Feed
                 }
                 return $this->_taxHelper->getTaxPrice($product, $product->getFinalPrice(), true);
         }
+    }
+
+    protected function getAttributeValue($storeId, $product, $attribute) {
+        $attribute_obj = $product->getResource()->getAttribute($attribute);
+
+        if(! empty($attribute_obj)) {
+            $attribute_text = $attribute_obj->setStoreId($storeId)->getFrontend()->getValue($product);
+
+            if (! empty($attribute_text)) {
+                return $attribute_text;
+            }
+        }
+
+        return null;
     }
 }
