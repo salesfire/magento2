@@ -170,7 +170,7 @@ class Feed
                     if (! empty($brand_code)) {
                         $brand = $this->getAttributeValue($product, $age_group_code, $storeId);
                         if ($brand) {
-                            $this->printLine($siteId, '<brand><![CDATA['.$this->escapeString($brand).']]></brand>', 3);
+                            $this->printLine($siteId, '<brand>' . $this->escapeString($brand) . '</brand>', 3);
                         }
                     } else if (! empty($default_brand)) {
                         $this->printLine($siteId, '<brand>' . $this->escapeString($default_brand) . '</brand>', 3);
