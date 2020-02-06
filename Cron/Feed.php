@@ -154,23 +154,35 @@ class Feed
                     $this->printLine($siteId, '<link>' . $product->getProductUrl(true) . '</link>', 3);
 
                     if (! empty($gender_code)) {
-                        $gender = $product->getResource()->getAttribute($gender_code)->setStoreId($storeId)->getFrontend()->getValue($product);
-                        if (! empty($gender)) {
-                            $this->printLine($siteId, '<gender><![CDATA['.$this->escapeString($gender).']]></gender>', 3);
+                        $gender_obj = $product->getResource()->getAttribute($gender_code);
+                        if ($gender_obj) {
+                            $gender = $gender_obj->setStoreId($storeId)->getFrontend()->getValue($product);
+
+                            if (! empty($gender)) {
+                                $this->printLine($siteId, '<gender><![CDATA['.$this->escapeString($gender).']]></gender>', 3);
+                            }
                         }
                     }
 
                     if (! empty($age_group_code)) {
-                        $age_group = $product->getResource()->getAttribute($age_group_code)->setStoreId($storeId)->getFrontend()->getValue($product);
-                        if (! empty($age_group)) {
-                            $this->printLine($siteId, '<age_group><![CDATA['.$this->escapeString($age_group).']]></age_group>', 3);
+                        $age_group_obj = $product->getResource()->getAttribute($age_group_code);
+                        if ($age_group_obj) {
+                            $age_group = $age_group_obj->setStoreId($storeId)->getFrontend()->getValue($product);
+
+                            if (! empty($age_group)) {
+                                $this->printLine($siteId, '<age_group><![CDATA['.$this->escapeString($age_group).']]></age_group>', 3);
+                            }
                         }
                     }
 
                     if (! empty($brand_code)) {
-                        $brand = $product->getResource()->getAttribute($brand_code)->setStoreId($storeId)->getFrontend()->getValue($product);
-                        if (! empty($brand)) {
-                            $this->printLine($siteId, '<brand>' . $this->escapeString($brand) . '</brand>', 3);
+                        $brand_obj = $product->getResource()->getAttribute($brand_code);
+                        if ($brand_obj) {
+                            $brand = $brand_obj->setStoreId($storeId)->getFrontend()->getValue($product);
+
+                            if (! empty($brand)) {
+                                $this->printLine($siteId, '<brand>' . $this->escapeString($brand) . '</brand>', 3);
+                            }
                         }
                     } else if (! empty($default_brand)) {
                         $this->printLine($siteId, '<brand>' . $this->escapeString($default_brand) . '</brand>', 3);
@@ -221,10 +233,13 @@ class Feed
                                             continue;
                                         }
 
-                                        $text = $childProduct->getResource()->getAttribute($attribute)->setStoreId($storeId)->getFrontend()->getValue($childProduct);
+                                        $attribute_obj = $childProduct->getResource()->getAttribute($attribute);
+                                        if($attribute_obj) {
+                                            $attribute_text = $attribute_obj->setStoreId($storeId)->getFrontend()->getValue($childProduct);
 
-                                        if (! empty($text)) {
-                                            $attributes[$attribute] = $text;
+                                            if (! empty($attribute_text)) {
+                                                $attributes[$attribute] = $attribute_text;
+                                            }
                                         }
                                     }
 
@@ -240,9 +255,13 @@ class Feed
                                 }
 
                                 if (! empty($colour_code)) {
-                                    $colour = $childProduct->getResource()->getAttribute($colour_code)->setStoreId($storeId)->getFrontend()->getValue($childProduct);
-                                    if (! empty($colour)) {
-                                        $this->printLine($siteId, '<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5);
+                                    $colour_obj = $childProduct->getResource()->getAttribute($colour_code);
+                                    if ($colour_obj) {
+                                        $colour = $colour_obj->setStoreId($storeId)->getFrontend()->getValue($childProduct);
+
+                                        if (! empty($colour)) {
+                                            $this->printLine($siteId, '<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5);
+                                        }
                                     }
                                 }
 
@@ -274,17 +293,24 @@ class Feed
                                     continue;
                                 }
 
-                                $text = $product->getResource()->getAttribute($attribute)->setStoreId($storeId)->getFrontend()->getValue($product);
+                                $attribute_obj = $product->getResource()->getAttribute($attribute);
+                                if($attribute_obj) {
+                                    $attribute_text = $attribute_obj->setStoreId($storeId)->getFrontend()->getValue($product);
 
-                                if (! empty($text)) {
-                                    $attributes[$attribute] = $text;
+                                    if (! empty($attribute_text)) {
+                                        $attributes[$attribute] = $attribute_text;
+                                    }
                                 }
                             }
 
                             if (! empty($colour_code)) {
-                                $colour = $product->getResource()->getAttribute($colour_code)->setStoreId($storeId)->getFrontend()->getValue($product);
-                                if (! empty($colour)) {
-                                    $this->printLine($siteId, '<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5);
+                                $colour_obj = $product->getResource()->getAttribute($colour_code);
+                                if ($colour_obj) {
+                                    $colour = $colour_obj->setStoreId($storeId)->getFrontend()->getValue($product);
+
+                                    if (! empty($colour)) {
+                                        $this->printLine($siteId, '<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5);
+                                    }
                                 }
                             }
 

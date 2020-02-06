@@ -1,5 +1,5 @@
 <?php
-namespace Salesfire\Salesfire\Controller\Index;
+namespace Salesfire\Salesfire\Controller\Config;
 
 /**
  * Salesfire Controller
