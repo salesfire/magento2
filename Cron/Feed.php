@@ -155,7 +155,7 @@ class Feed
 
                     if (! empty($gender_code)) {
                         $gender_obj = $product->getResource()->getAttribute($gender_code);
-                        if ($gender_obj) {
+                        if (! empty($gender_obj)) {
                             $gender = $gender_obj->setStoreId($storeId)->getFrontend()->getValue($product);
 
                             if (! empty($gender)) {
@@ -166,7 +166,7 @@ class Feed
 
                     if (! empty($age_group_code)) {
                         $age_group_obj = $product->getResource()->getAttribute($age_group_code);
-                        if ($age_group_obj) {
+                        if (! empty($age_group_obj)) {
                             $age_group = $age_group_obj->setStoreId($storeId)->getFrontend()->getValue($product);
 
                             if (! empty($age_group)) {
@@ -177,7 +177,7 @@ class Feed
 
                     if (! empty($brand_code)) {
                         $brand_obj = $product->getResource()->getAttribute($brand_code);
-                        if ($brand_obj) {
+                        if (! empty($brand_obj)) {
                             $brand = $brand_obj->setStoreId($storeId)->getFrontend()->getValue($product);
 
                             if (! empty($brand)) {
@@ -234,7 +234,7 @@ class Feed
                                         }
 
                                         $attribute_obj = $childProduct->getResource()->getAttribute($attribute);
-                                        if($attribute_obj) {
+                                        if(! empty($attribute_obj)) {
                                             $attribute_text = $attribute_obj->setStoreId($storeId)->getFrontend()->getValue($childProduct);
 
                                             if (! empty($attribute_text)) {
@@ -256,7 +256,7 @@ class Feed
 
                                 if (! empty($colour_code)) {
                                     $colour_obj = $childProduct->getResource()->getAttribute($colour_code);
-                                    if ($colour_obj) {
+                                    if (! empty($colour_obj)) {
                                         $colour = $colour_obj->setStoreId($storeId)->getFrontend()->getValue($childProduct);
 
                                         if (! empty($colour)) {
@@ -294,7 +294,7 @@ class Feed
                                 }
 
                                 $attribute_obj = $product->getResource()->getAttribute($attribute);
-                                if($attribute_obj) {
+                                if(! empty($attribute_obj)) {
                                     $attribute_text = $attribute_obj->setStoreId($storeId)->getFrontend()->getValue($product);
 
                                     if (! empty($attribute_text)) {
@@ -305,7 +305,7 @@ class Feed
 
                             if (! empty($colour_code)) {
                                 $colour_obj = $product->getResource()->getAttribute($colour_code);
-                                if ($colour_obj) {
+                                if (! empty($colour_obj)) {
                                     $colour = $colour_obj->setStoreId($storeId)->getFrontend()->getValue($product);
 
                                     if (! empty($colour)) {
