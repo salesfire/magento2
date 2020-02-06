@@ -163,14 +163,14 @@ class Feed
                     if (! empty($age_group_code)) {
                         $age_group = $this->getAttributeValue($product, $age_group_code, $storeId);
                         if ($age_group) {
-                            $this->printLine($siteId, '<gender><![CDATA['.$this->escapeString($age_group).']]></gender>', 3);
+                            $this->printLine($siteId, '<age_group><![CDATA['.$this->escapeString($age_group).']]></age_group>', 3);
                         }
                     }
 
                     if (! empty($brand_code)) {
                         $brand = $this->getAttributeValue($product, $age_group_code, $storeId);
                         if ($brand) {
-                            $this->printLine($siteId, '<gender><![CDATA['.$this->escapeString($brand).']]></gender>', 3);
+                            $this->printLine($siteId, '<brand><![CDATA['.$this->escapeString($brand).']]></brand>', 3);
                         }
                     } else if (! empty($default_brand)) {
                         $this->printLine($siteId, '<brand>' . $this->escapeString($default_brand) . '</brand>', 3);
@@ -241,7 +241,7 @@ class Feed
                                 if (! empty($colour_code)) {
                                     $colour = $this->getAttributeValue($childProduct, $colour_code, $storeId);
                                     if ($colour) {
-                                        $this->printLine($siteId, '<gender><![CDATA['.$this->escapeString($colour).']]></gender>', 3);
+                                        $this->printLine($siteId, '<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5);
                                     }
                                 }
 
@@ -282,7 +282,7 @@ class Feed
                             if (! empty($colour_code)) {
                                 $colour = $this->getAttributeValue($product, $colour_code, $storeId);
                                 if ($colour) {
-                                    $this->printLine($siteId, '<gender><![CDATA['.$this->escapeString($colour).']]></gender>', 3);
+                                    $this->printLine($siteId, '<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5);
                                 }
                             }
 
