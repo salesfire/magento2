@@ -5,6 +5,7 @@ Released on 2020-02-07
 Release notes:
 
 - Fix issue with missing images
+- Fix feed generation process issue
 
 
 ### Salesfire v1.2.2
