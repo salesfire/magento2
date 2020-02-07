@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Cron;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.2
+ * @version.   1.2.3
  */
 class Feed
 {
@@ -253,8 +253,13 @@ class Feed
                                 $this->printLine($siteId, '<link>' . $product->getProductUrl(true) . '</link>', 5);
 
                                 $image = $childProduct->getImage();
-                                if (! empty($image)) {
+                                if (! empty($image) && $image != 'no_selection') {
                                     $this->printLine($siteId, '<image>' . $mediaUrl . 'catalog/product' . $image . '</image>', 5);
+                                } else {
+                                    $image = $product->getImage();
+                                    if (! empty($image) && $image != 'no_selection') {
+                                        $this->printLine($siteId, '<image>' . $mediaUrl . 'catalog/product' . $image . '</image>', 5);
+                                    }
                                 }
 
                                 $this->printLine($siteId, '</variant>', 4);
