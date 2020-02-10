@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Cron;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.3
+ * @version.   1.2.4
  */
 class Feed
 {
@@ -84,7 +84,7 @@ class Feed
             $currency = $store->getCurrentCurrencyCode();
 
             $this->printLine($siteId, '<?xml version="1.0" encoding="utf-8" ?>', 0);
-            $this->printLine($siteId, '<productfeed site="'.$this->_storeManager->getStore($storeId)->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB).'" date-generated="'.gmdate('c').'">', 0);
+            $this->printLine($siteId, '<productfeed site="'.$this->_storeManager->getStore($storeId)->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB).'" date-generated="'.gmdate('c').'" version="' . $this->_helperData->getVersion() . '">', 0);
 
             $mediaUrl = $this->_storeManager->getStore($storeId)->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
 
@@ -310,8 +310,14 @@ class Feed
                         $this->printLine($siteId, '<link>' . $product->getProductUrl(true) . '</link>', 5);
 
                         $image = $product->getImage();
-                        if (! empty($image)) {
-                            $this->printLine($siteId, '<image>' . $mediaUrl . 'catalog/product' . $image . '</image>', 5);
+                        if (empty($image) || $image == 'no_selection') {
+                            $image = $product->getMediaGalleryImages()->getFirstItem()->getUrl();
+                        } else {
+                            $image = $mediaUrl . 'catalog/product' . $image;
+                        }
+
+                        if (! empty($image) && $image != 'no_selection') {
+                            $this->printLine($siteId, '<image>' . $image  . '</image>', 5);
                         }
 
                         $this->printLine($siteId, '</variant>', 4);
@@ -391,6 +397,8 @@ class Feed
 
         $collection->clear();
 
+        $collection->addMediaGalleryData();
+
         return $collection;
     }
 
@@ -437,7 +445,7 @@ class Feed
         if(! empty($attribute_obj)) {
             $attribute_text = $attribute_obj->setStoreId($storeId)->getFrontend()->getValue($product);
 
-            if (! empty($attribute_text)) {
+            if (! empty($attribute_text) && $attribute_text != 'no_selection') {
                 return $attribute_text;
             }
         }

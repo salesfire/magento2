@@ -1,5 +1,13 @@
 # Changelog
 
+### Salesfire v1.2.4
+Released on 2020-02-10
+Release notes:
+
+- Add product image fallback
+- Add verison to feed
+
+
 ### Salesfire v1.2.3
 Released on 2020-02-07
 Release notes:
