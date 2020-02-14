@@ -132,6 +132,9 @@ class Feed
                 $products = $this->getVisibleProducts($storeId, $page);
                 $count = count($products);
 
+                $object_manager = \Magento\Framework\App\ObjectManager::getInstance();
+                $stock_state = $object_manager->get('\Magento\CatalogInventory\Api\StockStateInterface');
+
                 if ($page == 1 && $count) {
                     $this->printLine($siteId, '<products>', 1);
                 }
@@ -247,8 +250,13 @@ class Feed
 
                                 $this->printLine($siteId, '<mpn><![CDATA['.$this->escapeString($childProduct->getSku()).']]></mpn>', 5);
 
-                                $stock_item = $this->_stockItem->get($childProduct->getId());
-                                $this->printLine($siteId, '<stock>'.($stock_item && $stock_item->getIsInStock() ? ($stock_item->getQty() > 0 ? (int) $stock_item->getQty() : 1) : 0).'</stock>', 5);
+                                try {
+                                    $stock_item = $this->_stockItem->get($childProduct->getId());
+                                    $this->printLine($siteId, '<stock>'.($stock_item && $stock_item->getIsInStock() ? ($stock_item->getQty() > 0 ? (int) $stock_item->getQty() : 1) : 0).'</stock>', 5);
+                                } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                                    $stock_qty = $stock_state->getStockQty($childProduct->getId());
+                                    $this->printLine($siteId, '<stock>' . ($stock_qty ? $stock_qty : 0) .'</stock>', 5);
+                                }
 
                                 $this->printLine($siteId, '<link>' . $product->getProductUrl(true) . '</link>', 5);
 
@@ -303,9 +311,15 @@ class Feed
                         }
 
                         $this->printLine($siteId, '<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 5);
+                        $stock_item = null;
 
-                        $stock_item = $this->_stockItem->get($product->getId());
-                        $this->printLine($siteId, '<stock>'.($stock_item && $stock_item->getIsInStock() ? ($stock_item->getMinQty() > 0 ? (int) $stock_item->getQty() : 1) : 0).'</stock>', 5);
+                        try {
+                            $stock_item = $this->_stockItem->get($product->getId());
+                            $this->printLine($siteId, '<stock>'.($stock_item && $stock_item->getIsInStock() ? ($stock_item->getQty() > 0 ? (int) $stock_item->getQty() : 1) : 0).'</stock>', 5);
+                        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                            $stock_qty = $stock_state->getStockQty($product->getId());
+                            $this->printLine($siteId, '<stock>' . ($stock_qty ? $stock_qty : 0) .'</stock>', 5);
+                        }
 
                         $this->printLine($siteId, '<link>' . $product->getProductUrl(true) . '</link>', 5);
 
