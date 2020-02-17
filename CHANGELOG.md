@@ -6,6 +6,7 @@ Release notes:
 
 - Add product image fallback
 - Add verison to feed
+- Fixed stock level
 
 
 ### Salesfire v1.2.3

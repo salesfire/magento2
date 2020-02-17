@@ -61,6 +61,10 @@ class Feed
     public function execute()
     {
         $storeCollection = $this->_storeManager->getStores();
+
+        $object_manager = \Magento\Framework\App\ObjectManager::getInstance();
+        $stock_state = $object_manager->get('\Magento\CatalogInventory\Api\StockStateInterface');
+
         foreach ($storeCollection as $store)
         {
             $storeId = $store->getId();
@@ -131,9 +135,6 @@ class Feed
             do {
                 $products = $this->getVisibleProducts($storeId, $page);
                 $count = count($products);
-
-                $object_manager = \Magento\Framework\App\ObjectManager::getInstance();
-                $stock_state = $object_manager->get('\Magento\CatalogInventory\Api\StockStateInterface');
 
                 if ($page == 1 && $count) {
                     $this->printLine($siteId, '<products>', 1);
@@ -250,24 +251,21 @@ class Feed
 
                                 $this->printLine($siteId, '<mpn><![CDATA['.$this->escapeString($childProduct->getSku()).']]></mpn>', 5);
 
+                                $stock = null;
                                 try {
                                     $stock_item = $this->_stockItem->get($childProduct->getId());
-                                    $this->printLine($siteId, '<stock>'.($stock_item && $stock_item->getIsInStock() ? ($stock_item->getQty() > 0 ? (int) $stock_item->getQty() : 1) : 0).'</stock>', 5);
+                                    $stock = ($stock_item && $stock_item->getIsInStock()) ? ($stock_item->getQty() > 0 ? (int) $stock_item->getQty() : 1) : 0;
                                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                                    $stock_qty = $stock_state->getStockQty($childProduct->getId());
-                                    $this->printLine($siteId, '<stock>' . ($stock_qty ? $stock_qty : 0) .'</stock>', 5);
+                                    $stock = $stock_state->getStockQty($childProduct->getId());
                                 }
+
+                                $this->printLine($siteId, '<stock>' . ($stock ? $stock : 0) .'</stock>', 5);
 
                                 $this->printLine($siteId, '<link>' . $product->getProductUrl(true) . '</link>', 5);
 
-                                $image = $childProduct->getImage();
-                                if (! empty($image) && $image != 'no_selection') {
-                                    $this->printLine($siteId, '<image>' . $mediaUrl . 'catalog/product' . $image . '</image>', 5);
-                                } else {
-                                    $image = $product->getImage();
-                                    if (! empty($image) && $image != 'no_selection') {
-                                        $this->printLine($siteId, '<image>' . $mediaUrl . 'catalog/product' . $image . '</image>', 5);
-                                    }
+                                $image = $this->getProductImage($siteId, $mediaUrl, $product, $childProduct);
+                                if (! empty($image)) {
+                                    $this->printLine($siteId, '<image>' . $image  . '</image>', 5);
                                 }
 
                                 $this->printLine($siteId, '</variant>', 4);
@@ -311,26 +309,21 @@ class Feed
                         }
 
                         $this->printLine($siteId, '<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 5);
-                        $stock_item = null;
 
+                        $stock = null;
                         try {
                             $stock_item = $this->_stockItem->get($product->getId());
-                            $this->printLine($siteId, '<stock>'.($stock_item && $stock_item->getIsInStock() ? ($stock_item->getQty() > 0 ? (int) $stock_item->getQty() : 1) : 0).'</stock>', 5);
+                            $stock = ($stock_item && $stock_item->getIsInStock()) ? ($stock_item->getQty() > 0 ? (int) $stock_item->getQty() : 1) : 0;
                         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                            $stock_qty = $stock_state->getStockQty($product->getId());
-                            $this->printLine($siteId, '<stock>' . ($stock_qty ? $stock_qty : 0) .'</stock>', 5);
+                            $stock = $stock_state->getStockQty($product->getId());
                         }
+
+                        $this->printLine($siteId, '<stock>' . ($stock ? $stock : 0) .'</stock>', 5);
 
                         $this->printLine($siteId, '<link>' . $product->getProductUrl(true) . '</link>', 5);
 
-                        $image = $product->getImage();
-                        if (empty($image) || $image == 'no_selection') {
-                            $image = $product->getMediaGalleryImages()->getFirstItem()->getUrl();
-                        } else {
-                            $image = $mediaUrl . 'catalog/product' . $image;
-                        }
-
-                        if (! empty($image) && $image != 'no_selection') {
+                        $image = $this->getProductImage($siteId, $mediaUrl, $product, $product);
+                        if (! empty($image)) {
                             $this->printLine($siteId, '<image>' . $image  . '</image>', 5);
                         }
 
@@ -465,5 +458,24 @@ class Feed
         }
 
         return null;
+    }
+
+    protected function getProductImage($siteId, $mediaUrl, $product, $childProduct) {
+        $image = $childProduct->getImage();
+        if (empty($image) || $image == 'no_selection') {
+            $image = $product->getImage();
+        }
+
+        if (empty($image) || $image == 'no_selection') {
+            $image = $product->getMediaGalleryImages()->getFirstItem()->getUrl();
+        } else {
+            $image = $mediaUrl . 'catalog/product' . $image;
+        }
+
+        if (empty($image) || $image == 'no_selection') {
+            return null;
+        }
+
+        return $image;
     }
 }
