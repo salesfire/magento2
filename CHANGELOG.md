@@ -5,7 +5,7 @@ Released on 2020-02-10
 Release notes:
 
 - Add product image fallback
-- Add verison to feed
+- Add version to feed
 - Fixed stock level
 
 
