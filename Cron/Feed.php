@@ -75,7 +75,12 @@ class Feed
     public function printLines($siteId, $text)
     {
         foreach ($text as $line) {
-            $this->printLine($siteId, $line[0], $line[1] ?? 0);
+            $tab = 0;
+            if (isset($line[1])) {
+                $tab = $line[1];
+            }
+
+            $this->printLine($siteId, $line[0], $tab);
         }
     }
 
