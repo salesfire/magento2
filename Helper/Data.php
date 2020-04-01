@@ -9,7 +9,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.4
+ * @version.   1.2.5
  */
 class Data extends AbstractHelper
 {
@@ -33,7 +33,18 @@ class Data extends AbstractHelper
      */
     public function getVersion()
     {
-        return '1.2.4';
+        return '1.2.5';
+    }
+
+    /**
+     * Strip the code of anything not normally in an attribute code
+     *
+     * @param mixed $code
+     * @return string
+     */
+    public function stripCode($code)
+    {
+        return trim(preg_replace('/[^a-z0-9_]+/', '', strtolower($code)));
     }
 
     /**
@@ -116,7 +127,7 @@ class Data extends AbstractHelper
      */
     public function getBrandCode($storeId = null)
     {
-        return trim($this->scopeConfig->getValue(
+        return $this->stripCode($this->scopeConfig->getValue(
             self::XML_PATH_FEED_BRAND_CODE,
             ScopeInterface::SCOPE_STORE,
             $storeId
@@ -131,7 +142,7 @@ class Data extends AbstractHelper
      */
     public function getGenderCode($storeId = null)
     {
-        return trim($this->scopeConfig->getValue(
+        return $this->stripCode($this->scopeConfig->getValue(
             self::XML_PATH_FEED_GENDER_CODE,
             ScopeInterface::SCOPE_STORE,
             $storeId
@@ -146,7 +157,7 @@ class Data extends AbstractHelper
      */
     public function getAgeGroupCode($storeId = null)
     {
-        return trim($this->scopeConfig->getValue(
+        return $this->stripCode($this->scopeConfig->getValue(
             self::XML_PATH_FEED_AGE_GROUP_CODE,
             ScopeInterface::SCOPE_STORE,
             $storeId
@@ -161,7 +172,7 @@ class Data extends AbstractHelper
      */
     public function getColourCode($storeId = null)
     {
-        return trim($this->scopeConfig->getValue(
+        return $this->stripCode($this->scopeConfig->getValue(
             self::XML_PATH_FEED_COLOUR_CODE,
             ScopeInterface::SCOPE_STORE,
             $storeId
@@ -176,10 +187,13 @@ class Data extends AbstractHelper
      */
     public function getAttributeCodes($storeId = null)
     {
-        return explode(',', trim($this->scopeConfig->getValue(
-            self::XML_PATH_FEED_ATTRIBUTE_CODES,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        )));
+        return array_map(
+            array($this, 'stripCode'),
+            explode(',', trim($this->scopeConfig->getValue(
+                self::XML_PATH_FEED_ATTRIBUTE_CODES,
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            )))
+        );
     }
 }

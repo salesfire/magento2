@@ -43,15 +43,19 @@
                 </field>
                 <field id="brand_code" translate="label" type="text" sortOrder="30" showInDefault="0" showInWebsite="0" showInStore="1">
                     <label>Brand Attribute Code</label>
+                    <comment>E.g: brand</comment>
                 </field>
                 <field id="gender_code" translate="label" type="text" sortOrder="40" showInDefault="0" showInWebsite="0" showInStore="1">
                     <label>Gender Attribute Code</label>
+                    <comment>E.g: gender</comment>
                 </field>
                 <field id="age_group_code" translate="label" type="text" sortOrder="50" showInDefault="0" showInWebsite="0" showInStore="1">
                     <label>Age Group Attribute Code</label>
+                    <comment>E.g: age_group</comment>
                 </field>
                 <field id="colour_code" translate="label" type="text" sortOrder="60" showInDefault="0" showInWebsite="0" showInStore="1">
                     <label>Colour Attribute Code</label>
+                    <comment>E.g: color</comment>
                 </field>
                 <field id="attribute_codes" translate="label" type="text" sortOrder="70" showInDefault="0" showInWebsite="0" showInStore="1">
                     <label>Additional Attribute Codes</label>
