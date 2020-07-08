@@ -1,7 +1,7 @@
 # Changelog
 
 ### Salesfire v1.2.6
-Released on 2020-02-10
+Released on 2020-07-08
 Release notes:
 
 - Fix issue getting product images
