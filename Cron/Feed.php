@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Cron;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.5
+ * @version.   1.2.6
  */
 class Feed
 {
@@ -559,7 +559,7 @@ class Feed
         if (empty($image) || $image == 'no_selection') {
             $image = $product->getMediaGalleryImages()->getFirstItem()->getUrl();
         } else {
-            $image = $mediaUrl . 'catalog/product' . $image;
+            $image = $mediaUrl . 'catalog/product/' . ltrim($image, '/');
         }
 
         if (empty($image) || $image == 'no_selection') {
