@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Cron;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.6
+ * @version.   1.2.7
  */
 class Feed
 {
@@ -309,8 +309,8 @@ class Feed
                                         if (! empty($attributes)) {
                                             $text[] = ['<attributes>', 5];
 
-                                            foreach($attributes as $attribute => $text) {
-                                                $text[] = ['<'.$attribute.'><![CDATA['.$this->escapeString($text).']]></'.$attribute.'>', 6];
+                                            foreach($attributes as $attribute => $attribute_text) {
+                                                $text[] = ['<'.$attribute.'><![CDATA['.$this->escapeString($attribute_text).']]></'.$attribute.'>', 6];
                                             }
 
                                             $text[] = ['</attributes>', 5];
@@ -375,8 +375,8 @@ class Feed
                                 if (! empty($attributes)) {
                                     $text[] = ['<attributes>', 5];
 
-                                    foreach($attributes as $attribute => $text) {
-                                        $text[] = ['<'.$attribute.'><![CDATA['.$this->escapeString($text).']]></'.$attribute.'>', 6];
+                                    foreach($attributes as $attribute => $attribute_text) {
+                                        $text[] = ['<'.$attribute.'><![CDATA['.$this->escapeString($attribute_text).']]></'.$attribute.'>', 6];
                                     }
 
                                     $text[] = ['</attributes>', 5];

@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.2.7
+Released on 2020-07-15
+Release notes:
+
+- Fix issue getting product attributes
+
 ### Salesfire v1.2.6
 Released on 2020-07-08
 Release notes:
