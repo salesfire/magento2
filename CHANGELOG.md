@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.2.8
+Released on 2020-07-23
+Release notes:
+
+- Fix issue paging products
+
 ### Salesfire v1.2.7
 Released on 2020-07-15
 Release notes:
