@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Cron;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.8
+ * @version.   1.2.9
  */
 class Feed
 {
@@ -171,7 +171,7 @@ class Feed
                             $text[] = ['<description><![CDATA['.$this->escapeString(substr($this->_escaper->escapeHtml(strip_tags($description)), 0, 2000)).']]></description>', 3];
                         }
 
-                        $text[] = ['<link>' . $category->getUrl(true) . '</link>', 3];
+                        $text[] = ['<link><![CDATA[' . $category->getUrl(true) . ']]></link>', 3];
 
                         $keywords = $category->getMetaKeywords();
                         if (! empty($keywords)) {
@@ -228,7 +228,7 @@ class Feed
 
                         $text[] = ['<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 3];
 
-                        $text[] = ['<link>' . $product->getProductUrl(true) . '</link>', 3];
+                        $text[] = ['<link><![CDATA[' . $product->getProductUrl(true) . ']]></link>', 3];
 
                         if (! empty($gender_code)) {
                             $gender = $this->getAttributeValue($storeId, $product, $gender_code);
@@ -336,7 +336,7 @@ class Feed
 
                                     $text[] = ['<stock>' . ($stock ? $stock : 0) .'</stock>', 5];
 
-                                    $text[] = ['<link>' . $product->getProductUrl(true) . '</link>', 5];
+                                    $text[] = ['<link><![CDATA[' . $product->getProductUrl(true) . ']]></link>', 5];
 
                                     $image = $this->getProductImage($siteId, $mediaUrl, $product, $childProduct);
                                     if (! empty($image)) {
@@ -395,7 +395,7 @@ class Feed
 
                             $text[] = ['<stock>' . ($stock ? $stock : 0) .'</stock>', 5];
 
-                            $text[] = ['<link>' . $product->getProductUrl(true) . '</link>', 5];
+                            $text[] = ['<link><![CDATA[' . $product->getProductUrl(true) . ']]></link>', 5];
 
                             $image = $this->getProductImage($siteId, $mediaUrl, $product, $product);
                             if (! empty($image)) {
