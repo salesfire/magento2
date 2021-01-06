@@ -1,5 +1,12 @@
 # Changelog
 
+### Salesfire v1.2.10
+Released on 2021-01-06
+Release notes:
+
+- Fix exception handling
+- Fix issue when retrieving brand attribute
+
 ### Salesfire v1.2.9
 Released on 2020-08-26
 Release notes:

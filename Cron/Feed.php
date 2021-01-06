@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Cron;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.9
+ * @version.   1.2.10
  */
 class Feed
 {
@@ -186,7 +186,7 @@ class Feed
 
                         $this->printLines($siteId, $text);
                     } catch (\Exception $e) {
-                        $this->_logger->error('Error with category: ' . $product->getId());
+                        $this->_logger->error('Error with category: ' . $category->getId());
                         $this->_logger->error('- File: ' . $e->getFile() . ' - ' . $e->getLine());
                         $this->_logger->error('- Message: ' . $e->getMessage());
                     }
@@ -245,7 +245,7 @@ class Feed
                         }
 
                         if (! empty($brand_code)) {
-                            $brand = $this->getAttributeValue($storeId, $product, $age_group_code);
+                            $brand = $this->getAttributeValue($storeId, $product, $brand_code);
                             if ($brand) {
                                 $text[] = ['<brand><![CDATA[' . $this->escapeString($brand) . ']]></brand>', 3];
                             } else {
