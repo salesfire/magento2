@@ -186,7 +186,7 @@ class Feed
 
                         $this->printLines($siteId, $text);
                     } catch (\Exception $e) {
-                        $this->_logger->error('Error with category: ' . $product->getId());
+                        $this->_logger->error('Error with category: ' . $category->getId());
                         $this->_logger->error('- File: ' . $e->getFile() . ' - ' . $e->getLine());
                         $this->_logger->error('- Message: ' . $e->getMessage());
                     }
