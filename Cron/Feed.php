@@ -245,7 +245,7 @@ class Feed
                         }
 
                         if (! empty($brand_code)) {
-                            $brand = $this->getAttributeValue($storeId, $product, $age_group_code);
+                            $brand = $this->getAttributeValue($storeId, $product, $brand_code);
                             if ($brand) {
                                 $text[] = ['<brand><![CDATA[' . $this->escapeString($brand) . ']]></brand>', 3];
                             } else {
