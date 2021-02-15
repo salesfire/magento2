@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Cron;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.10
+ * @version.   1.2.11
  */
 class Feed
 {
@@ -219,8 +219,8 @@ class Feed
 
                         $text[] = ['<description><![CDATA[' . $this->escapeString(substr($this->_escaper->escapeHtml(strip_tags($product->getDescription())), 0, 5000)) . ']]></description>', 3];
 
-                        $price = $product->getFinalPrice();
-                        $saleprice = $product->getSpecialPrice();
+                        $price = $this->getProductPrice($product);
+                        $saleprice = $this->getProductSalePrice($product);
 
                         $text[] = ['<price currency="' . $currency . '">' . $price . '</price>', 3];
 
@@ -498,40 +498,51 @@ class Feed
         return $collection;
     }
 
-    protected function getProductPrice($product, $currency, $bundlePriceModel)
+    protected function getProductPrice($product)
     {
         switch($product->getTypeId())
         {
-            case 'grouped':
-                return $this->_attributeOptionsPrice($product, $product->getMinimalPriceattributeOptions);
-            break;
+            case 'groconfigurableped':
+                $basePrice = $product->getPriceInfo()->getPrice('regular_price');
 
+                return $basePrice->getMinRegularAmount()->getValue();
             case 'bundle':
-                return $bundlePriceModel->getTotalPrices($product, 'min', 1);
-            break;
+                return $product->getPriceInfo()->getPrice('regular_price')->getMinimalPrice()->getValue();
+            case 'grouped':
+                $price = 0;
+                $usedProds = $product->getTypeInstance(true)->getAssociatedProducts($product);
 
+                foreach ($usedProds as $child) {
+                    if ($child->getId() != $product->getId()) {
+                            $price += $child->getPrice();
+                    }
+                }
+
+                return $price;
             default:
-                return $this->_taxHelper->getTaxPrice($product, $product->getPrice(), true);
+                return $product->getPrice();
         }
     }
 
-    protected function getProductSalePrice($product, $currency, $bundlePriceModel)
+    protected function getProductSalePrice($product)
     {
         switch($product->getTypeId())
         {
-            case 'grouped':
-                return $this->_taxHelper->getTaxPrice($product, $product->getMinimalPrice(), true);
-            break;
-
             case 'bundle':
-                return $bundlePriceModel->getTotalPrices($product, 'min', 1);
-            break;
+                return $product->getPriceInfo()->getPrice('final_price')->getMinimalPrice()->getValue();
+            case 'grouped':
+                $saleprice = 0;
+                $usedProds = $product->getTypeInstance(true)->getAssociatedProducts($product);
 
-            default:
-                if ($product->getSpecialPrice()) {
-                    return $this->_taxHelper->getTaxPrice($product, $product->getSpecialPrice(), true);
+                foreach ($usedProds as $child) {
+                    if ($child->getId() != $product->getId()) {
+                        $saleprice += $child->getFinalPrice();
+                    }
                 }
-                return $this->_taxHelper->getTaxPrice($product, $product->getFinalPrice(), true);
+
+                return $saleprice;
+            default:
+                return $product->getFinalPrice();
         }
     }
 
