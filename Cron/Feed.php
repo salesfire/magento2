@@ -502,7 +502,7 @@ class Feed
     {
         switch($product->getTypeId())
         {
-            case 'groconfigurableped':
+            case 'configurable':
                 $basePrice = $product->getPriceInfo()->getPrice('regular_price');
 
                 return $basePrice->getMinRegularAmount()->getValue();
