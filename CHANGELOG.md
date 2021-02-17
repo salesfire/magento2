@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.2.11
+Released on 2021-02-15
+Release notes:
+
+- Fix feed product prices
+
 ### Salesfire v1.2.10
 Released on 2021-01-06
 Release notes:
