@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.2.12
+Released on 2021-07-23
+Release notes:
+
+- Added support for Magento 2.4
+
 ### Salesfire v1.2.11
 Released on 2021-02-15
 Release notes:
