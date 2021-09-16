@@ -10,7 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.1
+ * @version.   1.2.13
  */
 class Script extends Template
 {

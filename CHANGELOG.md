@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.2.13
+Released on 2021-09-16
+Release notes:
+
+- Fix an issue with incorrect product ids being stored on purchases
+
 ### Salesfire v1.2.12
 Released on 2021-07-23
 Release notes:
