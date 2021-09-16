@@ -104,6 +104,14 @@ class Script extends Template
             foreach ($order->getAllVisibleItems() as $product) {
                 $variant = '';
                 $options = $product->getProductOptions();
+                $parent_product_id = $product_id = $product->getProductId();
+
+                if($product->getHasChildren()) {
+                    foreach($product->getChildrenItems() as $child) {
+                        $product_id = $child->getProductId();
+                    }
+                }
+
                 if (!empty($options) && !empty($options['attribute_info'])) {
                     $variant = implode(', ', array_map(function ($item) {
                         return $item['label'].': '.$item['value'];
@@ -111,8 +119,8 @@ class Script extends Template
                 }
 
                 $transaction->addProduct(new \Salesfire\Types\Product([
-                    'sku'        => $product->getProductId(),
-                    'parent_sku' => $product->getProductId(),
+                    'sku'        => $product_id,
+                    'parent_sku' => $parent_product_id,
                     'name'       => $product->getName(),
                     'price'      => round($product->getPrice(), 2),
                     'tax'        => round($product->getTaxAmount(), 2),
