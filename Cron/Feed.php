@@ -20,7 +20,6 @@ class Feed
     private $_taxHelper;
     private $_stockItem;
 
-    private $_writer;
     private $_logger;
 
     private $mediaPath;
@@ -34,7 +33,8 @@ class Feed
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Filesystem\Driver\File $file,
         \Magento\Catalog\Helper\Data $taxHelper,
-        \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItem
+        \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItem,
+        \Salesfire\Salesfire\Helper\Logger\Logger $logger
     ) {
         $this->_helperData                = $helperData;
         $this->_storeManager              = $storeManager;
@@ -46,9 +46,7 @@ class Feed
         $this->_taxHelper                 = $taxHelper;
         $this->_stockItem                 = $stockItem;
 
-        $this->_writer = new \Zend\Log\Writer\Stream(BP . '/var/log/salesfire.log');
-        $this->_logger = new \Zend\Log\Logger();
-        $this->_logger->addWriter($this->_writer);
+        $this->_logger = $logger;
 
         $this->mediaPath = $this->_filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)->getAbsolutePath() . 'catalog';
 
