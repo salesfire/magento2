@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.2.14
+Released on 2022-01-07
+Release notes:
+
+- Replaced Zend module with Magento's native logging module.
+
 ### Salesfire v1.2.13
 Released on 2021-09-16
 Release notes:
