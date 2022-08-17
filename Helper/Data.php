@@ -86,7 +86,7 @@ class Data extends AbstractHelper
             self::XML_PATH_GENERAL_SITE_ID,
             ScopeInterface::SCOPE_STORE,
             $storeId
-        ));
+        ) ?? '');
     }
 
     /**
@@ -116,7 +116,7 @@ class Data extends AbstractHelper
             self::XML_PATH_FEED_DEFAULT_BRAND,
             ScopeInterface::SCOPE_STORE,
             $storeId
-        ));
+        ) ?? '');
     }
 
     /**
@@ -193,7 +193,7 @@ class Data extends AbstractHelper
                 self::XML_PATH_FEED_ATTRIBUTE_CODES,
                 ScopeInterface::SCOPE_STORE,
                 $storeId
-            )))
+            ) ?? ''))
         );
     }
 }
