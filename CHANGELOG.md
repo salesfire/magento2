@@ -1,5 +1,12 @@
 # Changelog
 
+### Salesfire v1.2.15
+Released on 2022-08-18
+Release notes:
+
+- Fix tracking issues
+- Fix php 8 issues
+
 ### Salesfire v1.2.14
 Released on 2022-01-07
 Release notes:
