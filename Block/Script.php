@@ -92,6 +92,8 @@ class Script extends Template
 
         $formatter = new \Salesfire\Formatter($this->getHelper()->getSiteId());
 
+        $formatter->addPlatform('magento2');
+
         // Display transaction
         if ($this->request->getFullActionName() == 'checkout_onepage_success' && $order = $this->getOrder()) {
             $transaction = new \Salesfire\Types\Transaction([
