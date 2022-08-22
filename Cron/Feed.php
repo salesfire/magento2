@@ -408,7 +408,7 @@ class Feed
                         $text[] = ['</product>', 2];
 
                         $this->printLines($siteId, $text);
-                    } catch (\ Exception $e) {
+                    } catch (\Exception $e) {
                         $this->_logger->error('Error with product: ' . $product->getId());
                         $this->_logger->error('- File: ' . $e->getFile() . ' - ' . $e->getLine());
                         $this->_logger->error('- Message: ' . $e->getMessage());
