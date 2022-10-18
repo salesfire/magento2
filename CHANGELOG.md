@@ -1,5 +1,12 @@
 # Changelog
 
+### Salesfire v1.2.16
+Released on 2022-10-18
+Release notes:
+
+- Add parent images to product feed
+- Fix php 8 issues
+
 ### Salesfire v1.2.15
 Released on 2022-08-18
 Release notes:
