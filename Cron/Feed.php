@@ -228,6 +228,11 @@ class Feed
 
                         $text[] = ['<link><![CDATA[' . $product->getProductUrl(true) . ']]></link>', 3];
 
+                        $image = $this->getProductImage($siteId, $mediaUrl, $product, $product);
+                        if (! empty($image)) {
+                            $text[] = ['<image>' . $image  . '</image>', 3];
+                        }
+
                         if (! empty($gender_code)) {
                             $gender = $this->getAttributeValue($storeId, $product, $gender_code);
                             if ($gender) {

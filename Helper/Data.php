@@ -44,7 +44,7 @@ class Data extends AbstractHelper
      */
     public function stripCode($code)
     {
-        return trim(preg_replace('/[^a-z0-9_]+/', '', strtolower($code)));
+        return trim(preg_replace('/[^a-z0-9_]+/', '', strtolower($code ?? "")));
     }
 
     /**
