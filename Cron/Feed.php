@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Cron;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.14
+ * @version.   1.2.16
  */
 class Feed
 {
@@ -227,6 +227,11 @@ class Feed
                         $text[] = ['<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 3];
 
                         $text[] = ['<link><![CDATA[' . $product->getProductUrl(true) . ']]></link>', 3];
+
+                        $image = $this->getProductImage($siteId, $mediaUrl, $product, $product);
+                        if (! empty($image)) {
+                            $text[] = ['<image>' . $image  . '</image>', 3];
+                        }
 
                         if (! empty($gender_code)) {
                             $gender = $this->getAttributeValue($storeId, $product, $gender_code);
