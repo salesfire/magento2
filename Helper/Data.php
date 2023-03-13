@@ -9,7 +9,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.16
+ * @version.   1.3.0
  */
 class Data extends AbstractHelper
 {
@@ -25,6 +25,17 @@ class Data extends AbstractHelper
     const XML_PATH_FEED_COLOUR_CODE     = 'salesfire/feed/colour_code';
     const XML_PATH_FEED_AGE_GROUP_CODE  = 'salesfire/feed/age_group_code';
     const XML_PATH_FEED_ATTRIBUTE_CODES = 'salesfire/feed/attribute_codes';
+
+    protected $storeManager;
+
+    public function __construct(
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+    ) {
+        $this->storeManager = $storeManager;
+
+        return parent::__construct($context);
+    }
 
     /**
      * What version of salesfire are we using
@@ -47,6 +58,32 @@ class Data extends AbstractHelper
         return trim(preg_replace('/[^a-z0-9_]+/', '', strtolower($code ?? "")));
     }
 
+    public function isSingleStoreMode()
+    {
+        return $this->storeManager->isSingleStoreMode();
+    }
+
+    public function getStoreViews()
+    {
+        if ($this->storeManager->isSingleStoreMode()) {
+            $store = new \stdClass;
+            $store->id = null;
+            $store->site_uuid = $this->getSiteId(null);
+
+            return [$store];
+        }
+
+        foreach ($this->storeManager->getStores() as $store) {
+            $storeId = $store->getId();
+            $store = new \stdClass;
+            $store->id = $storeId;
+            $store->site_uuid = $this->getSiteId($storeId);
+            $stores[] = $store;
+        }
+
+        return $stores;
+    }
+
     /**
      * Whether salesfire is ready to use
      *
@@ -67,9 +104,8 @@ class Data extends AbstractHelper
      */
     public function isEnabled($storeId = null)
     {
-        return !! $this->scopeConfig->getValue(
+        return !! $this->getScopeConfigValue(
             self::XML_PATH_GENERAL_ENABLED,
-            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -82,11 +118,10 @@ class Data extends AbstractHelper
      */
     public function getSiteId($storeId = null)
     {
-        return trim($this->scopeConfig->getValue(
+        return $this->getScopeConfigValue(
             self::XML_PATH_GENERAL_SITE_ID,
-            ScopeInterface::SCOPE_STORE,
             $storeId
-        ) ?: '');
+        );
     }
 
     /**
@@ -97,9 +132,8 @@ class Data extends AbstractHelper
      */
     public function isFeedEnabled($storeId = null)
     {
-        return !! $this->scopeConfig->getValue(
+        return !! $this->getScopeConfigValue(
             self::XML_PATH_FEED_ENABLED,
-            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -112,11 +146,12 @@ class Data extends AbstractHelper
      */
     public function getDefaultBrand($storeId = null)
     {
-        return trim($this->scopeConfig->getValue(
+        $brand = $this->getScopeConfigValue(
             self::XML_PATH_FEED_DEFAULT_BRAND,
-            ScopeInterface::SCOPE_STORE,
             $storeId
-        ) ?: '');
+        );
+
+        return trim($brand ?: '');
     }
 
     /**
@@ -127,11 +162,12 @@ class Data extends AbstractHelper
      */
     public function getBrandCode($storeId = null)
     {
-        return $this->stripCode($this->scopeConfig->getValue(
+        $brand_code = $this->getScopeConfigValue(
             self::XML_PATH_FEED_BRAND_CODE,
-            ScopeInterface::SCOPE_STORE,
             $storeId
-        ));
+        );
+
+        return $this->stripCode($brand_code);
     }
 
     /**
@@ -142,11 +178,12 @@ class Data extends AbstractHelper
      */
     public function getGenderCode($storeId = null)
     {
-        return $this->stripCode($this->scopeConfig->getValue(
+        $gender_code = $this->getScopeConfigValue(
             self::XML_PATH_FEED_GENDER_CODE,
-            ScopeInterface::SCOPE_STORE,
             $storeId
-        ));
+        );
+
+        return $this->stripCode($gender_code);
     }
 
     /**
@@ -157,11 +194,12 @@ class Data extends AbstractHelper
      */
     public function getAgeGroupCode($storeId = null)
     {
-        return $this->stripCode($this->scopeConfig->getValue(
+        $age_group_code = $this->getScopeConfigValue(
             self::XML_PATH_FEED_AGE_GROUP_CODE,
-            ScopeInterface::SCOPE_STORE,
             $storeId
-        ));
+        );
+
+        return $this->stripCode($age_group_code);
     }
 
     /**
@@ -172,11 +210,12 @@ class Data extends AbstractHelper
      */
     public function getColourCode($storeId = null)
     {
-        return $this->stripCode($this->scopeConfig->getValue(
+        $color_code = $this->getScopeConfigValue(
             self::XML_PATH_FEED_COLOUR_CODE,
-            ScopeInterface::SCOPE_STORE,
             $storeId
-        ));
+        );
+
+        return $this->stripCode($color_code);
     }
 
     /**
@@ -187,13 +226,29 @@ class Data extends AbstractHelper
      */
     public function getAttributeCodes($storeId = null)
     {
+        $attribute_codes = $this->getScopeConfigValue(
+            self::XML_PATH_FEED_COLOUR_CODE,
+            $storeId
+        );
+
         return array_map(
             array($this, 'stripCode'),
-            explode(',', trim($this->scopeConfig->getValue(
-                self::XML_PATH_FEED_ATTRIBUTE_CODES,
+            explode(',', trim($attribute_codes ?: ''))
+        );
+    }
+
+    protected function getScopeConfigValue($setting, $storeId)
+    {
+        if ($storeId) {
+            return trim($this->scopeConfig->getValue(
+                $setting,
                 ScopeInterface::SCOPE_STORE,
                 $storeId
-            ) ?: ''))
-        );
+            ) ?: '');
+        } else {
+            return trim($this->scopeConfig->getValue(
+                $setting,
+            ) ?: '');
+        }
     }
 }

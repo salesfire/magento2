@@ -6,7 +6,7 @@ namespace Salesfire\Salesfire\Controller\Config;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.2
+ * @version.   1.3.0
  */
 class Index extends \Magento\Framework\App\Action\Action
 {
@@ -18,11 +18,13 @@ class Index extends \Magento\Framework\App\Action\Action
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $jsonFactory,
         \Salesfire\Salesfire\Helper\Data $helperData,
-        \Magento\Framework\App\ProductMetadataInterface $productMetadata
+        \Magento\Framework\App\ProductMetadataInterface $productMetadata,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
     ) {
         $this->_jsonFactory      = $jsonFactory;
         $this->_productMetadata  = $productMetadata;
         $this->helperData        = $helperData;
+        $this->_storeManager     = $storeManager;
 
         return parent::__construct($context);
     }
@@ -42,6 +44,8 @@ class Index extends \Magento\Framework\App\Action\Action
             'site_id'         => $this->getHelper()->getSiteId(),
             'is_feed_enabled' => $this->getHelper()->isFeedEnabled() ? true : false,
             'magento_version' => $this->_productMetadata->getVersion(),
+            'is_single_store' => $this->getHelper()->isSingleStoreMode(),
+            'stores'          => $this->getHelper()->getStoreViews(),
         ];
 
         $result->setData($data);
