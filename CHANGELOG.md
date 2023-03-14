@@ -1,5 +1,13 @@
 # Changelog
 
+### Salesfire v1.3.0
+Released on 2023-03-14
+Release notes:
+
+- Add Magento 2 Single Store support.
+- Added button to manually run feed.
+- Added customisable cron schedule for feed generation.
+
 ### Salesfire v1.2.16
 Released on 2022-10-18
 Release notes:
