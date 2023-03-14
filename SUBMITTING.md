@@ -12,6 +12,12 @@
 
 These will be reused within submission. Be conscious these will be public.
 
+## Push to Github, merge and tag
+
+- Push changes to Github.
+- Open PR, review and merge.
+- Add a tag for merge commit on master in the format vX.X.X.
+
 ## Create a zip
 
 Run the following command in the folder above the module:
