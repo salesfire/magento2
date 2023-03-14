@@ -4,66 +4,90 @@
         <tab id="salesfire" translate="label" sortOrder="300">
             <label>Salesfire</label>
         </tab>
-        <section id="salesfire" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+        <section id="salesfire" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="1">
             <class>separator-top</class>
             <label>General</label>
             <tab>salesfire</tab>
             <resource>Salesfire_Salesfire::salesfire</resource>
-            <group id="about" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="about" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="1">
                 <label>Salesfire</label>
                 <attribute type="expanded">1</attribute>
 
-                <field id="about" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="about" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="1">
                     <frontend_model>Salesfire\Salesfire\Block\Adminhtml\About</frontend_model>
                 </field>
             </group>
-            <group id="general" translate="label" type="text" sortOrder="20" showInDefault="0" showInWebsite="0" showInStore="1">
+            <group id="general" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="1">
                 <label>General</label>
                 <attribute type="expanded">1</attribute>
 
-                <field id="is_enabled" translate="label" type="select" sortOrder="10" showInDefault="0" showInWebsite="0" showInStore="1">
+                <field id="is_enabled" translate="label" type="select" sortOrder="10" showInDefault="0" showInWebsite="1" showInStore="1">
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="site_id" translate="label" type="text" sortOrder="20" showInDefault="0" showInWebsite="0" showInStore="1">
+                <field id="site_id" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Site ID</label>
                     <comment>E.g: 00000000-0000-0000-0000-00000000000</comment>
                 </field>
             </group>
-            <group id="feed" translate="label" type="text" sortOrder="30" showInDefault="0" showInWebsite="0" showInStore="1">
+            <group id="feed" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="1">
                 <label>Product Feed</label>
                 <attribute type="expanded">1</attribute>
 
-                <field id="is_enabled" translate="label" type="select" sortOrder="10" showInDefault="0" showInWebsite="0" showInStore="1">
+                <field id="is_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="default_brand" translate="label" type="text" sortOrder="20" showInDefault="0" showInWebsite="0" showInStore="1">
+                <field id="default_brand" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Default Brand</label>
                 </field>
-                <field id="brand_code" translate="label" type="text" sortOrder="30" showInDefault="0" showInWebsite="0" showInStore="1">
+                <field id="brand_code" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Brand Attribute Code</label>
                     <comment>E.g: brand</comment>
                 </field>
-                <field id="gender_code" translate="label" type="text" sortOrder="40" showInDefault="0" showInWebsite="0" showInStore="1">
+                <field id="gender_code" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Gender Attribute Code</label>
                     <comment>E.g: gender</comment>
                 </field>
-                <field id="age_group_code" translate="label" type="text" sortOrder="50" showInDefault="0" showInWebsite="0" showInStore="1">
+                <field id="age_group_code" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Age Group Attribute Code</label>
                     <comment>E.g: age_group</comment>
                 </field>
-                <field id="colour_code" translate="label" type="text" sortOrder="60" showInDefault="0" showInWebsite="0" showInStore="1">
+                <field id="colour_code" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Colour Attribute Code</label>
                     <comment>E.g: color</comment>
                 </field>
-                <field id="attribute_codes" translate="label" type="text" sortOrder="70" showInDefault="0" showInWebsite="0" showInStore="1">
+                <field id="attribute_codes" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Additional Attribute Codes</label>
                     <comment>Comma separated list of attribute codes to put in feed. E.g: material,size</comment>
                 </field>
-                <field id="feed_url" translate="label" sortOrder="80" showInDefault="0" showInWebsite="0" showInStore="1">
+                <field id="feed_url" translate="label" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Feed Url</label>
                     <frontend_model>Salesfire\Salesfire\Block\Adminhtml\FeedUrl</frontend_model>
+                </field>
+                <field id="run" showInDefault="1" showInStore="0" showInWebsite="0" sortOrder="90" translate="label" type="text">
+                    <label>Generate Feed</label>
+                    <frontend_model>Salesfire\Salesfire\Block\Adminhtml\Buttons\GenerateFeed</frontend_model>
+                    <comment/>
+                </field>
+            </group>
+            <group id="feed_generation" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0"
+                   showInStore="0">
+                <label>Product Feed Generation Schedule</label>
+                <field id="schedule" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Schedule (Cron)</label>
+                    <comment><![CDATA[
+<pre>
+* * * * *
+| | | | |
+| | | | +---- Day of the Week   (range: 1-7, 1 standing for Monday)
+| | | +------ Month of the Year (range: 1-12)
+| | +-------- Day of the Month  (range: 1-31)
+| +---------- Hour              (range: 0-23)
++------------ Minute            (range: 0-59)
+Example: 0 0 * * * Daily at midnight
+</pre>
+                    ]]></comment>
                 </field>
             </group>
         </section>

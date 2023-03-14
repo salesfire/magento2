@@ -6,6 +6,9 @@
                 <is_enabled>0</is_enabled>
                 <site_id></site_id>
             </general>
+            <feed_generation>
+                <schedule>0 1 * * *</schedule>
+            </feed_generation>
         </salesfire>
     </default>
 </config>

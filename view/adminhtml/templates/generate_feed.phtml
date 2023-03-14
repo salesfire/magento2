@@ -1,0 +1,40 @@
+<?php echo $block->getChildHtml('button') ?>
+
+<script>
+    require([
+        'jquery',
+        'prototype'
+    ], function(jQuery){
+
+        var button = jQuery('#sf-generate_button');
+
+        button.click(function () {
+            var params = {};
+            new Ajax.Request('<?php echo $block->getAjaxUrl() ?>', {
+                parameters:     params,
+                loaderArea:     false,
+                asynchronous:   true,
+                onCreate: function() {
+                    alert('Feed generation is about to start.\nPlease allow your store time to generate your feed.\nLarge product catalogues can take some time to generate.');
+                    button.text('Generating...');
+                },
+                onSuccess: function(response) {
+                    var resultText = '';
+                    if (response.status > 200) {
+                        resultText = response.statusText;
+
+                        alert('Unknown response:' + resultText);
+                    } else {
+                        resultText = 'Success';
+
+                        alert('Your feeds have finished generating.');
+
+                        button.text('Finished');
+                    }
+                }
+            });
+        });
+
+    });
+</script>
+
