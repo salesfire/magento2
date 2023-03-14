@@ -223,7 +223,7 @@ class Generator
 
                         $text[] = ['<title><![CDATA[' . $this->escapeString($product->getName()) . ']]></title>', 3];
 
-                        $text[] = ['<description><![CDATA[' . $this->escapeString(substr($this->_escaper->escapeHtml(strip_tags($product->getDescription())), 0, 5000)) . ']]></description>', 3];
+                        $text[] = ['<description><![CDATA[' . $this->escapeString(substr($this->_escaper->escapeHtml(strip_tags($product->getDescription() ?: '')), 0, 5000)) . ']]></description>', 3];
 
                         $price = $this->getProductPrice($product);
                         $saleprice = $this->getProductSalePrice($product);
