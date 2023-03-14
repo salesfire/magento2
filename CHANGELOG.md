@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.2.17
+Released on 2023-03-14
+Release notes:
+
+- Updated strip_tags deprecated argument
+
 ### Salesfire v1.2.16
 Released on 2022-10-18
 Release notes:
