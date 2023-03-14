@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Cron;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.16
+ * @version.   1.2.17
  */
 class Feed
 {
