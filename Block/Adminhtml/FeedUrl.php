@@ -3,6 +3,7 @@
 namespace Salesfire\Salesfire\Block\Adminhtml;
 
 use Magento\Backend\Block\Template\Context;
+use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Store\Model\StoreManagerInterface;
@@ -17,8 +18,11 @@ use Salesfire\Salesfire\Helper\Data;
  * @package    Salesfire_Salesfire
  * @version.   1.3.0
  */
-class FeedUrl extends \Magento\Config\Block\System\Config\Form\Field
+class FeedUrl extends Field
 {
+    /**
+     * @var
+     */
     public $helperData;
 
     /**
@@ -27,7 +31,11 @@ class FeedUrl extends \Magento\Config\Block\System\Config\Form\Field
     private $secureRenderer;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Context $context
+     * @param StoreManagerInterface $storeManager
+     * @param Data $helperData
+     * @param SecureHtmlRenderer|null $secureRenderer
+     * @param array $data
      */
     public function __construct(
         Context $context,
@@ -56,6 +64,6 @@ class FeedUrl extends \Magento\Config\Block\System\Config\Form\Field
 
         $feed_url = sprintf('%scatalog/%s.xml', $base_url, $this->_helperData->getSiteId($storeId));
 
-        return '<td class="value">'. $feed_url .'</td>';
+        return '<td class="value">' . $feed_url . '</td>';
     }
 }
