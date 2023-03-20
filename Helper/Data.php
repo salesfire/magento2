@@ -9,22 +9,22 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.3.0
+ * @version.   1.3.1
  */
 class Data extends AbstractHelper
 {
     /**
      * Config paths for using throughout the code
      */
-    const XML_PATH_GENERAL_ENABLED      = 'salesfire/general/is_enabled';
-    const XML_PATH_GENERAL_SITE_ID      = 'salesfire/general/site_id';
-    const XML_PATH_FEED_ENABLED         = 'salesfire/feed/is_enabled';
-    const XML_PATH_FEED_DEFAULT_BRAND   = 'salesfire/feed/default_brand';
-    const XML_PATH_FEED_BRAND_CODE      = 'salesfire/feed/brand_code';
-    const XML_PATH_FEED_GENDER_CODE     = 'salesfire/feed/gender_code';
-    const XML_PATH_FEED_COLOUR_CODE     = 'salesfire/feed/colour_code';
-    const XML_PATH_FEED_AGE_GROUP_CODE  = 'salesfire/feed/age_group_code';
-    const XML_PATH_FEED_ATTRIBUTE_CODES = 'salesfire/feed/attribute_codes';
+    public const XML_PATH_GENERAL_ENABLED      = 'salesfire/general/is_enabled';
+    public const XML_PATH_GENERAL_SITE_ID      = 'salesfire/general/site_id';
+    public const XML_PATH_FEED_ENABLED         = 'salesfire/feed/is_enabled';
+    public const XML_PATH_FEED_DEFAULT_BRAND   = 'salesfire/feed/default_brand';
+    public const XML_PATH_FEED_BRAND_CODE      = 'salesfire/feed/brand_code';
+    public const XML_PATH_FEED_GENDER_CODE     = 'salesfire/feed/gender_code';
+    public const XML_PATH_FEED_COLOUR_CODE     = 'salesfire/feed/colour_code';
+    public const XML_PATH_FEED_AGE_GROUP_CODE  = 'salesfire/feed/age_group_code';
+    public const XML_PATH_FEED_ATTRIBUTE_CODES = 'salesfire/feed/attribute_codes';
 
     protected $storeManager;
 
@@ -44,7 +44,7 @@ class Data extends AbstractHelper
      */
     public function getVersion()
     {
-        return '1.3.0';
+        return '1.3.1';
     }
 
     /**
