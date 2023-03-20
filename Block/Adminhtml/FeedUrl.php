@@ -2,7 +2,10 @@
 
 namespace Salesfire\Salesfire\Block\Adminhtml;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\UrlInterface;
@@ -15,19 +18,37 @@ use Salesfire\Salesfire\Helper\Data;
  * @package    Salesfire_Salesfire
  * @version.   1.3.0
  */
-class FeedUrl extends \Magento\Config\Block\System\Config\Form\Field
+class FeedUrl extends Field
 {
+    /**
+     * @var
+     */
     public $helperData;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
+     * @param Context $context
+     * @param StoreManagerInterface $storeManager
+     * @param Data $helperData
+     * @param SecureHtmlRenderer|null $secureRenderer
+     * @param array $data
      */
     public function __construct(
+        Context $context,
         StoreManagerInterface $storeManager,
         Data $helperData,
+        ?SecureHtmlRenderer $secureRenderer = null,
+        array $data = [],
     ) {
+        parent::__construct($context, $data);
+
         $this->_storeManager = $storeManager;
         $this->_helperData = $helperData;
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
     }
 
     /**
@@ -36,13 +57,13 @@ class FeedUrl extends \Magento\Config\Block\System\Config\Form\Field
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    protected function _renderValue(AbstractElement $element)
+    protected function _renderValue(AbstractElement $element): string
     {
         $storeId = $this->_storeManager->hasSingleStore() ? null : $element->getScopeId();
         $base_url = $this->_storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
 
         $feed_url = sprintf('%scatalog/%s.xml', $base_url, $this->_helperData->getSiteId($storeId));
 
-        return '<td class="value">'. $feed_url .'</td>';
+        return '<td class="value">' . $feed_url . '</td>';
     }
 }
