@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.3.1
+Released on 2023-03-20
+Release notes:
+
+- Fix issues running on Magento 2.4.5-p2 by @ssx in #26
+
 ### Salesfire v1.3.0
 Released on 2023-03-14
 Release notes:
