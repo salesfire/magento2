@@ -79,7 +79,7 @@ class Generator
 
     public function escapeString($text)
     {
-        return html_entity_decode(trim(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', utf8_encode($text))));
+        return html_entity_decode(trim($text));
     }
 
     public function execute()
