@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.3.2
+Released on 2023-04-14
+Release notes:
+
+- Remove UTF8 character stripping
+
 ### Salesfire v1.3.1
 Released on 2023-03-20
 Release notes:
