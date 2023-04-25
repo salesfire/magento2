@@ -16,7 +16,7 @@ class Feed
     private $_feedGenerator;
 
     public function __construct(
-        Generator $feedGenerator,
+        Generator $feedGenerator
     ) {
         $this->_feedGenerator = $feedGenerator;
     }

@@ -30,7 +30,7 @@ class Data extends AbstractHelper
 
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->storeManager = $storeManager;
 
@@ -247,7 +247,7 @@ class Data extends AbstractHelper
             ) ?: '');
         } else {
             return trim($this->scopeConfig->getValue(
-                $setting,
+                $setting
             ) ?: '');
         }
     }

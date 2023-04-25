@@ -34,7 +34,7 @@ class Generate extends \Magento\Backend\App\Action
         PageFactory $resultPageFactory,
         Data $jsonHelper,
         LoggerInterface $logger,
-        Generator $feedGenerator,
+        Generator $feedGenerator
     ) {
         $this->resultPageFactory = $resultPageFactory;
         $this->jsonHelper = $jsonHelper;

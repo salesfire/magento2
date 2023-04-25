@@ -42,7 +42,7 @@ class FeedUrl extends Field
         StoreManagerInterface $storeManager,
         Data $helperData,
         ?SecureHtmlRenderer $secureRenderer = null,
-        array $data = [],
+        array $data = []
     ) {
         parent::__construct($context, $data);
 
