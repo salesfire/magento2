@@ -15,7 +15,7 @@ use Salesfire\Salesfire\Helper\Feed\Generator;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.3.0
+ * @version    1.3.3
  */
 class Generate extends \Magento\Backend\App\Action
 {
