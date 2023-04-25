@@ -7,16 +7,17 @@ use Salesfire\Salesfire\Helper\Feed\Generator;
 /**
  * Salesfire Feed Cron
  *
- * @category   Salesfire
- * @package    Salesfire_Salesfire
- * @version.   1.3.0
+ * @version    1.3.3
  */
 class Feed
 {
+    /**
+     * @var \Salesfire\Salesfire\Helper\Feed\Generator
+     */
     private $_feedGenerator;
 
     public function __construct(
-        Generator $feedGenerator,
+        Generator $feedGenerator
     ) {
         $this->_feedGenerator = $feedGenerator;
     }

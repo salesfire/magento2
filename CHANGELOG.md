@@ -1,5 +1,12 @@
 # Changelog
 
+### Salesfire v1.3.3
+Released on 2023-04-25
+Release notes:
+
+- Added support for PHP 7.1, 7.2, 7.3 and 7.4.
+- Formatting.
+
 ### Salesfire v1.3.2
 Released on 2023-04-14
 Release notes:

@@ -9,7 +9,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.3.1
+ * @version    1.3.3
  */
 class Data extends AbstractHelper
 {
@@ -30,7 +30,7 @@ class Data extends AbstractHelper
 
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->storeManager = $storeManager;
 
@@ -44,7 +44,7 @@ class Data extends AbstractHelper
      */
     public function getVersion()
     {
-        return '1.3.2';
+        return '1.3.3';
     }
 
     /**
@@ -232,7 +232,7 @@ class Data extends AbstractHelper
         );
 
         return array_map(
-            array($this, 'stripCode'),
+            [$this, 'stripCode'],
             explode(',', trim($attribute_codes ?: ''))
         );
     }
@@ -247,7 +247,7 @@ class Data extends AbstractHelper
             ) ?: '');
         } else {
             return trim($this->scopeConfig->getValue(
-                $setting,
+                $setting
             ) ?: '');
         }
     }

@@ -6,7 +6,7 @@ namespace Salesfire\Salesfire\Controller\Config;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.3.0
+ * @version    1.3.3
  */
 class Index extends \Magento\Framework\App\Action\Action
 {
@@ -19,7 +19,7 @@ class Index extends \Magento\Framework\App\Action\Action
         \Magento\Framework\Controller\Result\JsonFactory $jsonFactory,
         \Salesfire\Salesfire\Helper\Data $helperData,
         \Magento\Framework\App\ProductMetadataInterface $productMetadata,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_jsonFactory      = $jsonFactory;
         $this->_productMetadata  = $productMetadata;

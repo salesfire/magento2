@@ -10,7 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.2.13
+ * @version    1.3.3
  */
 class Script extends Template
 {
@@ -108,8 +108,8 @@ class Script extends Template
                 $options = $product->getProductOptions();
                 $parent_product_id = $product_id = $product->getProductId();
 
-                if($product->getHasChildren()) {
-                    foreach($product->getChildrenItems() as $child) {
+                if ($product->getHasChildren()) {
+                    foreach ($product->getChildrenItems() as $child) {
                         $product_id = $child->getProductId();
                     }
                 }
@@ -151,5 +151,4 @@ class Script extends Template
 
         return $formatter->toScriptTag();
     }
-
 }
