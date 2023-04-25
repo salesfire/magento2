@@ -65,7 +65,7 @@ class Generator
         return $this->mediaPath . '/';
     }
 
-    public function printLine($siteId, $text, $tab=0)
+    public function printLine($siteId, $text, $tab = 0)
     {
         $this->_file->filePutContents($this->getMediaPath() . $siteId . '.temp.xml', str_repeat("\t", $tab) . $text . "\n", FILE_APPEND);
     }
@@ -89,8 +89,7 @@ class Generator
 
         $processed_site_ids = [];
 
-        foreach ($this->_helperData->getStoreViews() as $storeView)
-        {
+        foreach ($this->_helperData->getStoreViews() as $storeView) {
             $storeId = $storeView->id;
             $store = $this->_storeManager->getStore($storeId);
 
@@ -262,7 +261,7 @@ class Generator
                             } else {
                                 $text[] = ['<brand><![CDATA[' . $this->escapeString($default_brand) . ']]></brand>', 3];
                             }
-                        } else if (! empty($default_brand)) {
+                        } elseif (! empty($default_brand)) {
                             $text[] = ['<brand><![CDATA[' . $this->escapeString($default_brand) . ']]></brand>', 3];
                         }
 
@@ -306,8 +305,8 @@ class Generator
                                     if (! empty($attributes_to_show)) {
                                         $attributes = [];
 
-                                        foreach($attributes_to_show as $attribute) {
-                                            if (empty($attribute) || in_array($attribute, array('id', 'mpn', 'stock', 'link', 'image', $age_group_code, $gender_code, $brand_code, $colour_code))) {
+                                        foreach ($attributes_to_show as $attribute) {
+                                            if (empty($attribute) || in_array($attribute, ['id', 'mpn', 'stock', 'link', 'image', $age_group_code, $gender_code, $brand_code, $colour_code])) {
                                                 continue;
                                             }
 
@@ -320,7 +319,7 @@ class Generator
                                         if (! empty($attributes)) {
                                             $text[] = ['<attributes>', 5];
 
-                                            foreach($attributes as $attribute => $attribute_text) {
+                                            foreach ($attributes as $attribute => $attribute_text) {
                                                 $text[] = ['<'.$attribute.'><![CDATA['.$this->escapeString($attribute_text).']]></'.$attribute.'>', 6];
                                             }
 
@@ -365,8 +364,8 @@ class Generator
                             if (! empty($attribute_codes)) {
                                 $attributes = [];
 
-                                foreach($attribute_codes as $attribute) {
-                                    if (empty($attribute) || in_array($attribute, array('id', 'mpn', 'stock', 'link', 'image', $age_group_code, $gender_code, $brand_code, $colour_code))) {
+                                foreach ($attribute_codes as $attribute) {
+                                    if (empty($attribute) || in_array($attribute, ['id', 'mpn', 'stock', 'link', 'image', $age_group_code, $gender_code, $brand_code, $colour_code])) {
                                         continue;
                                     }
 
@@ -386,7 +385,7 @@ class Generator
                                 if (! empty($attributes)) {
                                     $text[] = ['<attributes>', 5];
 
-                                    foreach($attributes as $attribute => $attribute_text) {
+                                    foreach ($attributes as $attribute => $attribute_text) {
                                         $text[] = ['<'.$attribute.'><![CDATA['.$this->escapeString($attribute_text).']]></'.$attribute.'>', 6];
                                     }
 
@@ -464,13 +463,13 @@ class Generator
         $categories = $this->_categoryCollectionFactory->create()
             ->setStoreId($storeId)
             ->addFieldToFilter('is_active', 1)
-            ->addAttributeToFilter('path', array('like' => "1/{$rootCategoryId}/%"))
+            ->addAttributeToFilter('path', ['like' => "1/{$rootCategoryId}/%"])
             ->addAttributeToSelect('*');
 
         return $categories;
     }
 
-    public function getCategoryBreadcrumb($storeId, $category, $breadcrumb='')
+    public function getCategoryBreadcrumb($storeId, $category, $breadcrumb = '')
     {
         if (! empty($breadcrumb)) {
             $breadcrumb = ' > ' . $breadcrumb;
@@ -486,19 +485,18 @@ class Generator
         return $breadcrumb;
     }
 
-    protected function getVisibleProducts($storeId, $curPage=1, $pageSize=100)
+    protected function getVisibleProducts($storeId, $curPage = 1, $pageSize = 100)
     {
         $collection = $this->_productCollectionFactory->create()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('status', 1)
-            ->addAttributeToFilter('visibility', array('neq' => 1))
+            ->addAttributeToFilter('visibility', ['neq' => 1])
             ->setStoreId($storeId)
             ->addStoreFilter($storeId)
             ->addMinimalPrice()
             ->setPageSize($pageSize);
 
-        if (!empty($curPage))
-        {
+        if (!empty($curPage)) {
             $collection->setCurPage($curPage);
         }
 
@@ -511,8 +509,7 @@ class Generator
 
     protected function getProductPrice($product)
     {
-        switch($product->getTypeId())
-        {
+        switch ($product->getTypeId()) {
             case 'configurable':
                 $basePrice = $product->getPriceInfo()->getPrice('regular_price');
 
@@ -537,8 +534,7 @@ class Generator
 
     protected function getProductSalePrice($product)
     {
-        switch($product->getTypeId())
-        {
+        switch ($product->getTypeId()) {
             case 'bundle':
                 return $product->getPriceInfo()->getPrice('final_price')->getMinimalPrice()->getValue();
             case 'grouped':
@@ -557,10 +553,11 @@ class Generator
         }
     }
 
-    protected function getAttributeValue($storeId, $product, $attribute) {
+    protected function getAttributeValue($storeId, $product, $attribute)
+    {
         $attribute_obj = $product->getResource()->getAttribute($attribute);
 
-        if(! empty($attribute_obj)) {
+        if (! empty($attribute_obj)) {
             $attribute_text = $attribute_obj->setStoreId($storeId)->getFrontend()->getValue($product);
 
             if (! empty($attribute_text) && $attribute_text != 'no_selection') {
@@ -571,7 +568,8 @@ class Generator
         return null;
     }
 
-    protected function getProductImage($siteId, $mediaUrl, $product, $childProduct) {
+    protected function getProductImage($siteId, $mediaUrl, $product, $childProduct)
+    {
         $image = $childProduct->getImage();
         if (empty($image) || $image == 'no_selection') {
             $image = $product->getImage();

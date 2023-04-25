@@ -108,8 +108,8 @@ class Script extends Template
                 $options = $product->getProductOptions();
                 $parent_product_id = $product_id = $product->getProductId();
 
-                if($product->getHasChildren()) {
-                    foreach($product->getChildrenItems() as $child) {
+                if ($product->getHasChildren()) {
+                    foreach ($product->getChildrenItems() as $child) {
                         $product_id = $child->getProductId();
                     }
                 }
@@ -151,5 +151,4 @@ class Script extends Template
 
         return $formatter->toScriptTag();
     }
-
 }

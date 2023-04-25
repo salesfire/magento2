@@ -232,7 +232,7 @@ class Data extends AbstractHelper
         );
 
         return array_map(
-            array($this, 'stripCode'),
+            [$this, 'stripCode'],
             explode(',', trim($attribute_codes ?: ''))
         );
     }
