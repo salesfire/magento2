@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.3.4
+Released on 2023-05-17
+Released notes:
+
+- Fix potential bug with single/non-single store retrieving of setting values.
+
 ### Salesfire v1.3.3
 Released on 2023-04-25
 Release notes:
