@@ -247,7 +247,7 @@ class Data extends AbstractHelper
             ) ?: '');
         } else {
             return trim($this->scopeConfig->getValue(
-                $setting,
+                $setting
             ) ?: '');
         }
     }
