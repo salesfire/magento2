@@ -11,7 +11,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.3.0
+ * @version    1.3.3
  */
 class GenerateFeed extends \Magento\Config\Block\System\Config\Form\Field
 {
@@ -28,8 +28,7 @@ class GenerateFeed extends \Magento\Config\Block\System\Config\Form\Field
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $data);
     }
     /**

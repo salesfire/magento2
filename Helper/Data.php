@@ -9,7 +9,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.3.1
+ * @version    1.3.4
  */
 class Data extends AbstractHelper
 {
@@ -30,7 +30,7 @@ class Data extends AbstractHelper
 
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->storeManager = $storeManager;
 
@@ -44,7 +44,7 @@ class Data extends AbstractHelper
      */
     public function getVersion()
     {
-        return '1.3.1';
+        return '1.3.4';
     }
 
     /**
@@ -78,6 +78,7 @@ class Data extends AbstractHelper
             $store = new \stdClass;
             $store->id = $storeId;
             $store->site_uuid = $this->getSiteId($storeId);
+            $store->is_enabled = $this->isEnabled($storeId);
             $stores[] = $store;
         }
 
@@ -232,7 +233,7 @@ class Data extends AbstractHelper
         );
 
         return array_map(
-            array($this, 'stripCode'),
+            [$this, 'stripCode'],
             explode(',', trim($attribute_codes ?: ''))
         );
     }
@@ -245,9 +246,14 @@ class Data extends AbstractHelper
                 ScopeInterface::SCOPE_STORE,
                 $storeId
             ) ?: '');
+        } else if ($this->isSingleStoreMode()) {
+            return trim($this->scopeConfig->getValue(
+                $setting,
+            ) ?: '');
         } else {
             return trim($this->scopeConfig->getValue(
-                $setting
+                $setting,
+                ScopeInterface::SCOPE_STORE
             ) ?: '');
         }
     }

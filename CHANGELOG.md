@@ -1,5 +1,24 @@
 # Changelog
 
+### Salesfire v1.3.4
+Released on 2023-05-17
+Released notes:
+
+- Fix potential bug with single/non-single store retrieving of setting values.
+
+### Salesfire v1.3.3
+Released on 2023-04-25
+Release notes:
+
+- Added support for PHP 7.1, 7.2, 7.3 and 7.4.
+- Formatting.
+
+### Salesfire v1.3.2
+Released on 2023-04-14
+Release notes:
+
+- Remove UTF8 character stripping
+
 ### Salesfire v1.3.1
 Released on 2023-03-20
 Release notes:

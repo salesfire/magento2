@@ -16,7 +16,7 @@ use Salesfire\Salesfire\Helper\Data;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.3.1
+ * @version    1.3.3
  */
 class FeedUrl extends Field
 {
@@ -42,7 +42,7 @@ class FeedUrl extends Field
         StoreManagerInterface $storeManager,
         Data $helperData,
         ?SecureHtmlRenderer $secureRenderer = null,
-        array $data = [],
+        array $data = []
     ) {
         parent::__construct($context, $data);
 
