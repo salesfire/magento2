@@ -253,7 +253,7 @@ class Data extends AbstractHelper
         } else {
             return trim($this->scopeConfig->getValue(
                 $setting,
-                ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE
             ) ?: '');
         }
     }
