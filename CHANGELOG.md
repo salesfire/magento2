@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.3.5
+Released on 2023-06-20
+Released notes:
+
+- Removed trailing comma's in the function calls that were causing feed errors. 
+
 ### Salesfire v1.3.4
 Released on 2023-05-17
 Released notes:
