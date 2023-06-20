@@ -248,7 +248,7 @@ class Data extends AbstractHelper
             ) ?: '');
         } else if ($this->isSingleStoreMode()) {
             return trim($this->scopeConfig->getValue(
-                $setting,
+                $setting
             ) ?: '');
         } else {
             return trim($this->scopeConfig->getValue(
