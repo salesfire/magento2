@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.3.6
+Released on 2023-06-28
+Released notes:
+
+- Fix bug where the feed generation cron wasn't running.
+
 ### Salesfire v1.3.5
 Released on 2023-06-20
 Released notes:
