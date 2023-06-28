@@ -24,7 +24,6 @@ class Generator
 
     private $mediaPath;
 
-
     private $urlFinder;
 
     protected $configurable;
