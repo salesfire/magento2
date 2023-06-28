@@ -24,6 +24,17 @@ class Generator
 
     private $mediaPath;
 
+    private $urlFinder;
+
+    protected $configurable;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    private $frontendUrl;
+
     public function __construct(
         \Salesfire\Salesfire\Helper\Data $helperData,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -34,7 +45,11 @@ class Generator
         \Magento\Framework\Filesystem\Driver\File $file,
         \Magento\Catalog\Helper\Data $taxHelper,
         \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItem,
-        \Salesfire\Salesfire\Helper\Logger\Logger $logger
+        \Salesfire\Salesfire\Helper\Logger\Logger $logger,
+        \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder,
+        \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\Url $frontendUrl,
     ) {
         $this->_helperData                = $helperData;
         $this->_storeManager              = $storeManager;
@@ -45,6 +60,9 @@ class Generator
         $this->_escaper                   = $escaper;
         $this->_taxHelper                 = $taxHelper;
         $this->_stockItem                 = $stockItem;
+        $this->urlFinder                  = $urlFinder;
+        $this->configurable               = $configurable;
+        $this->frontendUrl                = $frontendUrl;
 
         $this->_logger = $logger;
 
@@ -58,6 +76,8 @@ class Generator
                 $this->_logger->error('Unable to create media catalog directory: ' . $this->mediaPath);
             }
         }
+
+        $this->scopeConfig = $context->getScopeConfig();
     }
 
     public function getMediaPath()
@@ -233,7 +253,7 @@ class Generator
 
                         $text[] = ['<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 3];
 
-                        $text[] = ['<link><![CDATA[' . $product->getProductUrl(true) . ']]></link>', 3];
+                        $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId) . ']]></link>', 3];
 
                         $image = $this->getProductImage($siteId, $mediaUrl, $product, $product);
                         if (! empty($image)) {
@@ -346,7 +366,7 @@ class Generator
 
                                     $text[] = ['<stock>' . ($stock ? $stock : 0) .'</stock>', 5];
 
-                                    $text[] = ['<link><![CDATA[' . $product->getProductUrl(true) . ']]></link>', 5];
+                                    $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId) . ']]></link>', 5];
 
                                     $image = $this->getProductImage($siteId, $mediaUrl, $product, $childProduct);
                                     if (! empty($image)) {
@@ -405,7 +425,7 @@ class Generator
 
                             $text[] = ['<stock>' . ($stock ? $stock : 0) .'</stock>', 5];
 
-                            $text[] = ['<link><![CDATA[' . $product->getProductUrl(true) . ']]></link>', 5];
+                            $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId) . ']]></link>', 5];
 
                             $image = $this->getProductImage($siteId, $mediaUrl, $product, $product);
                             if (! empty($image)) {
@@ -522,7 +542,7 @@ class Generator
 
                 foreach ($usedProds as $child) {
                     if ($child->getId() != $product->getId()) {
-                            $price += $child->getPrice();
+                        $price += $child->getPrice();
                     }
                 }
 
@@ -586,5 +606,56 @@ class Generator
         }
 
         return $image;
+    }
+
+    protected function getProductUrl($product, $storeId)
+    {
+        $route_path = '';
+
+        $request_path = $product->getRequestPath();
+
+        $route_params = [];
+
+        $filter_data = [
+            \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::ENTITY_ID => $product->getId(),
+            \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::ENTITY_TYPE => \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::ENTITY_TYPE,
+            \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::STORE_ID => $storeId,
+        ];
+
+        $rewrite = $this->urlFinder->findOneByData($filter_data);
+
+        if ($rewrite) {
+            $request_path = $rewrite->getRequestPath();
+        }
+
+        if (!empty($request_path)) {
+            $route_params['_direct'] = $request_path;
+        } else {
+            $route_path = 'catalog/product/view';
+
+            if (
+                $product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
+                    && count($parents = $this->configurable->getParentIdsByChild($product->getId())) > 0
+            ) {
+                $route_params['id'] = $parents[0];
+                $route_params['s'] = $product->getUrlKey();
+            } else {
+                $route_params['id'] = $product->getId();
+                $route_params['s'] = $product->getUrlKey();
+            }
+        }
+
+        $route_params['_scope'] = $storeId;
+        $route_params['_nosid'] = true;
+        $route_params['_type'] = \Magento\Framework\UrlInterface::URL_TYPE_LINK;
+
+        if ($this->scopeConfig->getValue(\Magento\Store\Model\Store::XML_PATH_STORE_IN_URL) == 1) {
+            $route_params['_scope_to_url'] = true;
+        }
+
+        return $this->frontendUrl->setScope($storeId)->getUrl(
+            $route_path,
+            $route_params
+        );
     }
 }
