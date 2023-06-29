@@ -87,6 +87,8 @@
 +------------ Minute            (range: 0-59)
 Example: 0 0 * * * Daily at midnight
 </pre>
+
+You may need to clear cache after changing this setting.
                     ]]></comment>
                 </field>
             </group>

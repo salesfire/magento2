@@ -1,5 +1,12 @@
 # Changelog
 
+### Salesfire v1.3.6
+Released on 2023-06-28
+Released notes:
+
+- Fix bug where the feed generation cron wasn't running.
+- Improved product links stability when URL rewrites are missing or have been corrupted.
+
 ### Salesfire v1.3.5
 Released on 2023-06-20
 Released notes:
