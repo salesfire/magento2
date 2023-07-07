@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.3.7
+Released on 2023-07-07
+Released notes:
+
+- Updated the feed generator to use the minimum price rather than the sum price of its associated products.
+
 ### Salesfire v1.3.6
 Released on 2023-06-28
 Released notes:
