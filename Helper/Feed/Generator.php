@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.3.2
+ * @version.   1.3.7
  */
 class Generator
 {
@@ -537,12 +537,14 @@ class Generator
             case 'bundle':
                 return $product->getPriceInfo()->getPrice('regular_price')->getMinimalPrice()->getValue();
             case 'grouped':
-                $price = 0;
+                $price = null;
                 $usedProds = $product->getTypeInstance(true)->getAssociatedProducts($product);
 
                 foreach ($usedProds as $child) {
                     if ($child->getId() != $product->getId()) {
-                        $price += $child->getPrice();
+                        $price = $price === null ?
+                            $child->getPrice()
+                            : min($child->getPrice(), $price);
                     }
                 }
 
@@ -563,7 +565,9 @@ class Generator
 
                 foreach ($usedProds as $child) {
                     if ($child->getId() != $product->getId()) {
-                        $saleprice += $child->getFinalPrice();
+                        $saleprice = $saleprice === null ?
+                            $child->getPrice()
+                            : min($child->getPrice(), $saleprice);
                     }
                 }
 
