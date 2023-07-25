@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.3.7
+ * @version.   1.3.8
  */
 class Generator
 {
@@ -49,7 +49,7 @@ class Generator
         \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable,
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Url $frontendUrl,
+        \Magento\Framework\Url $frontendUrl
     ) {
         $this->_helperData                = $helperData;
         $this->_storeManager              = $storeManager;
