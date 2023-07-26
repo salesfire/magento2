@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.3.9
+Released on 2023-07-26
+Released notes:
+
+- Fixed being unable to save Enable option in Single Store mode.
+
 ### Salesfire v1.3.8
 Released on 2023-07-25
 Released notes:
