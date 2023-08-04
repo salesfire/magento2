@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.3.8
+ * @version.   1.3.10
  */
 class Generator
 {
@@ -164,7 +164,7 @@ class Generator
             }
 
             $this->printLine($siteId, '<?xml version="1.0" encoding="utf-8" ?>', 0);
-            $this->printLine($siteId, '<productfeed site="'.$this->_storeManager->getStore($storeId)->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB).'" date-generated="'.gmdate('c').'" version="' . $this->_helperData->getVersion() . '">', 0);
+            $this->printLine($siteId, '<productfeed site="'.$this->_storeManager->getStore($storeId)->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB).'" generator="salesfire/magento2" date-generated="'.gmdate('c').'" version="' . $this->_helperData->getVersion() . '">', 0);
 
             $mediaUrl = $this->_storeManager->getStore($storeId)->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
 
@@ -236,7 +236,7 @@ class Generator
                     try {
                         $text = [];
 
-                        $text[] = ['<product id="product_'.$product->getId().'">', 2];
+                        $text[] = ['<product id="product_'.$product->getId().'" type="' . htmlspecialchars($product->getTypeId()) . '">', 2];
 
                         $text[] = ['<id>' . $product->getId() . '</id>', 3];
 

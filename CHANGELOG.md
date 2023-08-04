@@ -1,5 +1,12 @@
 # Changelog
 
+### Salesfire v1.3.10
+Released on 2023-08-04
+Released notes:
+
+- Fixed additional attributes not being included in feed.
+- Added additional information to feed including generator type and product type.
+
 ### Salesfire v1.3.9
 Released on 2023-07-26
 Released notes:
