@@ -9,7 +9,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.3.9
+ * @version    1.3.10
  */
 class Data extends AbstractHelper
 {
@@ -44,7 +44,7 @@ class Data extends AbstractHelper
      */
     public function getVersion()
     {
-        return '1.3.9';
+        return '1.3.10';
     }
 
     /**
@@ -228,7 +228,7 @@ class Data extends AbstractHelper
     public function getAttributeCodes($storeId = null)
     {
         $attribute_codes = $this->getScopeConfigValue(
-            self::XML_PATH_FEED_COLOUR_CODE,
+            self::XML_PATH_FEED_ATTRIBUTE_CODES,
             $storeId
         );
 
