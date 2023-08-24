@@ -9,7 +9,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.3.10
+ * @version    1.4.0
  */
 class Data extends AbstractHelper
 {
@@ -25,6 +25,7 @@ class Data extends AbstractHelper
     public const XML_PATH_FEED_COLOUR_CODE     = 'salesfire/feed/colour_code';
     public const XML_PATH_FEED_AGE_GROUP_CODE  = 'salesfire/feed/age_group_code';
     public const XML_PATH_FEED_ATTRIBUTE_CODES = 'salesfire/feed/attribute_codes';
+    public const XML_PATH_LOG_MAX_SIZE         = 'salesfire/logging/max_size';
 
     protected $storeManager;
 
@@ -44,7 +45,7 @@ class Data extends AbstractHelper
      */
     public function getVersion()
     {
-        return '1.3.10';
+        return '1.4.0';
     }
 
     /**
@@ -236,6 +237,17 @@ class Data extends AbstractHelper
             [$this, 'stripCode'],
             explode(',', trim($attribute_codes ?: ''))
         );
+    }
+
+    /**
+     * Get max log file size in megabytes.
+     * @return int
+     */
+    public function maxLogSize()
+    {
+        $max_size = $this->getScopeConfigValue(self::XML_PATH_LOG_MAX_SIZE, null);
+
+        return intval($max_size) * 1024 * 1024;
     }
 
     protected function getScopeConfigValue($setting, $storeId)

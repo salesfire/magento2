@@ -92,6 +92,17 @@ You may need to clear cache after changing this setting.
                     ]]></comment>
                 </field>
             </group>
+            <group id="logging" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0"
+                   showInStore="0">
+                <label>Logging</label>
+                <field id="max_size" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Max salesfire.log File Size (MBs)</label>
+                </field>
+                <field id="recent" translate="label" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Recent Log Entries</label>
+                    <frontend_model>Salesfire\Salesfire\Block\Adminhtml\Logs</frontend_model>
+                </field>
+            </group>
         </section>
     </system>
 </config>

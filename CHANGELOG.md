@@ -1,5 +1,12 @@
 # Changelog
 
+### Salesfire v1.4.0
+Released on 2023-08-24
+Released notes:
+
+- Added log truncating with max size setting.
+- Show last 100 log entries in admin.
+
 ### Salesfire v1.3.10
 Released on 2023-08-04
 Released notes:

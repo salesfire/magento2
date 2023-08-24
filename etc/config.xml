@@ -9,6 +9,9 @@
             <feed_generation>
                 <schedule>0 1 * * *</schedule>
             </feed_generation>
+            <logging>
+                <max_size>10</max_size>
+            </logging>
         </salesfire>
     </default>
 </config>
