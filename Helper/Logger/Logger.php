@@ -45,7 +45,7 @@ class Logger extends \Monolog\Logger
         try {
             $file = new SplFileObject($path, 'c');
 
-            $max_size = $size || self::MAX_SIZE;
+            $max_size = $size ?: self::MAX_SIZE;
 
             if ($file->getSize() >= $max_size) {
                 $file->ftruncate(0);
