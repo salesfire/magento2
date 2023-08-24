@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version.   1.3.10
+ * @version    1.4.0
  */
 class Generator
 {
@@ -108,6 +108,10 @@ class Generator
         $stock_state = $object_manager->get('\Magento\CatalogInventory\Api\StockStateInterface');
 
         $processed_site_ids = [];
+
+        if ($this->_logger->truncate($this->_helperData->maxLogSize())) {
+            $this->_logger->info('Truncated.');
+        }
 
         foreach ($this->_helperData->getStoreViews() as $storeView) {
             $storeId = $storeView->id;
