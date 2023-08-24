@@ -62,8 +62,17 @@ class Logs extends Field
      */
     protected function _renderValue(AbstractElement $element): string
     {
-        $lines = $this->_logger->getLastLines(100);
+        $lines = implode('', $this->_logger->getLastLines(500));
 
-        return sprintf('<td class="value">This shows the last 100 lines of /var/www/salesfire.log.<br /><pre style="white-space: nowrap; max-width: 600px; overflow-x: scroll; padding: 10px; border: 1px solid #eee; border-radius: 10px;">%s</pre></td>', implode('<br />', $lines));
+        return <<<EOD
+        <td class="value">
+            This shows the last 500 lines of /var/www/salesfire.log.
+            <a style="cursor: pointer" onclick="javascript:document.getElementById('field_log').focus(),document.getElementById('field_log').setSelectionRange(0, document.getElementById('field_log').value.length)">
+                Select all.
+            </a>
+
+            <textarea id="field_log" readonly onclick="this.setSelectionRange(0, this.value.length)" style="background: #fff; border: 1px solid #eee; border-radius: 10px; cursor: grab; color: #000; font-family: Consolas, monospace; height: 600px; opacity: 1; overflow-x: scroll; line-height: 18px; margin-top: 10px; padding: 10px; white-space: pre; width: 100%%;">$lines</textarea>
+        </td>
+        EOD;
     }
 }

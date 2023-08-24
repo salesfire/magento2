@@ -7,7 +7,7 @@
     </type>
     <type name="Salesfire\Salesfire\Helper\Logger\Logger">
         <arguments>
-            <argument name="name" xsi:type="string">salesfireLogger</argument>
+            <argument name="name" xsi:type="string">salesfire</argument>
             <argument name="handlers"  xsi:type="array">
                 <item name="system" xsi:type="object">Salesfire\Salesfire\Helper\Logger\Handler</item>
             </argument>
