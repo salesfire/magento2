@@ -242,11 +242,11 @@ class Generator
             ) {
                 $row = $args['row'];
 
-                $product = $this->productFactory->create()
-                    ->setStoreId($storeId)
-                    ->load($row['entity_id']);
-
                 try {
+                    $product = $this->productFactory->create()
+                        ->setStoreId($storeId)
+                        ->load($row['entity_id']);
+
                     $text = [];
 
                     $text[] = ['<product id="product_'.$product->getId().'" type="' . htmlspecialchars($product->getTypeId()) . '">', 2];
