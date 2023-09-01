@@ -517,9 +517,8 @@ class Generator
             ->setStoreId($storeId)
             ->addStoreFilter($storeId)
             ->addMinimalPrice()
+            ->addMediaGalleryData()
             ->setPageSize($chunk_size);
-
-        $collection->addMediaGalleryData();
 
         return $collection;
     }
