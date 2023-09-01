@@ -226,15 +226,15 @@ class Generator
             }
             $categories = null;
 
-            $page = 1;
-            do {
-                $products = $this->getVisibleProducts($storeId, $page);
-                $count = count($products);
+            $this->_logger->info('- Exporting products');
+            $this->printLine($siteId, '<products>', 1);
 
-                if ($page == 1 && $count) {
-                    $this->_logger->info('- Exporting products');
-                    $this->printLine($siteId, '<products>', 1);
-                }
+            $products = $this->getVisibleProducts($storeId, 100);
+
+            $total_pages = $products->getLastPageNumber();
+
+            for ($current_page = 1; $current_page <= $total_pages; $current_page++) {
+                $products->setCurPage($current_page);
 
                 foreach ($products as $product) {
                     try {
@@ -399,13 +399,6 @@ class Generator
                                     }
                                 }
 
-                                if (! empty($colour_code)) {
-                                    $colour = $this->getAttributeValue($storeId, $product, $colour_code);
-                                    if ($colour) {
-                                        $text[] = ['<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5];
-                                    }
-                                }
-
                                 if (! empty($attributes)) {
                                     $text[] = ['<attributes>', 5];
 
@@ -414,6 +407,13 @@ class Generator
                                     }
 
                                     $text[] = ['</attributes>', 5];
+                                }
+                            }
+
+                            if (! empty($colour_code)) {
+                                $colour = $this->getAttributeValue($storeId, $product, $colour_code);
+                                if ($colour) {
+                                    $text[] = ['<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5];
                                 }
                             }
 
@@ -451,13 +451,11 @@ class Generator
                     }
                 }
 
-                $page++;
-            } while ($count >= 100);
-
-            if ($count || $page > 1) {
-                $this->_logger->info('- Product export completed');
-                $this->printLine($siteId, '</products>', 1);
+                $products->clear();
             }
+
+            $this->_logger->info('- Product export completed');
+            $this->printLine($siteId, '</products>', 1);
 
             $this->printLine($siteId, '</productfeed>', 0);
 
@@ -509,24 +507,18 @@ class Generator
         return $breadcrumb;
     }
 
-    protected function getVisibleProducts($storeId, $curPage = 1, $pageSize = 100)
+    protected function getVisibleProducts($storeId, $chunk_size)
     {
-        $collection = $this->_productCollectionFactory->create()
+        $collection = $this->_productCollectionFactory
+            ->create()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('status', 1)
             ->addAttributeToFilter('visibility', ['neq' => 1])
             ->setStoreId($storeId)
             ->addStoreFilter($storeId)
             ->addMinimalPrice()
-            ->setPageSize($pageSize);
-
-        if (!empty($curPage)) {
-            $collection->setCurPage($curPage);
-        }
-
-        $collection->clear();
-
-        $collection->addMediaGalleryData();
+            ->addMediaGalleryData()
+            ->setPageSize($chunk_size);
 
         return $collection;
     }
