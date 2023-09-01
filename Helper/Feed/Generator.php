@@ -408,13 +408,6 @@ class Generator
                                 }
                             }
 
-                            if (! empty($colour_code)) {
-                                $colour = $this->getAttributeValue($storeId, $product, $colour_code);
-                                if ($colour) {
-                                    $text[] = ['<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5];
-                                }
-                            }
-
                             if (! empty($attributes)) {
                                 $text[] = ['<attributes>', 5];
 
@@ -423,6 +416,13 @@ class Generator
                                 }
 
                                 $text[] = ['</attributes>', 5];
+                            }
+                        }
+
+                        if (! empty($colour_code)) {
+                            $colour = $this->getAttributeValue($storeId, $product, $colour_code);
+                            if ($colour) {
+                                $text[] = ['<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5];
                             }
                         }
 
