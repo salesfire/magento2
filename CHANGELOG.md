@@ -1,5 +1,12 @@
 # Changelog
 
+### Salesfire v1.4.1
+Released on 2023-09-01
+Released notes:
+
+- Prevent infinite loop than can occasionally occur during feed generation.
+- Fix bug where colour code isn't always included in feed.
+
 ### Salesfire v1.4.0
 Released on 2023-08-24
 Released notes:
