@@ -14,13 +14,11 @@ class Generator
     private $_helperData;
     private $_storeManager;
     private $_productCollectionFactory;
-    private $productFactory;
     private $_filesystem;
     private $_file;
     private $_escaper;
     private $_taxHelper;
     private $_stockItem;
-    private $iterator;
 
     private $_logger;
 
@@ -41,7 +39,6 @@ class Generator
         \Salesfire\Salesfire\Helper\Data $helperData,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Filesystem $filesystem,
@@ -52,13 +49,11 @@ class Generator
         \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable,
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Url $frontendUrl,
-        \Magento\Framework\Model\ResourceModel\Iterator $iterator
+        \Magento\Framework\Url $frontendUrl
     ) {
         $this->_helperData                = $helperData;
         $this->_storeManager              = $storeManager;
         $this->_productCollectionFactory  = $productCollectionFactory;
-        $this->productFactory             = $productFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_filesystem                = $filesystem;
         $this->_file                      = $file;
@@ -68,7 +63,6 @@ class Generator
         $this->urlFinder                  = $urlFinder;
         $this->configurable               = $configurable;
         $this->frontendUrl                = $frontendUrl;
-        $this->iterator                   = $iterator;
 
         $this->_logger = $logger;
 
