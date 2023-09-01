@@ -53,7 +53,7 @@ class Generator
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable,
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Url $frontendUrl,
-        \Magento\Framework\Model\ResourceModel\Iterator $iterator,
+        \Magento\Framework\Model\ResourceModel\Iterator $iterator
     ) {
         $this->_helperData                = $helperData;
         $this->_storeManager              = $storeManager;
