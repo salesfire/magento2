@@ -4,7 +4,7 @@
 Released on 2023-12-11
 Released notes:
 
-- Fix PHP 7 compatibility issue.
+- Fix PHP 7 compatibility.
 
 ### Salesfire v1.4.1
 Released on 2023-09-01
