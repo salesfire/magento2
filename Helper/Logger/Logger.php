@@ -81,7 +81,7 @@ class Logger extends \Monolog\Logger
             $lines = new LimitIterator($file, $line_from, $line_to);
 
             return iterator_to_array($lines);
-        } catch (\Exception) {
+        } catch (\Exception $e) {
             return [];
         }
     }
