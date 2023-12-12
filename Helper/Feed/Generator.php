@@ -14,10 +14,12 @@ class Generator
     private $_helperData;
     private $_storeManager;
     private $_productCollectionFactory;
+    private $_categoryCollectionFactory;
     private $_filesystem;
     private $_file;
     private $_escaper;
     private $_taxHelper;
+    private $_catalogData;
     private $_stockItem;
 
     private $_logger;
@@ -43,7 +45,8 @@ class Generator
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Filesystem\Driver\File $file,
-        \Magento\Catalog\Helper\Data $taxHelper,
+        \Magento\Tax\Helper\Data $taxHelper,
+        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItem,
         \Salesfire\Salesfire\Helper\Logger\Logger $logger,
         \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder,
@@ -59,6 +62,7 @@ class Generator
         $this->_file                      = $file;
         $this->_escaper                   = $escaper;
         $this->_taxHelper                 = $taxHelper;
+        $this->_catalogData               = $catalogData;
         $this->_stockItem                 = $stockItem;
         $this->urlFinder                  = $urlFinder;
         $this->configurable               = $configurable;
@@ -525,52 +529,82 @@ class Generator
 
     protected function getProductPrice($product)
     {
+        $price = null;
+
         switch ($product->getTypeId()) {
             case 'configurable':
-                $basePrice = $product->getPriceInfo()->getPrice('regular_price');
-
-                return $basePrice->getMinRegularAmount()->getValue();
-            case 'bundle':
-                return $product->getPriceInfo()->getPrice('regular_price')->getMinimalPrice()->getValue();
+                $usedProds = $product->getTypeInstance()->getUsedProducts($product);
+                $price = $this->getUsedProductsMinPrice($product, $usedProds, 'regular_price');
+                break;
             case 'grouped':
-                $price = null;
-                $usedProds = $product->getTypeInstance(true)->getAssociatedProducts($product);
-
-                foreach ($usedProds as $child) {
-                    if ($child->getId() != $product->getId()) {
-                        $price = $price === null ?
-                            $child->getPrice()
-                            : min($child->getPrice(), $price);
-                    }
-                }
-
-                return $price;
+                $usedProds = $product->getTypeInstance()->getAssociatedProducts($product);
+                $price = $this->getUsedProductsMinPrice($product, $usedProds, 'regular_price');
+                break;
+            case 'bundle':
+                $price =  $product->getPriceInfo()->getPrice('regular_price')->getMinimalPrice()->getValue();
+                break;
             default:
-                return $product->getPrice();
+                $price = $product->getPrice();
         }
+
+        return $this->getPriceWithTax($product, $price);
     }
 
     protected function getProductSalePrice($product)
     {
+        $price = null;
+
         switch ($product->getTypeId()) {
-            case 'bundle':
-                return $product->getPriceInfo()->getPrice('final_price')->getMinimalPrice()->getValue();
+            case 'configurable':
+                $usedProds = $product->getTypeInstance()->getUsedProducts($product);
+                $price = $this->getUsedProductsMinPrice($product, $usedProds, 'final_price');
+                break;
             case 'grouped':
-                $saleprice = 0;
-                $usedProds = $product->getTypeInstance(true)->getAssociatedProducts($product);
-
-                foreach ($usedProds as $child) {
-                    if ($child->getId() != $product->getId()) {
-                        $saleprice = $saleprice === null ?
-                            $child->getPrice()
-                            : min($child->getPrice(), $saleprice);
-                    }
-                }
-
-                return $saleprice;
+                $usedProds = $product->getTypeInstance()->getAssociatedProducts($product);
+                $price = $this->getUsedProductsMinPrice($product, $usedProds, 'final_price');
+                break;
+            case 'bundle':
+                $price = $product->getPriceInfo()->getPrice('final_price')->getMinimalPrice()->getValue();
+                break;
             default:
-                return $product->getFinalPrice();
+                $price = $product->getFinalPrice();
         }
+
+        return $this->getPriceWithTax($product, $price);
+    }
+
+    protected function getUsedProductsMinPrice($product, $usedProds, $type)
+    {
+        $price = null;
+
+        foreach ($usedProds as $child) {
+            if ($child->getId() != $product->getId()) {
+                $price = $price === null ?
+                    $child->getPrice($type)
+                    : min($child->getPrice($type), $price);
+            }
+        }
+
+        return $price;
+    }
+
+    protected function getPriceWithTax($product, $price)
+    {
+        $price_display_type = $this->_taxHelper->getPriceDisplayType();
+
+        if ($price_display_type == $this->_taxHelper->getConfig()::DISPLAY_TYPE_EXCLUDING_TAX) {
+            return $price;
+        }
+
+        $price_includes_tax = $this->_taxHelper->priceIncludesTax();
+
+        if ($price_includes_tax) {
+            return $price;
+        }
+
+        $price = $this->_catalogData->getTaxPrice($product, $price, true);
+
+        return $price;
     }
 
     protected function getAttributeValue($storeId, $product, $attribute)
