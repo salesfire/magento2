@@ -38,34 +38,39 @@
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="default_brand" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="1">
+                <field id="tax_enabled" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <label>Include Tax In Prices</label>
+                    <source_model>Salesfire\Salesfire\Model\Source\Yesnoinherit</source_model>
+                    <comment>If the store is set to display prices excluding tax, this setting will be ignored.</comment>
+                </field>
+                <field id="default_brand" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Default Brand</label>
                 </field>
-                <field id="brand_code" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="1">
+                <field id="brand_code" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Brand Attribute Code</label>
                     <comment>E.g: brand</comment>
                 </field>
-                <field id="gender_code" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="1">
+                <field id="gender_code" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Gender Attribute Code</label>
                     <comment>E.g: gender</comment>
                 </field>
-                <field id="age_group_code" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="1">
+                <field id="age_group_code" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Age Group Attribute Code</label>
                     <comment>E.g: age_group</comment>
                 </field>
-                <field id="colour_code" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="1">
+                <field id="colour_code" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Colour Attribute Code</label>
                     <comment>E.g: color</comment>
                 </field>
-                <field id="attribute_codes" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="1">
+                <field id="attribute_codes" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Additional Attribute Codes</label>
                     <comment>Comma separated list of attribute codes to put in feed. E.g: material,size</comment>
                 </field>
-                <field id="feed_url" translate="label" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="1">
+                <field id="feed_url" translate="label" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="1">
                     <label>Feed Url</label>
                     <frontend_model>Salesfire\Salesfire\Block\Adminhtml\FeedUrl</frontend_model>
                 </field>
-                <field id="run" showInDefault="1" showInStore="0" showInWebsite="0" sortOrder="90" translate="label" type="text">
+                <field id="run" showInDefault="1" showInStore="0" showInWebsite="0" sortOrder="100" translate="label" type="text">
                     <label>Generate Feed</label>
                     <frontend_model>Salesfire\Salesfire\Block\Adminhtml\Buttons\GenerateFeed</frontend_model>
                     <comment/>

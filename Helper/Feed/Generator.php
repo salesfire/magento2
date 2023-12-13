@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.4.3
+ * @version    1.4.4
  */
 class Generator
 {
@@ -590,15 +590,21 @@ class Generator
 
     protected function getPriceWithTax($product, $price)
     {
-        $price_display_type = $this->_taxHelper->getPriceDisplayType();
-
-        if ($price_display_type == $this->_taxHelper->getConfig()::DISPLAY_TYPE_EXCLUDING_TAX) {
-            return $price;
-        }
-
+        $should_include_tax = $this->_helperData->isTaxEnabled();
+        $use_store_setting  = $this->_helperData->shouldUseStoreTaxSettings();
         $price_includes_tax = $this->_taxHelper->priceIncludesTax();
 
-        if ($price_includes_tax) {
+        if ($use_store_setting) {
+            $price_display_type = $this->_taxHelper->getPriceDisplayType();
+
+            if ($price_display_type == $this->_taxHelper->getConfig()::DISPLAY_TYPE_EXCLUDING_TAX) {
+                $should_include_tax = false;
+            } else {
+                $should_include_tax = true;
+            }
+        }
+
+        if ($price_includes_tax || ! $should_include_tax) {
             return $price;
         }
 

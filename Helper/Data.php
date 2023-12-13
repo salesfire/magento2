@@ -19,6 +19,7 @@ class Data extends AbstractHelper
     public const XML_PATH_GENERAL_ENABLED      = 'salesfire/general/is_enabled';
     public const XML_PATH_GENERAL_SITE_ID      = 'salesfire/general/site_id';
     public const XML_PATH_FEED_ENABLED         = 'salesfire/feed/is_enabled';
+    public const XML_PATH_FEED_TAX_ENABLED     = 'salesfire/feed/tax_enabled';
     public const XML_PATH_FEED_DEFAULT_BRAND   = 'salesfire/feed/default_brand';
     public const XML_PATH_FEED_BRAND_CODE      = 'salesfire/feed/brand_code';
     public const XML_PATH_FEED_GENDER_CODE     = 'salesfire/feed/gender_code';
@@ -45,7 +46,7 @@ class Data extends AbstractHelper
      */
     public function getVersion()
     {
-        return '1.4.2';
+        return '1.4.4';
     }
 
     /**
@@ -138,6 +139,22 @@ class Data extends AbstractHelper
             self::XML_PATH_FEED_ENABLED,
             $storeId
         );
+    }
+
+    public function isTaxEnabled($storeId = null)
+    {
+        return $this->getScopeConfigValue(
+            self::XML_PATH_FEED_TAX_ENABLED,
+            $storeId
+        ) === '1';
+    }
+
+    public function shouldUseStoreTaxSettings($storeId = null)
+    {
+        return $this->getScopeConfigValue(
+            self::XML_PATH_FEED_TAX_ENABLED,
+            $storeId
+        ) === '2';
     }
 
     /**
