@@ -4,7 +4,7 @@
 Released on 2023-12-13
 Released notes:
 
-- Update feed generation to use tax settings when calculating price.
+- Update feed generator to use tax settings when calculating price.
 
 ### Salesfire v1.4.2
 Released on 2023-12-11
