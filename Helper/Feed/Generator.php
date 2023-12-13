@@ -608,6 +608,7 @@ class Generator
             return $price;
         }
 
+        // Note: getTaxPrice() doesn't add tax if the store is set to show price excluding tax
         $price = $this->_catalogData->getTaxPrice($product, $price, true);
 
         return $price;
