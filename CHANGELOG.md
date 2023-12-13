@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.4.3
+Released on 2023-12-13
+Released notes:
+
+- Update feed generator to use tax settings when calculating price.
+
 ### Salesfire v1.4.2
 Released on 2023-12-11
 Released notes:
@@ -56,7 +62,7 @@ Released notes:
 Released on 2023-06-20
 Released notes:
 
-- Removed trailing comma's in the function calls that were causing feed errors. 
+- Removed trailing comma's in the function calls that were causing feed errors.
 
 ### Salesfire v1.3.4
 Released on 2023-05-17
