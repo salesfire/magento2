@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.4.4
+ * @version    1.4.5
  */
 class Generator
 {
@@ -357,6 +357,11 @@ class Generator
 
                                     if (! empty($colour_code)) {
                                         $colour = $this->getAttributeValue($storeId, $childProduct, $colour_code);
+
+                                        if (! $colour) {
+                                            $colour = $this->getAttributeValue($storeId, $product, $colour_code);
+                                        }
+
                                         if ($colour) {
                                             $text[] = ['<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5];
                                         }

@@ -1,5 +1,17 @@
 # Changelog
 
+### Salesfire v1.4.5
+Released on 2023-12-14
+Released notes:
+
+- Fix bug where colour isn't always included in feed.
+
+### Salesfire v1.4.4
+Released on 2023-12-13
+Released notes:
+
+- Added setting to include or exclude tax from Salesfire feed product prices.
+
 ### Salesfire v1.4.3
 Released on 2023-12-13
 Released notes:
