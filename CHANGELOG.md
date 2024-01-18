@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.4.6
+Released on 2024-01-18
+Released notes:
+
+- Fix bug where sale price isn't always included in feed.
+
 ### Salesfire v1.4.5
 Released on 2023-12-14
 Released notes:
