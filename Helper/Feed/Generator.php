@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.4.5
+ * @version    1.4.6
  */
 class Generator
 {
@@ -584,9 +584,8 @@ class Generator
 
         foreach ($usedProds as $child) {
             if ($child->getId() != $product->getId()) {
-                $price = $price === null ?
-                    $child->getPrice($type)
-                    : min($child->getPrice($type), $price);
+                $child_price = $child->getPriceInfo()->getPrice($type)->getAmount()->getBaseAmount();
+                $price = $price === null ? $child_price : min($child_price, $price);
             }
         }
 
