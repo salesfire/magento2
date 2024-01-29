@@ -552,7 +552,7 @@ class Generator
                 $price = $product->getPriceInfo()->getPrice('regular_price');
         }
 
-        return $this->getPriceWithTax($product, $price);
+        return $price ? $this->getPriceWithTax($product, $price) : null;
     }
 
     protected function getProductSalePrice($product)
@@ -575,7 +575,7 @@ class Generator
                 $price = $product->getPriceInfo()->getPrice('final_price');
         }
 
-        return $this->getPriceWithTax($product, $price);
+        return $price ? $this->getPriceWithTax($product, $price) : null;
     }
 
     protected function getUsedProductsMinPrice($product, $usedProds, $type)
