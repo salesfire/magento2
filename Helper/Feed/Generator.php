@@ -546,13 +546,13 @@ class Generator
                 $price = $this->getUsedProductsMinPrice($product, $usedProds, 'regular_price');
                 break;
             case 'bundle':
-                $price =  $product->getPriceInfo()->getPrice('regular_price')->getMinimalPrice()->getValue();
+                $price =  $product->getPriceInfo()->getPrice('regular_price');
                 break;
             default:
-                $price = $product->getPrice();
+                $price = $product->getPriceInfo()->getPrice('regular_price');
         }
 
-        return $this->getPriceWithTax($product, $price);
+        return $price ? $this->getPriceWithTax($product, $price) : null;
     }
 
     protected function getProductSalePrice($product)
@@ -569,27 +569,33 @@ class Generator
                 $price = $this->getUsedProductsMinPrice($product, $usedProds, 'final_price');
                 break;
             case 'bundle':
-                $price = $product->getPriceInfo()->getPrice('final_price')->getMinimalPrice()->getValue();
+                $price = $product->getPriceInfo()->getPrice('final_price');
                 break;
             default:
-                $price = $product->getFinalPrice();
+                $price = $product->getPriceInfo()->getPrice('final_price');
         }
 
-        return $this->getPriceWithTax($product, $price);
+        return $price ? $this->getPriceWithTax($product, $price) : null;
     }
 
     protected function getUsedProductsMinPrice($product, $usedProds, $type)
     {
-        $price = null;
+        $min_price = null;
+        $min_price_value = null;
 
         foreach ($usedProds as $child) {
             if ($child->getId() != $product->getId()) {
-                $child_price = $child->getPriceInfo()->getPrice($type)->getAmount()->getBaseAmount();
-                $price = $price === null ? $child_price : min($child_price, $price);
+                $price = $child->getPriceInfo()->getPrice($type);
+                $price_value = $price->getAmount()->getValue();
+
+                if ($min_price_value === null || $price_value < $min_price_value) {
+                    $min_price = $price;
+                    $min_price_value = $price_value;
+                }
             }
         }
 
-        return $price;
+        return $min_price;
     }
 
     protected function getPriceWithTax($product, $price)
@@ -608,14 +614,14 @@ class Generator
             }
         }
 
-        if ($price_includes_tax || ! $should_include_tax) {
-            return $price;
+        if ($should_include_tax) {
+            // Note: getTaxPrice() doesn't add tax if the store is set to show price excluding tax
+            return $price_includes_tax ?
+                $price->getAmount()->getValue() :
+                $this->_catalogData->getTaxPrice($product, $price->getAmount()->getBaseAmount(), true);
         }
 
-        // Note: getTaxPrice() doesn't add tax if the store is set to show price excluding tax
-        $price = $this->_catalogData->getTaxPrice($product, $price, true);
-
-        return $price;
+        return $price->getAmount()->getBaseAmount();
     }
 
     protected function getAttributeValue($storeId, $product, $attribute)

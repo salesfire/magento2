@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.4.7
+Released on 2024-01-31
+Released notes:
+
+- Fix bug where configurable product prices don't include tax.
+
 ### Salesfire v1.4.6
 Released on 2024-01-18
 Released notes:
