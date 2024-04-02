@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.4.8
+Released on 2024-04-02
+Released notes:
+
+- Fix feed generator stock level calculation.
+
 ### Salesfire v1.4.7
 Released on 2024-01-31
 Released notes:

@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.4.6
+ * @version    1.4.8
  */
 class Generator
 {
@@ -627,7 +627,7 @@ class Generator
 
     protected function getStockQty($product)
     {
-        if ($this->_moduleManager->isEnabled('Magento_InventoryCatalogApi') && false) {
+        if ($this->_moduleManager->isEnabled('Magento_InventoryCatalogApi')) {
             $stock_registry = $this->_objectManager->get('\Magento\CatalogInventory\Api\StockRegistryInterface');
             $stock_item = $stock_registry->getStockItem($product->getId());
             $stock_qty = $stock_item->getQty();
