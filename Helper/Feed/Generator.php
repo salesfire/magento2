@@ -7,11 +7,13 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.4.6
+ * @version    1.4.8
  */
 class Generator
 {
     private $_helperData;
+    private $_moduleManager;
+    private $_objectManager;
     private $_storeManager;
     private $_productCollectionFactory;
     private $_categoryCollectionFactory;
@@ -39,6 +41,7 @@ class Generator
 
     public function __construct(
         \Salesfire\Salesfire\Helper\Data $helperData,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
@@ -55,6 +58,8 @@ class Generator
         \Magento\Framework\Url $frontendUrl
     ) {
         $this->_helperData                = $helperData;
+        $this->_moduleManager             = $moduleManager;
+        $this->_objectManager             = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_storeManager              = $storeManager;
         $this->_productCollectionFactory  = $productCollectionFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
@@ -108,9 +113,6 @@ class Generator
 
     public function execute()
     {
-        $object_manager = \Magento\Framework\App\ObjectManager::getInstance();
-        $stock_state = $object_manager->get('\Magento\CatalogInventory\Api\StockStateInterface');
-
         $processed_site_ids = [];
 
         if ($this->_logger->truncate($this->_helperData->maxLogSize())) {
@@ -369,15 +371,7 @@ class Generator
 
                                     $text[] = ['<mpn><![CDATA['.$this->escapeString($childProduct->getSku()).']]></mpn>', 5];
 
-                                    $stock = null;
-                                    try {
-                                        $stock_item = $this->_stockItem->get($childProduct->getId());
-                                        $stock = ($stock_item && $stock_item->getIsInStock()) ? ($stock_item->getQty() > 0 ? (int) $stock_item->getQty() : 1) : 0;
-                                    } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                                        $stock = $stock_state->getStockQty($childProduct->getId());
-                                    }
-
-                                    $text[] = ['<stock>' . ($stock ? $stock : 0) .'</stock>', 5];
+                                    $text[] = ['<stock>' . $this->getStockQty($childProduct) .'</stock>', 5];
 
                                     $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId) . ']]></link>', 5];
 
@@ -428,15 +422,7 @@ class Generator
 
                             $text[] = ['<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 5];
 
-                            $stock = null;
-                            try {
-                                $stock_item = $this->_stockItem->get($product->getId());
-                                $stock = ($stock_item && $stock_item->getIsInStock()) ? ($stock_item->getQty() > 0 ? (int) $stock_item->getQty() : 1) : 0;
-                            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                                $stock = $stock_state->getStockQty($product->getId());
-                            }
-
-                            $text[] = ['<stock>' . ($stock ? $stock : 0) .'</stock>', 5];
+                            $text[] = ['<stock>' . $this->getStockQty($product) .'</stock>', 5];
 
                             $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId) . ']]></link>', 5];
 
@@ -637,6 +623,30 @@ class Generator
         }
 
         return null;
+    }
+
+    protected function getStockQty($product)
+    {
+        if ($this->_moduleManager->isEnabled('Magento_InventoryCatalogApi')) {
+            $stock_registry = $this->_objectManager->get('\Magento\CatalogInventory\Api\StockRegistryInterface');
+            $stock_item = $stock_registry->getStockItem($product->getId());
+            $stock_qty = $stock_item->getQty();
+            $is_in_stock = $stock_item->getIsInStock();
+
+            return $is_in_stock ? ($stock_qty > 0 ? (int) $stock_qty : 1) : 0;
+        }
+
+        $stock = null;
+
+        try {
+            $stock_item = $this->_stockItem->get($product->getId());
+            $stock = ($stock_item && $stock_item->getIsInStock()) ? ($stock_item->getQty() > 0 ? (int) $stock_item->getQty() : 1) : 0;
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $stock_state = $this->_objectManager->get('\Magento\CatalogInventory\Api\StockStateInterface');
+            $stock = $stock_state->getStockQty($product->getId());
+        }
+
+        return $stock ? $stock : 0;
     }
 
     protected function getProductImage($siteId, $mediaUrl, $product, $childProduct)
