@@ -1,16 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
     <policies>
         <policy id="script-src">
             <values>
-                <value id="salesfire" type="host">cdn.salesfire.co.uk</value>
+                <value id="salesfire-script" type="host">*.salesfire.co.uk</value>
             </values>
         </policy>
         <policy id="connect-src">
             <values>
-                <value id="salesfire" type="host">hit.salesfire.co.uk</value>
+                <value id="salesfire-src" type="host">*.salesfire.co.uk</value>
+                <value id="salesfire-sm-src" type="host">*.smartmetrics.co.uk</value>
+            </values>
+        </policy>
+        <policy id="frame-src">
+            <values>
+                <value id="salesfire-frame" type="host">*.salesfire.co.uk</value>
+            </values>
+        </policy>
+        <policy id="font-src">
+            <values>
+                <value id="salesfire-fonts" type="host">*.salesfire.co.uk</value>
+                <value id="salesfire-tk-fonts" type="host">*.typekit.net</value>
+                <value id="salesfire-kl-fonts" type="host">*.klarnacdn.net</value>
+            </values>
+        </policy>
+        <policy id="style-src">
+            <values>
+                <value id="salesfire-styles" type="host">*.salesfire.co.uk</value>
+                <value id="salesfire-tk-styles" type="host">*.typekit.net</value>
+            </values>
+        </policy>
+        <policy id="img-src">
+            <values>
+                <value id="salesfire-img" type="host">*.salesfire.co.uk</value>
             </values>
         </policy>
     </policies>
