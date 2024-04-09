@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.4.9
+Released on 2024-04-02
+Released notes:
+
+- Add CSP whitelist.
+
 ### Salesfire v1.4.8
 Released on 2024-04-02
 Released notes:

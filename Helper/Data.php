@@ -46,7 +46,7 @@ class Data extends AbstractHelper
      */
     public function getVersion()
     {
-        return '1.4.8';
+        return '1.4.9';
     }
 
     /**
