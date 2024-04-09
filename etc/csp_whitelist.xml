@@ -9,8 +9,8 @@
         </policy>
         <policy id="connect-src">
             <values>
-                <value id="salesfire-connent" type="host">*.salesfire.co.uk</value>
-                <value id="salesfire-sm-connent" type="host">*.smartmetrics.co.uk</value>
+                <value id="salesfire-connect" type="host">*.salesfire.co.uk</value>
+                <value id="salesfire-sm-connect" type="host">*.smartmetrics.co.uk</value>
             </values>
         </policy>
         <policy id="frame-src">
