@@ -23,14 +23,14 @@
                 <value id="salesfire-fonts" type="host">*.salesfire.co.uk</value>
                 <value id="salesfire-tk-fonts" type="host">*.typekit.net</value>
                 <value id="salesfire-kl-fonts" type="host">*.klarnacdn.net</value>
-                <value id="salesfire-g-fonts" type="host">https://fonts.gstatic.com</value>
+                <value id="salesfire-g-fonts" type="host">fonts.gstatic.com</value>
             </values>
         </policy>
         <policy id="style-src">
             <values>
                 <value id="salesfire-styles" type="host">*.salesfire.co.uk</value>
                 <value id="salesfire-tk-styles" type="host">*.typekit.net</value>
-                <value id="salesfire-g-styles" type="host">https://fonts.googleapis.com</value>
+                <value id="salesfire-g-styles" type="host">fonts.googleapis.com</value>
             </values>
         </policy>
         <policy id="img-src">
