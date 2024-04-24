@@ -471,6 +471,8 @@ class Generator
 
             $this->_logger->info('');
             $this->_logger->info('Export completed');
+
+            $processed_site_ids[] = $siteId;
         }
     }
 
