@@ -4,7 +4,7 @@
 Released on 2024-04-24
 Released notes:
 
-- Updated the feed generator, to add to the processed_site_ids array, preventing them from being processed again.
+- Fix issue where the generated feed file was being overwritten.
 
 ### Salesfire v1.4.9
 Released on 2024-04-02
