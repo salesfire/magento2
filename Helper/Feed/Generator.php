@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.4.8
+ * @version    1.4.10
  */
 class Generator
 {
@@ -471,6 +471,8 @@ class Generator
 
             $this->_logger->info('');
             $this->_logger->info('Export completed');
+
+            $processed_site_ids[] = $siteId;
         }
     }
 

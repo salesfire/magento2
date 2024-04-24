@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.4.10
+Released on 2024-04-24
+Released notes:
+
+- Fix issue where the generated feed file was being overwritten.
+
 ### Salesfire v1.4.9
 Released on 2024-04-02
 Released notes:
