@@ -33,6 +33,10 @@ class Script extends Template
      * @var \Magento\Catalog\Helper\Data
      */
     public $taxHelper;
+    /**
+     * @var \Magento\Csp\Helper\CspNonceProvider
+     */
+    public $cspNonceProvider;
 
     public function __construct(
         Context $context,
@@ -41,13 +45,15 @@ class Script extends Template
         \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Data $taxHelper,
+        \Magento\Csp\Helper\CspNonceProvider $cspNonceProvider,
         array $data = []
     ) {
-        $this->helperData      = $helperData;
-        $this->checkoutSession = $checkoutSession;
-        $this->request         = $request;
-        $this->registry        = $registry;
-        $this->taxHelper       = $taxHelper;
+        $this->helperData       = $helperData;
+        $this->checkoutSession  = $checkoutSession;
+        $this->request          = $request;
+        $this->registry         = $registry;
+        $this->taxHelper        = $taxHelper;
+        $this->cspNonceProvider = $cspNonceProvider;
         parent::__construct($context, $data);
     }
 
@@ -148,6 +154,9 @@ class Script extends Template
                 'tax'        => $tax,
             ]));
         }
+
+        $nonce = $this->cspNonceProvider->generateNonce();
+        $formatter->addNonce($nonce);
 
         return $formatter->toScriptTag();
     }
