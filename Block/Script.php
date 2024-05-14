@@ -156,8 +156,7 @@ class Script extends Template
         }
 
         $nonce = $this->cspNonceProvider->generateNonce();
-        $formatter->addNonce($nonce);
 
-        return $formatter->toScriptTag();
+        return $formatter->toScriptTag($nonce);
     }
 }
