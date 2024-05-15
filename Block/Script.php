@@ -48,12 +48,12 @@ class Script extends Template
         \Magento\Catalog\Helper\Data $taxHelper,
         array $data = []
     ) {
-        $this->helperData       = $helperData;
-        $this->checkoutSession  = $checkoutSession;
-        $this->request          = $request;
-        $this->registry         = $registry;
-        $this->taxHelper        = $taxHelper;
-        $this->_objectManager   = ObjectManager::getInstance();
+        $this->helperData      = $helperData;
+        $this->checkoutSession = $checkoutSession;
+        $this->request         = $request;
+        $this->registry        = $registry;
+        $this->taxHelper       = $taxHelper;
+        $this->_objectManager  = ObjectManager::getInstance();
         parent::__construct($context, $data);
     }
 
