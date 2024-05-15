@@ -29,12 +29,15 @@ class Data extends AbstractHelper
     public const XML_PATH_LOG_MAX_SIZE         = 'salesfire/logging/max_size';
 
     protected $storeManager;
+    protected $productMetadata;
 
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\ProductMetadataInterface $productMetadata
     ) {
         $this->storeManager = $storeManager;
+        $this->productMetadata = $productMetadata;
 
         return parent::__construct($context);
     }
@@ -47,6 +50,11 @@ class Data extends AbstractHelper
     public function getVersion()
     {
         return '1.4.10';
+    }
+
+    public function getMagentoVersion()
+    {
+        return $this->productMetadata->getVersion();
     }
 
     /**
