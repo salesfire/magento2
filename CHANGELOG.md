@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.4.11
+Released on 2024-05-20
+Released notes:
+
+- Inline script CSP support.
+
 ### Salesfire v1.4.10
 Released on 2024-04-24
 Released notes:

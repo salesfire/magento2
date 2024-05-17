@@ -9,7 +9,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.4.8
+ * @version    1.4.11
  */
 class Data extends AbstractHelper
 {
@@ -49,12 +49,28 @@ class Data extends AbstractHelper
      */
     public function getVersion()
     {
-        return '1.4.10';
+        return '1.4.11';
     }
 
+    /**
+     * What version of Magento are we using
+     *
+     * @return string
+     */
     public function getMagentoVersion()
     {
         return $this->productMetadata->getVersion();
+    }
+
+    /**
+     * Is the current Magento version greater than or equal to the given version
+     *
+     * @param string $version
+     * @return bool
+     */
+    public function isMinimumMagentoVersion($version)
+    {
+        return version_compare($this->getMagentoVersion(), $version, '>=');
     }
 
     /**

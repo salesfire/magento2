@@ -11,7 +11,7 @@ use \Magento\Framework\App\ObjectManager;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.3.3
+ * @version    1.4.11
  */
 class Script extends Template
 {
@@ -156,7 +156,7 @@ class Script extends Template
         }
 
         $nonce = null;
-        if (version_compare($this->getHelper()->getMagentoVersion(), '2.4.7', '>=')) {
+        if ($this->getHelper()->isMinimumMagentoVersion('2.4.7')) {
             $cspNonceProvider = $this->_objectManager->get('\Magento\Csp\Helper\CspNonceProvider');
             $nonce = $cspNonceProvider->generateNonce();
         }
