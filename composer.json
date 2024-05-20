@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "salesfire/salesfire": "^1.0.3"
+        "salesfire/salesfire": "^1.0.4"
     },
     "autoload": {
         "files": [
