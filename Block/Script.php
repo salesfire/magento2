@@ -4,13 +4,14 @@ namespace Salesfire\Salesfire\Block;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\ObjectManagerInterface;
+use \Magento\Framework\App\ObjectManager;
 
 /**
  * Salesfire Script Block
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.3.3
+ * @version    1.4.11
  */
 class Script extends Template
 {
@@ -33,6 +34,10 @@ class Script extends Template
      * @var \Magento\Catalog\Helper\Data
      */
     public $taxHelper;
+    /**
+     * @var \Magento\Framework\App\ObjectManager
+     */
+    private $_objectManager;
 
     public function __construct(
         Context $context,
@@ -48,6 +53,7 @@ class Script extends Template
         $this->request         = $request;
         $this->registry        = $registry;
         $this->taxHelper       = $taxHelper;
+        $this->_objectManager  = ObjectManager::getInstance();
         parent::__construct($context, $data);
     }
 
@@ -149,6 +155,12 @@ class Script extends Template
             ]));
         }
 
-        return $formatter->toScriptTag();
+        $nonce = null;
+        if ($this->getHelper()->isMinimumMagentoVersion('2.4.7')) {
+            $cspNonceProvider = $this->_objectManager->get('\Magento\Csp\Helper\CspNonceProvider');
+            $nonce = $cspNonceProvider->generateNonce();
+        }
+
+        return $formatter->toScriptTag($nonce);
     }
 }
