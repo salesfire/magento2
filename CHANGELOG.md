@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.4.12
+Released on 2024-06-11
+Released notes:
+
+- Added additional logging to improve debugging.
+
 ### Salesfire v1.4.11
 Released on 2024-05-20
 Released notes:
