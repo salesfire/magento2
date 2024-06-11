@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.4.10
+ * @version    1.4.12
  */
 class Generator
 {
@@ -235,218 +235,223 @@ class Generator
             $this->_logger->info('- Exporting products');
             $this->printLine($siteId, '<products>', 1);
 
-            $products = $this->getVisibleProducts($storeId, 100);
+            try {
+                $products = $this->getVisibleProducts($storeId, 100);
 
-            $total_pages = $products->getLastPageNumber();
+                $total_pages = $products->getLastPageNumber();
 
-            for ($current_page = 1; $current_page <= $total_pages; $current_page++) {
-                $products->setCurPage($current_page);
+                for ($current_page = 1; $current_page <= $total_pages; $current_page++) {
+                    $products->setCurPage($current_page);
 
-                foreach ($products as $product) {
-                    try {
-                        $text = [];
+                    foreach ($products as $product) {
+                        try {
+                            $text = [];
 
-                        $text[] = ['<product id="product_'.$product->getId().'" type="' . htmlspecialchars($product->getTypeId()) . '">', 2];
+                            $text[] = ['<product id="product_'.$product->getId().'" type="' . htmlspecialchars($product->getTypeId()) . '">', 2];
 
-                        $text[] = ['<id>' . $product->getId() . '</id>', 3];
+                            $text[] = ['<id>' . $product->getId() . '</id>', 3];
 
-                        $text[] = ['<title><![CDATA[' . $this->escapeString($product->getName()) . ']]></title>', 3];
+                            $text[] = ['<title><![CDATA[' . $this->escapeString($product->getName()) . ']]></title>', 3];
 
-                        $text[] = ['<description><![CDATA[' . $this->escapeString(substr($this->_escaper->escapeHtml(strip_tags($product->getDescription() ?: '')), 0, 5000)) . ']]></description>', 3];
+                            $text[] = ['<description><![CDATA[' . $this->escapeString(substr($this->_escaper->escapeHtml(strip_tags($product->getDescription() ?: '')), 0, 5000)) . ']]></description>', 3];
 
-                        $price = $this->getProductPrice($product);
-                        $saleprice = $this->getProductSalePrice($product);
+                            $price = $this->getProductPrice($product);
+                            $saleprice = $this->getProductSalePrice($product);
 
-                        $text[] = ['<price currency="' . $currency . '">' . $price . '</price>', 3];
+                            $text[] = ['<price currency="' . $currency . '">' . $price . '</price>', 3];
 
-                        $text[] = ['<sale_price currency="' . $currency . '">' . ($saleprice ? $saleprice : $price) . '</sale_price>', 3];
+                            $text[] = ['<sale_price currency="' . $currency . '">' . ($saleprice ? $saleprice : $price) . '</sale_price>', 3];
 
-                        $text[] = ['<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 3];
+                            $text[] = ['<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 3];
 
-                        $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId) . ']]></link>', 3];
-
-                        $image = $this->getProductImage($siteId, $mediaUrl, $product, $product);
-                        if (! empty($image)) {
-                            $text[] = ['<image>' . $image  . '</image>', 3];
-                        }
-
-                        if (! empty($gender_code)) {
-                            $gender = $this->getAttributeValue($storeId, $product, $gender_code);
-                            if ($gender) {
-                                $text[] = ['<gender><![CDATA['.$this->escapeString($gender).']]></gender>', 3];
-                            }
-                        }
-
-                        if (! empty($age_group_code)) {
-                            $age_group = $this->getAttributeValue($storeId, $product, $age_group_code);
-                            if ($age_group) {
-                                $text[] = ['<age_group><![CDATA['.$this->escapeString($age_group).']]></age_group>', 3];
-                            }
-                        }
-
-                        if (! empty($brand_code)) {
-                            $brand = $this->getAttributeValue($storeId, $product, $brand_code);
-                            if ($brand) {
-                                $text[] = ['<brand><![CDATA[' . $this->escapeString($brand) . ']]></brand>', 3];
-                            } else {
-                                $text[] = ['<brand><![CDATA[' . $this->escapeString($default_brand) . ']]></brand>', 3];
-                            }
-                        } elseif (! empty($default_brand)) {
-                            $text[] = ['<brand><![CDATA[' . $this->escapeString($default_brand) . ']]></brand>', 3];
-                        }
-
-                        $categories = $product->getCategoryIds();
-                        if (! empty($categories)) {
-                            $text[] = ['<categories>', 3];
-                            foreach ($categories as $categoryId) {
-                                $text[] = ['<category id="category_'.$categoryId.'" />', 4];
-                            }
-                            $text[] = ['</categories>', 3];
-                        }
-
-                        $keywords = $product->getMetaKeywords();
-                        if (! empty($keywords)) {
-                            $text[] = ['<keywords>', 3];
-                            foreach (explode(',', $keywords) as $keyword) {
-                                $text[] = ['<keyword><![CDATA['.$this->escapeString($keyword).']]></keyword>', 4];
-                            }
-                            $text[] = ['</keywords>', 3];
-                        }
-
-                        $text[] = ['<variants>', 3];
-
-                        if ($product->getTypeId() === 'configurable') {
-                            $product_attributes = [];
-                            $product_options = $product->getTypeInstance()->getConfigurableAttributesAsArray($product);
-                            foreach ($product_options as $option) {
-                                $product_attributes[] = $option['attribute_code'];
-                            }
-
-                            $childProducts = $product->getTypeInstance()->getUsedProducts($product);
-
-                            if (count($childProducts) > 0) {
-                                foreach ($childProducts as $childProduct) {
-                                    $text[] = ['<variant>', 4];
-
-                                    $text[] = ['<id>' . $childProduct->getId() . '</id>', 5];
-
-                                    $attributes_to_show = array_merge($product_attributes, $attribute_codes);
-
-                                    if (! empty($attributes_to_show)) {
-                                        $attributes = [];
-
-                                        foreach ($attributes_to_show as $attribute) {
-                                            if (empty($attribute) || in_array($attribute, ['id', 'mpn', 'stock', 'link', 'image', $age_group_code, $gender_code, $brand_code, $colour_code])) {
-                                                continue;
-                                            }
-
-                                            $attribute_text = $this->getAttributeValue($storeId, $childProduct, $attribute);
-                                            if ($attribute_text) {
-                                                $attributes[$attribute] = $attribute_text;
-                                            }
-                                        }
-
-                                        if (! empty($attributes)) {
-                                            $text[] = ['<attributes>', 5];
-
-                                            foreach ($attributes as $attribute => $attribute_text) {
-                                                $text[] = ['<'.$attribute.'><![CDATA['.$this->escapeString($attribute_text).']]></'.$attribute.'>', 6];
-                                            }
-
-                                            $text[] = ['</attributes>', 5];
-                                        }
-                                    }
-
-                                    if (! empty($colour_code)) {
-                                        $colour = $this->getAttributeValue($storeId, $childProduct, $colour_code);
-
-                                        if (! $colour) {
-                                            $colour = $this->getAttributeValue($storeId, $product, $colour_code);
-                                        }
-
-                                        if ($colour) {
-                                            $text[] = ['<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5];
-                                        }
-                                    }
-
-                                    $text[] = ['<mpn><![CDATA['.$this->escapeString($childProduct->getSku()).']]></mpn>', 5];
-
-                                    $text[] = ['<stock>' . $this->getStockQty($childProduct) .'</stock>', 5];
-
-                                    $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId) . ']]></link>', 5];
-
-                                    $image = $this->getProductImage($siteId, $mediaUrl, $product, $childProduct);
-                                    if (! empty($image)) {
-                                        $text[] = ['<image>' . $image  . '</image>', 5];
-                                    }
-
-                                    $text[] = ['</variant>', 4];
-                                }
-                            }
-                        } else {
-                            $text[] = ['<variant>', 4];
-
-                            $text[] = ['<id>' . $product->getId() . '</id>', 5];
-
-                            if (! empty($attribute_codes)) {
-                                $attributes = [];
-
-                                foreach ($attribute_codes as $attribute) {
-                                    if (empty($attribute) || in_array($attribute, ['id', 'mpn', 'stock', 'link', 'image', $age_group_code, $gender_code, $brand_code, $colour_code])) {
-                                        continue;
-                                    }
-
-                                    $attribute_text = $this->getAttributeValue($storeId, $product, $attribute);
-                                    if ($attribute_text) {
-                                        $attributes[$attribute] = $attribute_text;
-                                    }
-                                }
-
-                                if (! empty($attributes)) {
-                                    $text[] = ['<attributes>', 5];
-
-                                    foreach ($attributes as $attribute => $attribute_text) {
-                                        $text[] = ['<'.$attribute.'><![CDATA['.$this->escapeString($attribute_text).']]></'.$attribute.'>', 6];
-                                    }
-
-                                    $text[] = ['</attributes>', 5];
-                                }
-                            }
-
-                            if (! empty($colour_code)) {
-                                $colour = $this->getAttributeValue($storeId, $product, $colour_code);
-                                if ($colour) {
-                                    $text[] = ['<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5];
-                                }
-                            }
-
-                            $text[] = ['<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 5];
-
-                            $text[] = ['<stock>' . $this->getStockQty($product) .'</stock>', 5];
-
-                            $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId) . ']]></link>', 5];
+                            $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId) . ']]></link>', 3];
 
                             $image = $this->getProductImage($siteId, $mediaUrl, $product, $product);
                             if (! empty($image)) {
-                                $text[] = ['<image>' . $image  . '</image>', 5];
+                                $text[] = ['<image>' . $image  . '</image>', 3];
                             }
 
-                            $text[] = ['</variant>', 4];
+                            if (! empty($gender_code)) {
+                                $gender = $this->getAttributeValue($storeId, $product, $gender_code);
+                                if ($gender) {
+                                    $text[] = ['<gender><![CDATA['.$this->escapeString($gender).']]></gender>', 3];
+                                }
+                            }
+
+                            if (! empty($age_group_code)) {
+                                $age_group = $this->getAttributeValue($storeId, $product, $age_group_code);
+                                if ($age_group) {
+                                    $text[] = ['<age_group><![CDATA['.$this->escapeString($age_group).']]></age_group>', 3];
+                                }
+                            }
+
+                            if (! empty($brand_code)) {
+                                $brand = $this->getAttributeValue($storeId, $product, $brand_code);
+                                if ($brand) {
+                                    $text[] = ['<brand><![CDATA[' . $this->escapeString($brand) . ']]></brand>', 3];
+                                } else {
+                                    $text[] = ['<brand><![CDATA[' . $this->escapeString($default_brand) . ']]></brand>', 3];
+                                }
+                            } elseif (! empty($default_brand)) {
+                                $text[] = ['<brand><![CDATA[' . $this->escapeString($default_brand) . ']]></brand>', 3];
+                            }
+
+                            $categories = $product->getCategoryIds();
+                            if (! empty($categories)) {
+                                $text[] = ['<categories>', 3];
+                                foreach ($categories as $categoryId) {
+                                    $text[] = ['<category id="category_'.$categoryId.'" />', 4];
+                                }
+                                $text[] = ['</categories>', 3];
+                            }
+
+                            $keywords = $product->getMetaKeywords();
+                            if (! empty($keywords)) {
+                                $text[] = ['<keywords>', 3];
+                                foreach (explode(',', $keywords) as $keyword) {
+                                    $text[] = ['<keyword><![CDATA['.$this->escapeString($keyword).']]></keyword>', 4];
+                                }
+                                $text[] = ['</keywords>', 3];
+                            }
+
+                            $text[] = ['<variants>', 3];
+
+                            if ($product->getTypeId() === 'configurable') {
+                                $product_attributes = [];
+                                $product_options = $product->getTypeInstance()->getConfigurableAttributesAsArray($product);
+                                foreach ($product_options as $option) {
+                                    $product_attributes[] = $option['attribute_code'];
+                                }
+
+                                $childProducts = $product->getTypeInstance()->getUsedProducts($product);
+
+                                if (count($childProducts) > 0) {
+                                    foreach ($childProducts as $childProduct) {
+                                        $text[] = ['<variant>', 4];
+
+                                        $text[] = ['<id>' . $childProduct->getId() . '</id>', 5];
+
+                                        $attributes_to_show = array_merge($product_attributes, $attribute_codes);
+
+                                        if (! empty($attributes_to_show)) {
+                                            $attributes = [];
+
+                                            foreach ($attributes_to_show as $attribute) {
+                                                if (empty($attribute) || in_array($attribute, ['id', 'mpn', 'stock', 'link', 'image', $age_group_code, $gender_code, $brand_code, $colour_code])) {
+                                                    continue;
+                                                }
+
+                                                $attribute_text = $this->getAttributeValue($storeId, $childProduct, $attribute);
+                                                if ($attribute_text) {
+                                                    $attributes[$attribute] = $attribute_text;
+                                                }
+                                            }
+
+                                            if (! empty($attributes)) {
+                                                $text[] = ['<attributes>', 5];
+
+                                                foreach ($attributes as $attribute => $attribute_text) {
+                                                    $text[] = ['<'.$attribute.'><![CDATA['.$this->escapeString($attribute_text).']]></'.$attribute.'>', 6];
+                                                }
+
+                                                $text[] = ['</attributes>', 5];
+                                            }
+                                        }
+
+                                        if (! empty($colour_code)) {
+                                            $colour = $this->getAttributeValue($storeId, $childProduct, $colour_code);
+
+                                            if (! $colour) {
+                                                $colour = $this->getAttributeValue($storeId, $product, $colour_code);
+                                            }
+
+                                            if ($colour) {
+                                                $text[] = ['<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5];
+                                            }
+                                        }
+
+                                        $text[] = ['<mpn><![CDATA['.$this->escapeString($childProduct->getSku()).']]></mpn>', 5];
+
+                                        $text[] = ['<stock>' . $this->getStockQty($childProduct) .'</stock>', 5];
+
+                                        $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId) . ']]></link>', 5];
+
+                                        $image = $this->getProductImage($siteId, $mediaUrl, $product, $childProduct);
+                                        if (! empty($image)) {
+                                            $text[] = ['<image>' . $image  . '</image>', 5];
+                                        }
+
+                                        $text[] = ['</variant>', 4];
+                                    }
+                                }
+                            } else {
+                                $text[] = ['<variant>', 4];
+
+                                $text[] = ['<id>' . $product->getId() . '</id>', 5];
+
+                                if (! empty($attribute_codes)) {
+                                    $attributes = [];
+
+                                    foreach ($attribute_codes as $attribute) {
+                                        if (empty($attribute) || in_array($attribute, ['id', 'mpn', 'stock', 'link', 'image', $age_group_code, $gender_code, $brand_code, $colour_code])) {
+                                            continue;
+                                        }
+
+                                        $attribute_text = $this->getAttributeValue($storeId, $product, $attribute);
+                                        if ($attribute_text) {
+                                            $attributes[$attribute] = $attribute_text;
+                                        }
+                                    }
+
+                                    if (! empty($attributes)) {
+                                        $text[] = ['<attributes>', 5];
+
+                                        foreach ($attributes as $attribute => $attribute_text) {
+                                            $text[] = ['<'.$attribute.'><![CDATA['.$this->escapeString($attribute_text).']]></'.$attribute.'>', 6];
+                                        }
+
+                                        $text[] = ['</attributes>', 5];
+                                    }
+                                }
+
+                                if (! empty($colour_code)) {
+                                    $colour = $this->getAttributeValue($storeId, $product, $colour_code);
+                                    if ($colour) {
+                                        $text[] = ['<colour><![CDATA['.$this->escapeString($colour).']]></colour>', 5];
+                                    }
+                                }
+
+                                $text[] = ['<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 5];
+
+                                $text[] = ['<stock>' . $this->getStockQty($product) .'</stock>', 5];
+
+                                $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId) . ']]></link>', 5];
+
+                                $image = $this->getProductImage($siteId, $mediaUrl, $product, $product);
+                                if (! empty($image)) {
+                                    $text[] = ['<image>' . $image  . '</image>', 5];
+                                }
+
+                                $text[] = ['</variant>', 4];
+                            }
+
+                            $text[] = ['</variants>', 3];
+
+                            $text[] = ['</product>', 2];
+
+                            $this->printLines($siteId, $text);
+                        } catch (\Exception $e) {
+                            $this->_logger->error('Error with product: ' . $product->getId());
+                            $this->_logger->error('- File: ' . $e->getFile() . ' - ' . $e->getLine());
+                            $this->_logger->error('- Message: ' . $e->getMessage());
                         }
-
-                        $text[] = ['</variants>', 3];
-
-                        $text[] = ['</product>', 2];
-
-                        $this->printLines($siteId, $text);
-                    } catch (\Exception $e) {
-                        $this->_logger->error('Error with product: ' . $product->getId());
-                        $this->_logger->error('- File: ' . $e->getFile() . ' - ' . $e->getLine());
-                        $this->_logger->error('- Message: ' . $e->getMessage());
                     }
-                }
 
-                $products->clear();
+                    $products->clear();
+                }
+            } catch (\Exception $e) {
+                $this->_logger->error('- File: ' . $e->getFile() . ' - ' . $e->getLine());
+                $this->_logger->error('- Message: ' . $e->getMessage());
             }
 
             $this->_logger->info('- Product export completed');
