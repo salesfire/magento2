@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.4.13
+Released on 2024-08-14
+Released notes:
+
+- Added ability to strip invalid UTF-8 characters.
+
 ### Salesfire v1.4.12
 Released on 2024-06-11
 Released notes:

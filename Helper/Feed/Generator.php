@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.4.12
+ * @version    1.4.13
  */
 class Generator
 {
@@ -96,7 +96,9 @@ class Generator
 
     public function printLine($siteId, $text, $tab = 0)
     {
-        $this->_file->filePutContents($this->getMediaPath() . $siteId . '.temp.xml', str_repeat("\t", $tab) . $text . "\n", FILE_APPEND);
+        $regex = '/[^\x09\x0A\x0D\x20-\xD7FF\xE000-\xFFFD\x10000-x10FFFF]/';
+
+        $this->_file->filePutContents($this->getMediaPath() . $siteId . '.temp.xml', str_repeat("\t", $tab) . preg_replace($regex, '', $text) . "\n", FILE_APPEND);
     }
 
     public function printLines($siteId, $text)
