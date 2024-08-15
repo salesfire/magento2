@@ -1,6 +1,6 @@
 # Changelog
 
-### Salesfire v1.4.13
+### Salesfire v1.4.13.1
 Released on 2024-08-14
 Released notes:
 
