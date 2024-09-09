@@ -31,6 +31,11 @@ class FeedUrl extends Field
     private $secureRenderer;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param Data $helperData

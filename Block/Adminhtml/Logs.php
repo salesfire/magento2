@@ -32,6 +32,16 @@ class Logs extends Field
     private $secureRenderer;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
+     * @var Logger
+     */
+    protected $_logger;
+
+    /**
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param Data $helperData

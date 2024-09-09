@@ -12,6 +12,7 @@ class Index extends \Magento\Framework\App\Action\Action
 {
     protected $_jsonFactory;
     protected $_productMetadata;
+    protected $_storeManager;
     public $helperData;
 
     public function __construct(
