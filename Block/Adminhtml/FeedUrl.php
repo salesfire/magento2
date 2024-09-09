@@ -16,7 +16,7 @@ use Salesfire\Salesfire\Helper\Data;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.3.3
+ * @version    1.4.15
  */
 class FeedUrl extends Field
 {

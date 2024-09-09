@@ -6,7 +6,7 @@ namespace Salesfire\Salesfire\Controller\Config;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.3.3
+ * @version    1.4.15
  */
 class Index extends \Magento\Framework\App\Action\Action
 {
