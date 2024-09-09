@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.4.15
+Released on 2024-09-09
+Released notes:
+
+- Fix php 8.3 compatibility.
+
 ### Salesfire v1.4.14
 Released on 2024-08-15
 Released notes:
