@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.4.16
+Released on 2024-09-12
+Released notes:
+
+- Fix configurable products stock level calculation.
+
 ### Salesfire v1.4.15
 Released on 2024-09-09
 Released notes:

@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.4.14
+ * @version    1.4.16
  */
 class Generator
 {
@@ -374,7 +374,7 @@ class Generator
 
                                         $text[] = ['<mpn><![CDATA['.$this->escapeString($childProduct->getSku()).']]></mpn>', 5];
 
-                                        $text[] = ['<stock>' . $this->getStockQty($childProduct) .'</stock>', 5];
+                                        $text[] = ['<stock>' . $this->getStockQty($product, $childProduct) .'</stock>', 5];
 
                                         $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId) . ']]></link>', 5];
 
@@ -634,8 +634,18 @@ class Generator
         return null;
     }
 
-    protected function getStockQty($product)
+    protected function getStockQty($product, $childProduct = null)
     {
+        if ($childProduct) {
+            $parent_stock = $this->getStockQty($product);
+
+            if ($parent_stock === 0) {
+                return 0;
+            }
+
+            $product = $childProduct;
+        }
+
         if ($this->_moduleManager->isEnabled('Magento_InventoryCatalogApi')) {
             $stock_registry = $this->_objectManager->get('\Magento\CatalogInventory\Api\StockRegistryInterface');
             $stock_item = $stock_registry->getStockItem($product->getId());
