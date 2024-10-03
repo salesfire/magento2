@@ -1,5 +1,12 @@
 # Changelog
 
+### Salesfire v1.4.17
+Released on 2024-10-03
+Released notes:
+
+- Add support for Magento MSI.
+- Stop disabled products from being included in feeds.
+
 ### Salesfire v1.4.16
 Released on 2024-09-12
 Released notes:

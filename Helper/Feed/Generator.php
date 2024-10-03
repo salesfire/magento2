@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.4.16
+ * @version    1.4.17
  */
 class Generator
 {
@@ -329,6 +329,10 @@ class Generator
 
                                 if (count($childProducts) > 0) {
                                     foreach ($childProducts as $childProduct) {
+                                        if ($childProduct->getStatus() != 1) {
+                                            continue;
+                                        }
+
                                         $text[] = ['<variant>', 4];
 
                                         $text[] = ['<id>' . $childProduct->getId() . '</id>', 5];
@@ -579,6 +583,10 @@ class Generator
         $min_price_value = null;
 
         foreach ($usedProds as $child) {
+            if ($child->getStatus() != 1) {
+                continue;
+            }
+
             if ($child->getId() != $product->getId()) {
                 $price = $child->getPriceInfo()->getPrice($type);
                 $price_value = $price->getAmount()->getValue();
@@ -646,7 +654,20 @@ class Generator
             $product = $childProduct;
         }
 
-        if ($this->_moduleManager->isEnabled('Magento_InventoryCatalogApi')) {
+        if ($this->_moduleManager->isEnabled('Magento_InventoryCatalogApi') && $this->_moduleManager->isEnabled('Magento_InventorySalesApi')) {
+            $default_stock_provider = $this->_objectManager->create(\Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface::class);
+            $stock_item_data = $this->_objectManager->create(\Magento\InventorySalesApi\Model\GetStockItemDataInterface::class);
+
+            $default_stock_id = $default_stock_provider->getId();
+            $stock_item = $stock_item_data->execute($product->getSku(), $default_stock_id);
+
+            $is_salable = $stock_item[\Magento\InventorySalesApi\Model\GetStockItemDataInterface::IS_SALABLE] ?? false;
+            $stock_qty = $stock_item[\Magento\InventorySalesApi\Model\GetStockItemDataInterface::QUANTITY] ?? 0;
+
+            return $is_salable ? ($stock_qty > 0 ? (int) $stock_qty : 1) : 0;
+        }
+
+        if ($this->_moduleManager->isEnabled('Magento_CatalogInventory')) {
             $stock_registry = $this->_objectManager->get('\Magento\CatalogInventory\Api\StockRegistryInterface');
             $stock_item = $stock_registry->getStockItem($product->getId());
             $stock_qty = $stock_item->getQty();
