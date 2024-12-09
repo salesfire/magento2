@@ -19,6 +19,11 @@ class Logger extends \Monolog\Logger
 {
     const MAX_SIZE =  1024 * 1024 * 50; // 50 megabytes
 
+    public function __construct($name = 'salesfire', array $handlers = [], array $processors = [])
+    {
+        parent::__construct($name, $handlers, $processors);
+    }
+
     protected function getPath()
     {
         /** @var \App\Logger\Handler $handlers */
