@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.1
+Released on 2024-12-04
+Released notes:
+
+- Improves product quantity rounding to better handle made to measure products.
+
 ### Salesfire v1.4.17
 Released on 2024-10-03
 Released notes:

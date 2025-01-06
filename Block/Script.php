@@ -132,7 +132,7 @@ class Script extends Template
                     'name'       => $product->getName(),
                     'price'      => round($product->getPrice(), 2),
                     'tax'        => round($product->getTaxAmount(), 2),
-                    'quantity'   => round($product->getQtyOrdered()),
+                    'quantity'   => round($product->getQtyOrdered(), 2),
                     'variant'    => $variant,
                 ]));
             }
