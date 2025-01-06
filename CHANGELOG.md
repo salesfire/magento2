@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.2
+Released on 2025-01-06
+Released notes:
+
+- Add constructor to the Logger class to provide a default value for the name parameter and ensure proper initialisation
+
 ### Salesfire v1.4.17
 Released on 2024-10-03
 Released notes:
