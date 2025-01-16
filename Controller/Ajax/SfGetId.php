@@ -7,7 +7,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Salesfire\Salesfire\Helper\CookieHelper;
 
-class GetId extends Action
+class SfGetId extends Action
 {
     protected $resultJsonFactory;
     protected $cookieHelper;

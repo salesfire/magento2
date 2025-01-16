@@ -90,6 +90,17 @@ class Script extends Template
         return $this->product;
     }
 
+    public function initSfGetIdScript()
+    {
+        return  <<<EOF
+            <script>
+                require(['sfgetid'], function(sfgetid) {
+                    sfgetid();
+                });
+            </script>
+EOF;
+    }
+
     public function _toHtml()
     {
         if (! $this->getHelper()->isAvailable()) {
@@ -161,14 +172,6 @@ class Script extends Template
             $nonce = $cspNonceProvider->generateNonce();
         }
 
-        $html = <<<EOF
-            <script>
-                require(['getid'], function(getid) {
-                    getid();
-                });
-            </script>
-EOF;
-
-        return $html . $formatter->toScriptTag($nonce);
+        return $this->initSfGetIdScript() . $formatter->toScriptTag($nonce);
     }
 }

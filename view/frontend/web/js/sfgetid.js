@@ -3,17 +3,17 @@ define(['mage/url'], function (url) {
         let sfCuid = localStorage.getItem('sf_cuid') || null;
     
         if (! sfCuid) {
-            const response = await fetch(url.build('/salesfire/ajax/getid'), {
+            sfCuid = await fetch(url.build('/salesfire/ajax/sfgetid'), {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             })
+            .then(async response => await response.json())
             .catch(error => {
                 console.error('Error: ' + error);
+                return null;
             });
-
-            sfCuid = await response.json();
         }
 
         if (sfCuid) {
