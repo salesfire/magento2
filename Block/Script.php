@@ -161,6 +161,14 @@ class Script extends Template
             $nonce = $cspNonceProvider->generateNonce();
         }
 
-        return $formatter->toScriptTag($nonce);
+        $html = <<<EOF
+            <script>
+                require(['getid'], function(getid) {
+                    getid();
+                });
+            </script>
+EOF;
+
+        return $html . $formatter->toScriptTag($nonce);
     }
 }
