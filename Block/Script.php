@@ -90,15 +90,21 @@ class Script extends Template
         return $this->product;
     }
 
-    public function initSfGetIdScript()
+    public function initSfGetIdScript($nonce = null)
     {
-        return  <<<EOF
-            <script>
-                require(['sfgetid'], function(sfgetid) {
-                    sfgetid();
-                });
-            </script>
-EOF;
+        $script = "<script";
+
+        if ($nonce) {
+            $script .= " nonce=\"{$nonce}\"";
+        }
+
+        $script .= ">\n";
+        $script .= "require(['sfgetid'], function(sfgetid) {\n";
+        $script .= "    sfgetid();\n";
+        $script .= "});\n";
+        $script .= "</script>\n";
+    
+        return $script;
     }
 
     public function _toHtml()
@@ -172,6 +178,6 @@ EOF;
             $nonce = $cspNonceProvider->generateNonce();
         }
 
-        return $this->initSfGetIdScript() . $formatter->toScriptTag($nonce);
+        return $this->initSfGetIdScript($nonce) . $formatter->toScriptTag($nonce);
     }
 }
