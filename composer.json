@@ -15,7 +15,8 @@
         }
     ],
     "require": {
-        "salesfire/salesfire": "^1.0.4"
+        "salesfire/salesfire": "^1.0.4",
+        "symfony/polyfill-mbstring": "^1.31"
     },
     "autoload": {
         "files": [
