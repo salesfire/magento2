@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.3
+Released on 2025-02-03
+Released notes:
+
+- Improves product description generation to cater for non UTF-8 characters
+
 ### Salesfire v1.5.2
 Released on 2025-01-06
 Released notes:

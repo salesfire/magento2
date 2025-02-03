@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.5.2
+ * @version    1.5.3
  */
 class Generator
 {
@@ -205,7 +205,7 @@ class Generator
 
                         $description = $category->getDescription();
                         if (! empty($description)) {
-                            $text[] = ['<description><![CDATA['.$this->escapeString(substr($this->_escaper->escapeHtml(strip_tags($description)), 0, 2000)).']]></description>', 3];
+                            $text[] = ['<description><![CDATA['.$this->escapeString(mb_substr($this->_escaper->escapeHtml(strip_tags($description)), 0, 2000)).']]></description>', 3];
                         }
 
                         $text[] = ['<link><![CDATA[' . $category->getUrl(true) . ']]></link>', 3];
@@ -255,7 +255,7 @@ class Generator
 
                             $text[] = ['<title><![CDATA[' . $this->escapeString($product->getName()) . ']]></title>', 3];
 
-                            $text[] = ['<description><![CDATA[' . $this->escapeString(substr($this->_escaper->escapeHtml(strip_tags($product->getDescription() ?: '')), 0, 5000)) . ']]></description>', 3];
+                            $text[] = ['<description><![CDATA[' . $this->escapeString(mb_substr($this->_escaper->escapeHtml(strip_tags($product->getDescription() ?: '')), 0, 5000)) . ']]></description>', 3];
 
                             $price = $this->getProductPrice($product);
                             $saleprice = $this->getProductSalePrice($product);
