@@ -1,7 +1,7 @@
 # Changelog
 
 ### Salesfire v1.5.4
-Released on 2025-02-03
+Released on 2025-02-04
 Released notes:
 
 - Add deterministic tracking
