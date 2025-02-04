@@ -90,6 +90,23 @@ class Script extends Template
         return $this->product;
     }
 
+    public function initSfGetIdScript($nonce = null)
+    {
+        $script = "<script";
+
+        if ($nonce) {
+            $script .= " nonce=\"{$nonce}\"";
+        }
+
+        $script .= ">\n";
+        $script .= "require(['sfgetid'], function(sfgetid) {\n";
+        $script .= "    sfgetid();\n";
+        $script .= "});\n";
+        $script .= "</script>\n";
+    
+        return $script;
+    }
+
     public function _toHtml()
     {
         if (! $this->getHelper()->isAvailable()) {
@@ -161,6 +178,6 @@ class Script extends Template
             $nonce = $cspNonceProvider->generateNonce();
         }
 
-        return $formatter->toScriptTag($nonce);
+        return $this->initSfGetIdScript($nonce) . $formatter->toScriptTag($nonce);
     }
 }
