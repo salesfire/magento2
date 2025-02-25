@@ -175,8 +175,9 @@ class Generator
                 $this->_file->deleteFile($this->getMediaPath() . $siteId . '.temp.xml');
             }
 
+            $baseUrl = $this->_storeManager->getStore($storeId)->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB);
             $this->printLine($siteId, '<?xml version="1.0" encoding="utf-8" ?>', 0);
-            $this->printLine($siteId, '<productfeed site="'.$this->_storeManager->getStore($storeId)->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB).'" generator="salesfire/magento2" date-generated="'.gmdate('c').'" version="' . $this->_helperData->getVersion() . '">', 0);
+            $this->printLine($siteId, '<productfeed site="'.$baseUrl.'" generator="salesfire/magento2" date-generated="'.gmdate('c').'" version="' . $this->_helperData->getVersion() . '">', 0);
 
             $mediaUrl = $this->_storeManager->getStore($storeId)->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
 
@@ -208,7 +209,7 @@ class Generator
                             $text[] = ['<description><![CDATA['.$this->escapeString(mb_substr($this->_escaper->escapeHtml(strip_tags($description)), 0, 2000)).']]></description>', 3];
                         }
 
-                        $text[] = ['<link><![CDATA[' . $category->getUrl(true) . ']]></link>', 3];
+                        $text[] = ['<link><![CDATA[' . $baseUrl . $category->getUrlPath() . ']]></link>', 3];
 
                         $keywords = $category->getMetaKeywords();
                         if (! empty($keywords)) {
