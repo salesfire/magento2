@@ -267,7 +267,7 @@ class Generator
 
                             $text[] = ['<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 3];
 
-                            $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId) . ']]></link>', 3];
+                            $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId, false) . ']]></link>', 3];
 
                             $image = $this->getProductImage($siteId, $mediaUrl, $product, $product);
                             if (! empty($image)) {
@@ -432,7 +432,7 @@ class Generator
 
                                 $text[] = ['<stock>' . $this->getStockQty($product) .'</stock>', 5];
 
-                                $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId) . ']]></link>', 5];
+                                $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId, false) . ']]></link>', 5];
 
                                 $image = $this->getProductImage($siteId, $mediaUrl, $product, $product);
                                 if (! empty($image)) {
@@ -710,7 +710,7 @@ class Generator
         return $image;
     }
 
-    protected function getProductUrl($product, $storeId)
+    protected function getProductUrl($product, $storeId, $hasParent = true)
     {
         $route_path = '';
 
@@ -738,6 +738,7 @@ class Generator
             if (
                 $product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
                     && count($parents = $this->configurable->getParentIdsByChild($product->getId())) > 0
+                    && $hasParent
             ) {
                 $route_params['id'] = $parents[0];
                 $route_params['s'] = $product->getUrlKey();
