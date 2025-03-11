@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.5
+Released on 2025-03-11
+Released notes:
+
+- Fixed multi-site feed generation
+
 ### Salesfire v1.5.4
 Released on 2025-02-04
 Released notes:
