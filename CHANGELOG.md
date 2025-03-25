@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.6
+Released on 2025-03-25
+Released notes:
+
+- Fixed multi source inventory quantity
+
 ### Salesfire v1.5.5
 Released on 2025-03-11
 Released notes:
