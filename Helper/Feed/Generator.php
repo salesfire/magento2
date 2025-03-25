@@ -664,7 +664,7 @@ class Generator
                 $websiteCode = $this->_storeManager->getStore($storeId)->getWebsite()->getCode();
                 $default_stock_id = $this->_objectManager
                     ->get(\Magento\InventorySalesApi\Api\StockResolverInterface::class)
-                    ->execute($websiteCode)
+                    ->execute('website', $websiteCode)
                     ->getStockId();
             } catch (\Exception $e) {
                 // If MSI isn't enabled fallback to default.
