@@ -660,15 +660,21 @@ class Generator
             $default_stock_provider = $this->_objectManager->create(\Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface::class);
             $stock_item_data = $this->_objectManager->create(\Magento\InventorySalesApi\Model\GetStockItemDataInterface::class);
 
+            $default_stock_id = $default_stock_provider->getId();
+
+            // Resolve MSI stock ID if it exists, else silently fallback to default_stock_id.
             try {
                 $websiteCode = $this->_storeManager->getStore($storeId)->getWebsite()->getCode();
-                $default_stock_id = $this->_objectManager
+                $resolvedStockId = $this->_objectManager
                     ->get(\Magento\InventorySalesApi\Api\StockResolverInterface::class)
                     ->execute('website', $websiteCode)
                     ->getStockId();
+
+                if ($resolvedStockId) {
+                    $default_stock_id = $resolvedStockId;
+                }
             } catch (\Exception $e) {
-                // If MSI isn't enabled fallback to default.
-                $default_stock_id = $default_stock_provider->getId();
+                // Silently fall back to default_stock_id
             }
 
             $stock_item = $stock_item_data->execute($product->getSku(), $default_stock_id);
