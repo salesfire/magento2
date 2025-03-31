@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.8
+Released on 2025-03-31
+Released notes:
+
+- Bump version for Magento release
+
 ### Salesfire v1.5.7
 Released on 2025-03-31
 Released notes:
