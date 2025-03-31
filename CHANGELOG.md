@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.7
+Released on 2025-03-31
+Released notes:
+
+- Add gitignore file to ignore IDE files
+
 ### Salesfire v1.5.6
 Released on 2025-03-25
 Released notes:
