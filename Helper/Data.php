@@ -9,7 +9,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.5.5
+ * @version    1.5.6
  */
 class Data extends AbstractHelper
 {
@@ -49,7 +49,7 @@ class Data extends AbstractHelper
      */
     public function getVersion()
     {
-        return '1.5.5';
+        return '1.5.6';
     }
 
     /**

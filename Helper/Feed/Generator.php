@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.5.5
+ * @version    1.5.6
  */
 class Generator
 {
@@ -379,7 +379,7 @@ class Generator
 
                                         $text[] = ['<mpn><![CDATA['.$this->escapeString($childProduct->getSku()).']]></mpn>', 5];
 
-                                        $text[] = ['<stock>' . $this->getStockQty($product, $childProduct) .'</stock>', 5];
+                                        $text[] = ['<stock>' . $this->getStockQty($product, $storeId, $childProduct) .'</stock>', 5];
 
                                         $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId) . ']]></link>', 5];
 
@@ -430,7 +430,7 @@ class Generator
 
                                 $text[] = ['<mpn><![CDATA['.$this->escapeString($product->getSku()).']]></mpn>', 5];
 
-                                $text[] = ['<stock>' . $this->getStockQty($product) .'</stock>', 5];
+                                $text[] = ['<stock>' . $this->getStockQty($product, $storeId) .'</stock>', 5];
 
                                 $text[] = ['<link><![CDATA[' . $this->getProductUrl($product, $storeId, false) . ']]></link>', 5];
 
@@ -643,10 +643,11 @@ class Generator
         return null;
     }
 
-    protected function getStockQty($product, $childProduct = null)
+    protected function getStockQty($product, $storeId, $childProduct = null)
     {
+
         if ($childProduct) {
-            $parent_stock = $this->getStockQty($product);
+            $parent_stock = $this->getStockQty($product, $storeId);
 
             if ($parent_stock === 0) {
                 return 0;
@@ -660,6 +661,22 @@ class Generator
             $stock_item_data = $this->_objectManager->create(\Magento\InventorySalesApi\Model\GetStockItemDataInterface::class);
 
             $default_stock_id = $default_stock_provider->getId();
+
+            // Resolve MSI stock ID if it exists, else silently fallback to default_stock_id.
+            try {
+                $websiteCode = $this->_storeManager->getStore($storeId)->getWebsite()->getCode();
+                $resolvedStockId = $this->_objectManager
+                    ->get(\Magento\InventorySalesApi\Api\StockResolverInterface::class)
+                    ->execute('website', $websiteCode)
+                    ->getStockId();
+
+                if ($resolvedStockId) {
+                    $default_stock_id = $resolvedStockId;
+                }
+            } catch (\Exception $e) {
+                // Silently fall back to default_stock_id
+            }
+
             $stock_item = $stock_item_data->execute($product->getSku(), $default_stock_id);
 
             $is_salable = $stock_item[\Magento\InventorySalesApi\Model\GetStockItemDataInterface::IS_SALABLE] ?? false;
@@ -684,7 +701,7 @@ class Generator
             $stock = ($stock_item && $stock_item->getIsInStock()) ? ($stock_item->getQty() > 0 ? (int) $stock_item->getQty() : 1) : 0;
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $stock_state = $this->_objectManager->get('\Magento\CatalogInventory\Api\StockStateInterface');
-            $stock = $stock_state->getStockQty($product->getId());
+            $stock = $stock_state->getStockQty($product->getId(), $storeId);
         }
 
         return $stock ? $stock : 0;
