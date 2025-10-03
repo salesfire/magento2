@@ -143,7 +143,7 @@ class Script extends Template
                     }, $options['attribute_info']));
                 }
 
-                $quantity = $product->getQtyOrdered() ?: 1;
+                $quantity = $product->getQtyOrdered() ?? 1;
                 $totalAfterDiscountsBeforeTax = $product->getRowTotal() ?: 0;
                 $itemPriceAfterDiscounts = $quantity > 0 ? $totalAfterDiscountsBeforeTax / $quantity : 0;
                 $taxOnDiscountedTotal = $product->getTaxAmount() ?: 0;
