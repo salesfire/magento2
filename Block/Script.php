@@ -143,13 +143,19 @@ class Script extends Template
                     }, $options['attribute_info']));
                 }
 
+                $quantity = $product->getQtyOrdered() ?: 1;
+                $totalAfterDiscountsBeforeTax = $product->getRowTotal() ?: 0;
+                $itemPriceAfterDiscounts = $quantity > 0 ? $totalAfterDiscountsBeforeTax / $quantity : 0;
+                $taxOnDiscountedTotal = $product->getTaxAmount() ?: 0;
+                $itemTaxOnDiscountedPrice = $quantity > 0 ? $taxOnDiscountedTotal / $quantity : 0;
+
                 $transaction->addProduct(new \Salesfire\Types\Product([
                     'sku'        => $product_id,
                     'parent_sku' => $parent_product_id,
                     'name'       => $product->getName(),
-                    'price'      => round($product->getPrice(), 2),
-                    'tax'        => round($product->getTaxAmount(), 2),
-                    'quantity'   => round($product->getQtyOrdered(), 2),
+                    'price'      => round($itemPriceAfterDiscounts, 2),
+                    'tax'        => round($itemTaxOnDiscountedPrice, 2),
+                    'quantity'   => round($quantity, 2),
                     'variant'    => $variant,
                 ]));
             }
