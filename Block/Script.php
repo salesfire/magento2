@@ -144,9 +144,12 @@ class Script extends Template
                 }
 
                 $quantity = $product->getQtyOrdered() ?? 1;
+
+                // These totals are for all items in this order line (e.g., if qty=4, this is the total for all 4)
                 $totalAfterDiscountsBeforeTax = $product->getRowTotal() ?: 0;
-                $itemPriceAfterDiscounts = $quantity > 0 ? $totalAfterDiscountsBeforeTax / $quantity : 0;
                 $taxOnDiscountedTotal = $product->getTaxAmount() ?: 0;
+
+                $itemPriceAfterDiscounts = $quantity > 0 ? $totalAfterDiscountsBeforeTax / $quantity : 0;
                 $itemTaxOnDiscountedPrice = $quantity > 0 ? $taxOnDiscountedTotal / $quantity : 0;
 
                 $transaction->addProduct(new \Salesfire\Types\Product([
