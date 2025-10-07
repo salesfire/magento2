@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.8
+Released on 2025-10-07
+Released notes:
+
+- Fix discount price tracking in order transactions
+
 ### Salesfire v1.5.7
 Released on 2025-03-31
 Released notes:
