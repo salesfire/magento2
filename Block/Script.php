@@ -143,13 +143,16 @@ class Script extends Template
                     }, $options['attribute_info']));
                 }
 
+                $quantity = $product->getQtyOrdered() ?? 1;
+                $pricing = $this->calculateItemPriceAndTax($product, $quantity);
+
                 $transaction->addProduct(new \Salesfire\Types\Product([
                     'sku'        => $product_id,
                     'parent_sku' => $parent_product_id,
                     'name'       => $product->getName(),
-                    'price'      => round($product->getPrice(), 2),
-                    'tax'        => round($product->getTaxAmount(), 2),
-                    'quantity'   => round($product->getQtyOrdered(), 2),
+                    'price'      => round($pricing['price'], 2),
+                    'tax'        => round($pricing['tax'], 2),
+                    'quantity'   => round($quantity, 2),
                     'variant'    => $variant,
                 ]));
             }
@@ -179,5 +182,28 @@ class Script extends Template
         }
 
         return $this->initSfGetIdScript($nonce) . $formatter->toScriptTag($nonce);
+    }
+
+    /**
+     * Calculate per-item price and tax after discounts
+     *
+     * @param \Magento\Sales\Model\Order\Item $product
+     * @param float $quantity
+     * @return array Associative array with 'price' and 'tax' keys
+     */
+    private function calculateItemPriceAndTax($product, $quantity)
+    {
+        // Row totals represent all items in the order line (e.g., if qty=4, this is the total for all 4)
+        $rowTotal = $product->getRowTotal() ?: 0;
+        $rowTax = $product->getTaxAmount() ?: 0;
+
+        if ($quantity <= 0) {
+            return ['price' => 0, 'tax' => 0];
+        }
+
+        return [
+            'price' => $rowTotal / $quantity,
+            'tax' => $rowTax / $quantity,
+        ];
     }
 }
