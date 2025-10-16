@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="head.additional">
+            <block name="salesfire_script"
+                   ifconfig="salesfire/general/is_enabled"
+                   template="Salesfire_Salesfire::sfgetid.phtml"/>
+            <block name="salesfire_script.datalayer"
+                   ifconfig="salesfire/general/is_enabled"
+                   template="Salesfire_Salesfire::sf-datalayer.phtml"/>
+            <block name="salesfire_script.cdn"
+                   ifconfig="salesfire/general/is_enabled"
+                   template="Salesfire_Salesfire::sf-cdn.phtml">
+                <arguments>
+                    <argument name="url" xsi:type="string">https://cdn.salesfire.co.uk/code/</argument>
+                    <argument name="async" xsi:type="boolean">false</argument>
+                    <argument name="defer" xsi:type="boolean">true</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>
