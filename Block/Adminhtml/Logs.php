@@ -83,6 +83,6 @@ class Logs extends Field
 
             <textarea id="field_log" readonly onclick="this.setSelectionRange(0, this.value.length)" style="background: #fff; border: 1px solid #eee; border-radius: 10px; cursor: grab; color: #000; font-family: Consolas, monospace; height: 600px; opacity: 1; overflow-x: scroll; line-height: 18px; margin-top: 10px; padding: 10px; white-space: pre; width: 100%%;">$lines</textarea>
         </td>
-        EOD;
+EOD;
     }
 }

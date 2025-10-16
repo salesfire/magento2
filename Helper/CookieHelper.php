@@ -19,7 +19,7 @@ class CookieHelper
     public function __construct(
         CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
-        SessionManagerInterface $sessionManager,
+        SessionManagerInterface $sessionManager
     ) {
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
