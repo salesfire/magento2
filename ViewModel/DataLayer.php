@@ -70,7 +70,7 @@ class DataLayer implements ArgumentInterface
         ) {
             $transaction = new SalesfireTransactionType([
                 'id'       => $order->getIncrementId(),
-                'shipping' => round($order->getShippingAmount(), 2),
+                'shipping' => round((float)$order->getShippingAmount(), 2), // customisation: float type casting
                 'currency' => $order->getOrderCurrencyCode(),
                 'coupon'   => $order->getCouponCode(),
             ]);
@@ -99,9 +99,9 @@ class DataLayer implements ArgumentInterface
                     'sku'        => $product_id,
                     'parent_sku' => $parent_product_id,
                     'name'       => $product->getName(),
-                    'price'      => round($pricing['price'], 2),
-                    'tax'        => round($pricing['tax'], 2),
-                    'quantity'   => round($quantity, 2),
+                    'price'      => round((float)$pricing['price'], 2), // customisation: float type casting
+                    'tax'        => round((float)$pricing['tax'], 2), // customisation: float type casting
+                    'quantity'   => round((float)$quantity, 2), // customisation: float type casting
                     'variant'    => $variant,
                 ]));
             }
@@ -111,8 +111,8 @@ class DataLayer implements ArgumentInterface
 
         if ($product = $this->registry->registry('product')) { // customisation: use registry directly rather than class-level helper function
             // Calculate product tax
-            $price = round($this->taxHelper->getTaxPrice($product, $product->getFinalPrice(), false), 2);
-            $tax = round($this->taxHelper->getTaxPrice($product, $product->getFinalPrice(), true), 2) - $price;
+            $price = round((float)$this->taxHelper->getTaxPrice($product, $product->getFinalPrice(), false), 2); // customisation: float type casting
+            $tax = round((float)$this->taxHelper->getTaxPrice($product, $product->getFinalPrice(), true), 2) - $price; // customisation: float type casting
 
             $formatter->addProductView(new SalesfireProductType([
                 'sku'        => $product->getId(),
