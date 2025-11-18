@@ -110,7 +110,7 @@ class Generator
 
     public function escapeString($text)
     {
-        return html_entity_decode(trim($text));
+        return html_entity_decode(trim($text), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
     }
 
     public function execute()
@@ -250,7 +250,7 @@ class Generator
                         try {
                             $text = [];
 
-                            $text[] = ['<product id="product_'.$product->getId().'" type="' . htmlspecialchars($product->getTypeId()) . '">', 2];
+                            $text[] = ['<product id="product_'.$product->getId().'" type="' . htmlspecialchars($product->getTypeId(), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8', false) . '">', 2];
 
                             $text[] = ['<id>' . $product->getId() . '</id>', 3];
 
