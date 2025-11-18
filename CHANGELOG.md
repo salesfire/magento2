@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.10
+Released on 2025-11-18
+Released notes:
+
+- Fixed tax missing from price
+
 ### Salesfire v1.5.9
 Released on 2025-10-07
 Released notes:
