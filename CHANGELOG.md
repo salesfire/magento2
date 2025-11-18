@@ -4,7 +4,7 @@
 Released on 2025-11-18
 Released notes:
 
-- Bump salesfire script version
+- Fixed tax missing from price
 
 ### Salesfire v1.5.9
 Released on 2025-10-07
