@@ -1,0 +1,32 @@
+<?php
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Salesfire\Salesfire\ViewModel\DataLayer;
+
+/** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
+/** @var Template $block */
+if (!($url = $block->getData('url'))) {
+    return;
+}
+
+/** @var ViewModelRegistry $viewModels */
+/** @var DataLayer $dataLayer */
+$dataLayer = $viewModels->require(DataLayer::class);
+$siteId = $dataLayer->getSiteId();
+
+if (!$siteId) {
+    return;
+}
+
+$url .= $siteId . '.js';
+?>
+<script src="<?= $escaper->escapeUrl($url); ?>"
+        <?php if ($block->getData('async')): ?>async<?php endif; ?>
+        <?php if ($block->getData('defer')): ?>defer<?php endif; ?>>
+</script>
+<?php isset($hyvaCsp) && $hyvaCsp->registerInlineScript(); ?>
