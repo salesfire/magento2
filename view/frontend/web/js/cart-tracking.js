@@ -90,8 +90,34 @@ define([
      */
     customerData.get('cart').subscribe(function (cartData) {
 
-        // On the first run, just store the initial cart state.
+        // Handle initialising data for the first time.
         if (_.isEmpty(prevCartData)) {
+            // If the first data we receive already contains items, it's the first "add to cart" event.
+            // We must process it immediately by comparing it against a manually created empty cart.
+            if (cartData.items && cartData.items.length > 0) {
+                var emptyCart = { items: [] };
+                var addedProduct = findAddedProduct(cartData, emptyCart);
+
+                if (addedProduct) {
+                    var qty = addedProduct.qty_diff || addedProduct.qty;
+                    window.sfDataLayer = window.sfDataLayer || [];
+                    window.sfDataLayer.push({
+                        'ecommerce': {
+                            'add': {
+                                'sku': addedProduct.product_sku,
+                                'name': addedProduct.product_name,
+                                'price': addedProduct.product_price_value,
+                                'quantity': qty,
+                                'currency': window.sfData.currency || 'GBP',
+                                'link': addedProduct.product_url,
+                                'image_url': addedProduct.product_image ? addedProduct.product_image.src : ''
+                            }
+                        }
+                    });
+                }
+            }
+            // After processing the first event (or if the initial cart was empty),
+            // store the state for the next comparison and stop here for this run.
             prevCartData = $.extend(true, {}, cartData);
             return;
         }
