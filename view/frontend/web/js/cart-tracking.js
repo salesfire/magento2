@@ -84,6 +84,31 @@ define([
     }
 
     /**
+     * Builds the data layer object and pushes it to the window.sfDataLayer array.
+     * @param {string} eventType - The type of event, either 'add' or 'remove'.
+     * @param {Object} product - The product data object.
+     */
+    function pushToDataLayer(eventType, product) {
+        var qty = product.qty_diff || product.qty;
+        var eventData = {
+            'ecommerce': {}
+        };
+
+        eventData.ecommerce[eventType] = {
+            'sku': product.product_sku,
+            'name': product.product_name,
+            'price': product.product_price_value,
+            'quantity': qty,
+            'currency': window.sfData.currency || 'GBP',
+            'link': product.product_url,
+            'image_url': product.product_image ? product.product_image.src : ''
+        };
+
+        window.sfDataLayer = window.sfDataLayer || [];
+        window.sfDataLayer.push(eventData);
+    }
+
+    /**
      * Subscribes to changes in Magento's cart data.
      * When a change is detected, it compares the new cart state with the previous one
      * and pushes an 'add' or 'remove' event to the sfDataLayer.
@@ -103,22 +128,8 @@ define([
                     var addedProduct = findAddedProduct(cartData, emptyCart);
 
                     if (addedProduct) {
-                        var qty = addedProduct.qty_diff || addedProduct.qty;
-                        window.sfDataLayer = window.sfDataLayer || [];
-                        window.sfDataLayer.push({
-                            'ecommerce': {
-                                'add': {
-                                    'sku': addedProduct.product_sku,
-                                    'name': addedProduct.product_name,
-                                    'price': addedProduct.product_price_value,
-                                    'quantity': qty,
-                                    'currency': window.sfData.currency || 'GBP',
-                                    'link': addedProduct.product_url,
-                                    'image_url': addedProduct.product_image ? addedProduct.product_image.src : ''
-                                }
-                            }
-                        });
-                        // Set the flag in storage to prevent this from firing again on subsequent page loads.
+                        pushToDataLayer('add', addedProduct);
+                        // Set the flag in sessionStorage to prevent this from firing again on subsequent page loads.
                         sessionStorage.setItem('sf_first_cart_event_fired', 'true');
                     }
                 }
@@ -131,41 +142,11 @@ define([
         var addedProduct = findAddedProduct(cartData, prevCartData);
 
         if (addedProduct) {
-            var qty = addedProduct.qty_diff || addedProduct.qty;
-
-            window.sfDataLayer = window.sfDataLayer || [];
-            window.sfDataLayer.push({
-                'ecommerce': {
-                    'add': {
-                        'sku': addedProduct.product_sku,
-                        'name': addedProduct.product_name,
-                        'price': addedProduct.product_price_value,
-                        'quantity': qty,
-                        'currency': window.sfData.currency || 'GBP',
-                        'link': addedProduct.product_url,
-                        'image_url': addedProduct.product_image ? addedProduct.product_image.src : ''
-                    }
-                }
-            });
+            pushToDataLayer('add', addedProduct);
         } else {
             var removedProduct = findRemovedProduct(cartData, prevCartData);
             if (removedProduct) {
-                var qty = removedProduct.qty_diff || removedProduct.qty;
-
-                window.sfDataLayer = window.sfDataLayer || [];
-                window.sfDataLayer.push({
-                    'ecommerce': {
-                        'remove': {
-                            'sku': removedProduct.product_sku,
-                            'name': removedProduct.product_name,
-                            'price': removedProduct.product_price_value,
-                            'quantity': qty,
-                            'currency': window.sfData.currency || 'GBP',
-                            'link': removedProduct.product_url,
-                            'image_url': removedProduct.product_image ? removedProduct.product_image.src : ''
-                        }
-                    }
-                });
+                pushToDataLayer('remove', removedProduct);
             }
         }
 
