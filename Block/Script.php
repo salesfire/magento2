@@ -5,6 +5,7 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\ObjectManagerInterface;
 use \Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Salesfire Script Block
@@ -38,6 +39,10 @@ class Script extends Template
      * @var \Magento\Framework\App\ObjectManager
      */
     private $_objectManager;
+    /**
+     * @var StoreManagerInterface
+     */
+    protected $_storeManager;
 
     public function __construct(
         Context $context,
@@ -46,6 +51,7 @@ class Script extends Template
         \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Data $taxHelper,
+        StoreManagerInterface $storeManager,
         array $data = []
     ) {
         $this->helperData      = $helperData;
@@ -53,6 +59,7 @@ class Script extends Template
         $this->request         = $request;
         $this->registry        = $registry;
         $this->taxHelper       = $taxHelper;
+        $this->_storeManager   = $storeManager;
         $this->_objectManager  = ObjectManager::getInstance();
         parent::__construct($context, $data);
     }
@@ -104,6 +111,25 @@ class Script extends Template
         $script .= "});\n";
         $script .= "</script>\n";
     
+        return $script;
+    }
+
+    public function initSfAddToCartScript($nonce = null)
+    {
+        $script = "<script";
+
+        if ($nonce) {
+            $script .= " nonce=\"{$nonce}\"";
+        }
+
+        $currencyCode = $this->_storeManager->getStore()->getCurrentCurrencyCode();
+
+        $script .= ">\n";
+        $script .= "window.sfData = window.sfData || {};\n";
+        $script .= "window.sfData.currency = '{$currencyCode}';\n";
+        $script .= "require(['sfcarttracking']);\n";
+        $script .= "</script>\n";
+
         return $script;
     }
 
