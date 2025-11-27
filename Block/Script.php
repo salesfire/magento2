@@ -207,7 +207,7 @@ class Script extends Template
             $nonce = $cspNonceProvider->generateNonce();
         }
 
-        return $this->initSfGetIdScript($nonce) . $formatter->toScriptTag($nonce);
+        return $this->initSfGetIdScript($nonce) . $this->initSfAddToCartScript($nonce) . $formatter->toScriptTag($nonce);
     }
 
     /**
