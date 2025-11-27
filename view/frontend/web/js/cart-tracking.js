@@ -9,7 +9,7 @@ define([
      * A variable to hold a deep copy of the cart data from the previous state.
      * This is used to compare against the new state to detect changes.
      */
-    var prevCartData = {};
+    let prevCartData = {};
 
     /**
      * Compares the new cart state with the old to find any added products or increased quantities.
@@ -19,13 +19,13 @@ define([
      * @returns {Object|null} The added product item or null if none is found.
      */
     function findAddedProduct(newCart, oldCart) {
-        var oldItems = oldCart.items || [];
-        var newItems = newCart.items || [];
-        var oldItemsBySku = _.indexBy(oldItems, 'product_sku');
-        var newItemsBySku = _.indexBy(newItems, 'product_sku');
+        const oldItems = oldCart.items || [];
+        const newItems = newCart.items || [];
+        const oldItemsBySku = _.indexBy(oldItems, 'product_sku');
+        const newItemsBySku = _.indexBy(newItems, 'product_sku');
 
         // Case 1: A completely new SKU has been added to the cart.
-        var newItemSku = _.find(_.keys(newItemsBySku), function (sku) {
+        const newItemSku = _.find(_.keys(newItemsBySku), function (sku) {
             return !oldItemsBySku[sku];
         });
 
@@ -34,12 +34,12 @@ define([
         }
 
         // Case 2: The quantity of an existing SKU has been increased.
-        var updatedItemSku = _.find(_.keys(newItemsBySku), function (sku) {
+        const updatedItemSku = _.find(_.keys(newItemsBySku), function (sku) {
             return oldItemsBySku[sku] && parseInt(newItemsBySku[sku].qty) > parseInt(oldItemsBySku[sku].qty);
         });
 
         if (updatedItemSku) {
-            var item = $.extend(true, {}, newItemsBySku[updatedItemSku]);
+            const item = $.extend(true, {}, newItemsBySku[updatedItemSku]);
             item.qty_diff = parseInt(item.qty) - parseInt(oldItemsBySku[updatedItemSku].qty);
             return item;
         }
@@ -55,13 +55,13 @@ define([
      * @returns {Object|null} The removed product item or null if none is found.
      */
     function findRemovedProduct(newCart, oldCart) {
-        var oldItems = oldCart.items || [];
-        var newItems = newCart.items || [];
-        var oldItemsBySku = _.indexBy(oldItems, 'product_sku');
-        var newItemsBySku = _.indexBy(newItems, 'product_sku');
+        const oldItems = oldCart.items || [];
+        const newItems = newCart.items || [];
+        const oldItemsBySku = _.indexBy(oldItems, 'product_sku');
+        const newItemsBySku = _.indexBy(newItems, 'product_sku');
 
         // Case 1: An SKU has been completely removed from the cart.
-        var removedItemSku = _.find(_.keys(oldItemsBySku), function (sku) {
+        const removedItemSku = _.find(_.keys(oldItemsBySku), function (sku) {
             return !newItemsBySku[sku];
         });
 
@@ -70,12 +70,12 @@ define([
         }
 
         // Case 2: The quantity of an existing SKU has been decreased.
-        var updatedItemSku = _.find(_.keys(newItemsBySku), function (sku) {
+        const updatedItemSku = _.find(_.keys(newItemsBySku), function (sku) {
             return oldItemsBySku[sku] && parseInt(newItemsBySku[sku].qty) < parseInt(oldItemsBySku[sku].qty);
         });
 
         if (updatedItemSku) {
-            var item = $.extend(true, {}, oldItemsBySku[updatedItemSku]);
+            const item = $.extend(true, {}, oldItemsBySku[updatedItemSku]);
             item.qty_diff = parseInt(oldItemsBySku[updatedItemSku].qty) - parseInt(newItemsBySku[updatedItemSku].qty);
             return item;
         }
@@ -89,8 +89,8 @@ define([
      * @param {Object} product - The product data object.
      */
     function pushToDataLayer(eventType, product) {
-        var qty = product.qty_diff || product.qty;
-        var eventData = {
+        const qty = product.qty_diff || product.qty;
+        const eventData = {
             'ecommerce': {}
         };
 
@@ -118,14 +118,14 @@ define([
         // On the first run, we need to handle the initialisation.
         if (_.isEmpty(prevCartData)) {
 
-            var firstEventFired = sessionStorage.getItem('sf_first_cart_event_fired');
+            const firstEventFired = sessionStorage.getItem('sf_first_cart_event_fired');
 
             if (cartData.items && cartData.items.length > 0) {
 
                 // Only process this as the first event if our session flag has NOT been set.
                 if (!firstEventFired) {
-                    var emptyCart = { items: [] };
-                    var addedProduct = findAddedProduct(cartData, emptyCart);
+                    const emptyCart = { items: [] };
+                    const addedProduct = findAddedProduct(cartData, emptyCart);
 
                     if (addedProduct) {
                         pushToDataLayer('add', addedProduct);
@@ -139,12 +139,12 @@ define([
             return;
         }
 
-        var addedProduct = findAddedProduct(cartData, prevCartData);
+        const addedProduct = findAddedProduct(cartData, prevCartData);
 
         if (addedProduct) {
             pushToDataLayer('add', addedProduct);
         } else {
-            var removedProduct = findRemovedProduct(cartData, prevCartData);
+            const removedProduct = findRemovedProduct(cartData, prevCartData);
             if (removedProduct) {
                 pushToDataLayer('remove', removedProduct);
             }
