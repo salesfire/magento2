@@ -90,34 +90,40 @@ define([
      */
     customerData.get('cart').subscribe(function (cartData) {
 
-        // Handle initialising data for the first time.
+        // On the first run, we need to handle the initialisation.
         if (_.isEmpty(prevCartData)) {
-            // If the first data we receive already contains items, it's the first "add to cart" event.
-            // We must process it immediately by comparing it against a manually created empty cart.
-            if (cartData.items && cartData.items.length > 0) {
-                var emptyCart = { items: [] };
-                var addedProduct = findAddedProduct(cartData, emptyCart);
 
-                if (addedProduct) {
-                    var qty = addedProduct.qty_diff || addedProduct.qty;
-                    window.sfDataLayer = window.sfDataLayer || [];
-                    window.sfDataLayer.push({
-                        'ecommerce': {
-                            'add': {
-                                'sku': addedProduct.product_sku,
-                                'name': addedProduct.product_name,
-                                'price': addedProduct.product_price_value,
-                                'quantity': qty,
-                                'currency': window.sfData.currency || 'GBP',
-                                'link': addedProduct.product_url,
-                                'image_url': addedProduct.product_image ? addedProduct.product_image.src : ''
+            var firstEventFired = sessionStorage.getItem('sf_first_cart_event_fired');
+
+            if (cartData.items && cartData.items.length > 0) {
+
+                // Only process this as the first event if our session flag has NOT been set.
+                if (!firstEventFired) {
+                    var emptyCart = { items: [] };
+                    var addedProduct = findAddedProduct(cartData, emptyCart);
+
+                    if (addedProduct) {
+                        var qty = addedProduct.qty_diff || addedProduct.qty;
+                        window.sfDataLayer = window.sfDataLayer || [];
+                        window.sfDataLayer.push({
+                            'ecommerce': {
+                                'add': {
+                                    'sku': addedProduct.product_sku,
+                                    'name': addedProduct.product_name,
+                                    'price': addedProduct.product_price_value,
+                                    'quantity': qty,
+                                    'currency': window.sfData.currency || 'GBP',
+                                    'link': addedProduct.product_url,
+                                    'image_url': addedProduct.product_image ? addedProduct.product_image.src : ''
+                                }
                             }
-                        }
-                    });
+                        });
+                        // Set the flag in storage to prevent this from firing again on subsequent page loads.
+                        sessionStorage.setItem('sf_first_cart_event_fired', 'true');
+                    }
                 }
             }
-            // After processing the first event (or if the initial cart was empty),
-            // store the state for the next comparison and stop here for this run.
+
             prevCartData = $.extend(true, {}, cartData);
             return;
         }
@@ -165,5 +171,10 @@ define([
 
         // After processing, store a deep copy of the new cart state for the next comparison.
         prevCartData = $.extend(true, {}, cartData);
+
+        // If the cart is now empty, reset the session flag so the next "first add" can be tracked.
+        if (cartData.items && cartData.items.length === 0) {
+            sessionStorage.removeItem('sf_first_cart_event_fired');
+        }
     });
 });
