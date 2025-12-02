@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.11
+Released on 2025-12-02
+Released notes:
+
+- Added basket tracking functionality
+
 ### Salesfire v1.5.10
 Released on 2025-11-18
 Released notes:
