@@ -95,7 +95,7 @@ define([
         };
 
         eventData.ecommerce[eventType] = {
-            'sku': product.product_sku,
+            'sku': product.product_id,
             'name': product.product_name,
             'price': product.product_price_value,
             'quantity': qty,
