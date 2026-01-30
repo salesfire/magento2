@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.12
+Released on 2025-12-02
+Released notes:
+
+- Fix feed not including categories in single store mode
+
 ### Salesfire v1.5.11
 Released on 2025-12-02
 Released notes:
