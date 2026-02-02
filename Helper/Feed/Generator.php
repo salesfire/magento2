@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.5.11
+ * @version    1.5.12
  */
 class Generator
 {
@@ -490,7 +490,13 @@ class Generator
 
     public function getCategories($storeId)
     {
-        $rootCategoryId = $this->_storeManager->getStore($storeId)->getRootCategoryId();
+        $store = $storeId !== null
+            ? $this->_storeManager->getStore($storeId)
+            : $this->_storeManager->getDefaultStoreView();
+
+        $storeId = (int) $store->getId();
+        $rootCategoryId = (int) $store->getRootCategoryId();
+
         $categories = $this->_categoryCollectionFactory->create()
             ->setStoreId($storeId)
             ->addFieldToFilter('is_active', 1)
