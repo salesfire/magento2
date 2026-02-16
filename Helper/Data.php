@@ -9,7 +9,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.5.12
+ * @version    1.5.13
  */
 class Data extends AbstractHelper
 {

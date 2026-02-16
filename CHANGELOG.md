@@ -4,7 +4,7 @@
 Released on 2026-02-17
 Released notes:
 
-- Fix PHP 8.2 compatibility issues, defined properties in the Generator class to ensure proper initialisation and compatibility with newer PHP versions.
+- Fix PHP 8.2 compatibility issues.
 
 ### Salesfire v1.5.12
 Released on 2025-12-02
