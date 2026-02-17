@@ -15,13 +15,14 @@ use Salesfire\Salesfire\Helper\Feed\Generator;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.3.3
+ * @version    1.5.13
  */
 class Generate extends \Magento\Backend\App\Action
 {
-
     protected $resultPageFactory;
     protected $jsonHelper;
+    protected $logger;
+    protected $feedGenerator;
 
     /**
      * Constructor

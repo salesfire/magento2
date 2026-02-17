@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.13
+Released on 2026-02-17
+Released notes:
+
+- Fix PHP 8.2 compatibility issues.
+
 ### Salesfire v1.5.12
 Released on 2025-12-02
 Released notes:
