@@ -13,21 +13,23 @@ use LimitIterator;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.4.0
+ * @version    1.5.14
  */
-class Logger extends \Monolog\Logger
+class Logger
 {
+    protected $logger;
+
     const MAX_SIZE =  1024 * 1024 * 50; // 50 megabytes
 
     public function __construct($name = 'salesfire', array $handlers = [], array $processors = [])
     {
-        parent::__construct($name, $handlers, $processors);
+        $this->logger = new \Monolog\Logger($name, $handlers, $processors);
     }
 
     protected function getPath()
     {
         /** @var \App\Logger\Handler $handlers */
-        $handlers = $this->getHandlers();
+        $handlers = $this->logger->getHandlers();
 
         if (! is_array($handlers) || count($handlers) === 0) {
             return null;
