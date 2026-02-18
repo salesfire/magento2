@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.5.12
+ * @version    1.5.14
  */
 class Generator
 {
@@ -110,7 +110,7 @@ class Generator
 
     public function escapeString($text)
     {
-        return html_entity_decode(trim($text));
+        return html_entity_decode(trim($text ?? ''));
     }
 
     public function execute()

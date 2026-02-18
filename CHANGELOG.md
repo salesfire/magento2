@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.14
+Released on 2026-02-18
+Released notes:
+
+- Fix PHP compatibility issues.
+
 ### Salesfire v1.5.13
 Released on 2026-02-17
 Released notes:
