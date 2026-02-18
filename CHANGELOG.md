@@ -4,7 +4,7 @@
 Released on 2026-02-18
 Released notes:
 
-- Fix feed generator string escape issues.
+- Fix PHP compatibility issues.
 
 ### Salesfire v1.5.13
 Released on 2026-02-17
