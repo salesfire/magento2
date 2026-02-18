@@ -35,6 +35,8 @@ class FeedUrl extends Field
      */
     protected $_storeManager;
 
+    protected $_helperData;
+
     /**
      * @param Context $context
      * @param StoreManagerInterface $storeManager

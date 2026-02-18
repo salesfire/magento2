@@ -17,7 +17,7 @@ use \Salesfire\Salesfire\Helper\Logger\Logger;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.4.15
+ * @version    1.5.14
  */
 class Logs extends Field
 {
@@ -40,6 +40,8 @@ class Logs extends Field
      * @var Logger
      */
     protected $_logger;
+
+    protected $_helperData;
 
     /**
      * @param Context $context

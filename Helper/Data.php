@@ -39,7 +39,7 @@ class Data extends AbstractHelper
         $this->storeManager = $storeManager;
         $this->productMetadata = $productMetadata;
 
-        return parent::__construct($context);
+        parent::__construct($context);
     }
 
     /**
