@@ -13,7 +13,7 @@ use LimitIterator;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.5.14
+ * @version    1.5.15
  */
 class Logger
 {
@@ -91,5 +91,15 @@ class Logger
         } catch (\Exception $e) {
             return [];
         }
+    }
+
+    public function info($message, array $context = [])
+    {
+        $this->logger->info($message, $context);
+    }
+
+    public function error($message, array $context = [])
+    {
+        $this->logger->error($message, $context);
     }
 }

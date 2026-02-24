@@ -2,7 +2,7 @@
     "name": "salesfire/magento2",
     "description": "Salesfire Magento2",
     "type": "magento2-module",
-    "version": "1.5.14",
+    "version": "1.5.15",
     "license": [
         "OSL-3.0"
     ],
