@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.17
+Released on 2026-02-24
+Released notes:
+
+- Add Breeze theme compatibility for JS modules (cart-tracking.js and sfgetid.js).
+
 ### Salesfire v1.5.16
 Released on 2026-02-24
 Released notes:
