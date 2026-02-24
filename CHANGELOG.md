@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.16
+Released on 2026-02-24
+Released notes:
+
+- Update cart tracking to use the original image instead of the thumbnail.
+
 ### Salesfire v1.5.15
 Released on 2026-02-24
 Released notes:
