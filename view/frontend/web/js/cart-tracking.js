@@ -101,7 +101,7 @@ define([
             'quantity': qty,
             'currency': window.sfData.currency || 'GBP',
             'link': product.product_url,
-            'image_url': product.product_image
+            'image_url': product.product_image && product.product_image.src
                 ? product.product_image.src.replace(
                     /\/media\/catalog\/product\/cache\/[^/]+\/+/,
                     '/media/catalog/product/'
