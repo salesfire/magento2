@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.16
+Released on 2026-02-24
+Released notes:
+
+- Remove the cached image path from the cart tracking data. 
+
 ### Salesfire v1.5.15
 Released on 2026-02-24
 Released notes:
