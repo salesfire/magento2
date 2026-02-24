@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.15
+Released on 2026-02-24
+Released notes:
+
+- Fix Logger to log to the correct file.
+
 ### Salesfire v1.5.14
 Released on 2026-02-18
 Released notes:
