@@ -101,7 +101,12 @@ define([
             'quantity': qty,
             'currency': window.sfData.currency || 'GBP',
             'link': product.product_url,
-            'image_url': product.product_image ? product.product_image.src : ''
+            'image_url': product.product_image
+                ? product.product_image.src.replace(
+                    /\/media\/catalog\/product\/cache\/[^/]+\/+/,
+                    '/media/catalog/product/'
+                )
+                : ''
         };
 
         window.sfDataLayer = window.sfDataLayer || [];
