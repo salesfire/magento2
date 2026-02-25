@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+  <body>
+    <referenceBlock name="breeze.js">
+      <arguments>
+        <argument name="bundles" xsi:type="array">
+          <item name="dynamic" xsi:type="array">
+            <item name="items" xsi:type="array">
+
+              <!-- Cart Tracking -->
+              <item name="Salesfire_Salesfire/js/cart-tracking" xsi:type="array">
+                <item name="path" xsi:type="string">Salesfire_Salesfire/js/cart-tracking</item>
+                <item name="export" xsi:type="array">
+                  <item name="sf-cart-tracking-alias" xsi:type="string">sfcarttracking</item>
+                </item>
+                <item name="load" xsi:type="array">
+                  <item name="onRequire" xsi:type="boolean">true</item>
+                </item>
+              </item>
+
+              <!-- SfGetId -->
+              <item name="Salesfire_Salesfire/js/sfgetid" xsi:type="array">
+                <item name="path" xsi:type="string">Salesfire_Salesfire/js/sfgetid</item>
+                <item name="export" xsi:type="array">
+                  <item name="sf-getid-alias" xsi:type="string">sfgetid</item>
+                </item>
+                <item name="load" xsi:type="array">
+                  <item name="onRequire" xsi:type="boolean">true</item>
+                </item>
+              </item>
+
+            </item>
+          </item>
+        </argument>
+      </arguments>
+    </referenceBlock>
+  </body>
+</page>
