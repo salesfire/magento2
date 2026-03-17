@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.18
+Released on 2026-03-16
+Released notes:
+
+- Fix product feed to respect Magento visibility settings. Products with visibility set to "Catalog" only are now excluded from the feed.
+
 ### Salesfire v1.5.17
 Released on 2026-02-24
 Released notes:

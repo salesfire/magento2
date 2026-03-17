@@ -528,7 +528,7 @@ class Generator
             ->create()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('status', 1)
-            ->addAttributeToFilter('visibility', ['neq' => 1])
+            ->addAttributeToFilter('visibility', ['in' => [3, 4]])
             ->setStoreId($storeId)
             ->addStoreFilter($storeId)
             ->addMinimalPrice()
