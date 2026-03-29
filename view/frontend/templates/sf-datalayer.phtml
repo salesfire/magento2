@@ -1,0 +1,30 @@
+<?php
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Salesfire\Salesfire\ViewModel\DataLayer;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var HyvaCsp $hyvaCsp */
+/** @var ViewModelRegistry $viewModels */
+/** @var DataLayer $dataLayer */
+$dataLayer = $viewModels->require(DataLayer::class);
+$data = $dataLayer->getData();
+
+if (!$data) {
+    return;
+}
+?>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        sfDataLayer = window.sfDataLayer || [];
+
+        <?php /** @link https://developer.adobe.com/commerce/php/development/security/cross-site-scripting/#phtml-templates */ ?>
+        sfDataLayer.push(<?= /** @noEscape */ $data; ?>);
+    });
+</script>
+<?php isset($hyvaCsp) && $hyvaCsp->registerInlineScript(); ?>
