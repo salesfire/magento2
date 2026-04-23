@@ -6,7 +6,6 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\ObjectManagerInterface;
 use \Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
-use Zend_Log_Writer_Stream;
 
 /**
  * Salesfire Script Block
@@ -111,7 +110,6 @@ class Script extends Template
         $script .= "    sfgetid();\n";
         $script .= "});\n";
         $script .= "</script>\n";
-
         return $script;
     }
 
