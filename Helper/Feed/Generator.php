@@ -349,6 +349,9 @@ class Generator
                                                 }
 
                                                 $attribute_text = $this->getAttributeValue($storeId, $childProduct, $attribute);
+                                                if (! $attribute_text) {
+                                                    $attribute_text = $this->getAttributeValue($storeId, $product, $attribute);
+                                                }
                                                 if ($attribute_text) {
                                                     $attributes[$attribute] = $attribute_text;
                                                 }
