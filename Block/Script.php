@@ -110,6 +110,7 @@ class Script extends Template
         $script .= "    sfgetid();\n";
         $script .= "});\n";
         $script .= "</script>\n";
+
         return $script;
     }
 
