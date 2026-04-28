@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.19
+Released on 2026-04-27
+Released notes:
+
+- Fall back to parent attribute value for additional attributes on child (simple) products where attribute value isn't available.
+
 ### Salesfire v1.5.18
 Released on 2026-03-16
 Released notes:
