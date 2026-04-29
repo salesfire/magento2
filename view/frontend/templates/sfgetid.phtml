@@ -1,0 +1,42 @@
+<?php
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var HyvaCsp $hyvaCsp */
+?>
+<script>
+    window.addEventListener('DOMContentLoaded', async () => {
+        let sfCuid = localStorage.getItem('sf_cuid') || null;
+
+        if (!sfCuid) {
+            sfCuid = await fetch(
+                `${BASE_URL}salesfire/ajax/sfgetid`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }).then(async response => await response.json())
+                .catch(error => {
+                    console.error('Error: ' + error);
+                    return null;
+                });
+        }
+
+        if (sfCuid) {
+            localStorage.setItem('sf_cuid', sfCuid);
+            window.sfDataLayer = window.sfDataLayer || [];
+            window.sfDataLayer.push({
+                session: {
+                    id: sfCuid,
+                },
+            });
+        }
+    });
+</script>
+<?php isset($hyvaCsp) && $hyvaCsp->registerInlineScript(); ?>
