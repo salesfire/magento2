@@ -106,7 +106,7 @@ class Script extends Template
         }
 
         $script .= ">\n";
-        $script .= "if (typeof require !== 'undefined') {\n";
+        $script .= "if (typeof require === 'function') {\n";
         $script .= "    require(['sfgetid'], function(sfgetid) {\n";
         $script .= "        sfgetid();\n";
         $script .= "    });\n";
@@ -129,7 +129,7 @@ class Script extends Template
         $script .= ">\n";
         $script .= "window.sfData = window.sfData || {};\n";
         $script .= "window.sfData.currency = '{$currencyCode}';\n";
-        $script .= "if (typeof require !== 'undefined') {\n";
+        $script .= "if (typeof require === 'function') {\n";
         $script .= "    require(['sfcarttracking']);\n";
         $script .= "}\n";
         $script .= "</script>\n";
