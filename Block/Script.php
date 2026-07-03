@@ -12,7 +12,7 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.4.11
+ * @version    1.5.20
  */
 class Script extends Template
 {
@@ -106,9 +106,11 @@ class Script extends Template
         }
 
         $script .= ">\n";
-        $script .= "require(['sfgetid'], function(sfgetid) {\n";
-        $script .= "    sfgetid();\n";
-        $script .= "});\n";
+        $script .= "if (typeof require !== 'undefined') {\n";
+        $script .= "    require(['sfgetid'], function(sfgetid) {\n";
+        $script .= "        sfgetid();\n";
+        $script .= "    });\n";
+        $script .= "}\n";
         $script .= "</script>\n";
 
         return $script;
@@ -127,7 +129,9 @@ class Script extends Template
         $script .= ">\n";
         $script .= "window.sfData = window.sfData || {};\n";
         $script .= "window.sfData.currency = '{$currencyCode}';\n";
-        $script .= "require(['sfcarttracking']);\n";
+        $script .= "if (typeof require !== 'undefined') {\n";
+        $script .= "    require(['sfcarttracking']);\n";
+        $script .= "}\n";
         $script .= "</script>\n";
 
         return $script;
