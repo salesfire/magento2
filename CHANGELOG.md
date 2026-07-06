@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.20
+Released on 2026-07-06
+Released notes:
+
+- Prevent JavaScript errors on Hyvä themes.
+
 ### Salesfire v1.5.19
 Released on 2026-04-27
 Released notes:
