@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.21
+Released on 2026-08-05
+Released notes:
+
+- Fixed Salesfire admin settings.
+
 ### Salesfire v1.5.20
 Released on 2026-07-06
 Released notes:
