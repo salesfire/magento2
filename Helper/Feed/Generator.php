@@ -388,7 +388,7 @@ class Generator
 
                                         $image = $this->getProductImage($siteId, $mediaUrl, $product, $childProduct);
                                         if (! empty($image)) {
-                                            $text[] = ['<image>' . $image  . '</image>', 5];
+                                            $text[] = ['<image>' . htmlspecialchars($image, ENT_XML1, 'UTF-8') . '</image>', 5];
                                         }
 
                                         $text[] = ['</variant>', 4];
@@ -439,7 +439,7 @@ class Generator
 
                                 $image = $this->getProductImage($siteId, $mediaUrl, $product, $product);
                                 if (! empty($image)) {
-                                    $text[] = ['<image>' . $image  . '</image>', 5];
+                                    $text[] = ['<image>' . htmlspecialchars($image, ENT_XML1, 'UTF-8') . '</image>', 5];
                                 }
 
                                 $text[] = ['</variant>', 4];
