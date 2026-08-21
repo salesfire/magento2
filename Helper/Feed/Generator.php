@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.5.20
+ * @version    1.5.22
  */
 class Generator
 {
@@ -271,7 +271,7 @@ class Generator
 
                             $image = $this->getProductImage($siteId, $mediaUrl, $product, $product);
                             if (! empty($image)) {
-                                $text[] = ['<image>' . $image  . '</image>', 3];
+                                $text[] = ['<image>' . htmlspecialchars($image, ENT_XML1, 'UTF-8') . '</image>', 3];
                             }
 
                             if (! empty($gender_code)) {
