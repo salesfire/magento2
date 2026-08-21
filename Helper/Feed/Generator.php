@@ -271,7 +271,7 @@ class Generator
 
                             $image = $this->getProductImage($siteId, $mediaUrl, $product, $product);
                             if (! empty($image)) {
-                                $text[] = ['<image>' . htmlspecialchars($image, ENT_XML1, 'UTF-8') . '</image>', 3];
+                                $text[] = ['<image>' . $this->escapeXmlString($image) . '</image>', 3];
                             }
 
                             if (! empty($gender_code)) {
@@ -388,7 +388,7 @@ class Generator
 
                                         $image = $this->getProductImage($siteId, $mediaUrl, $product, $childProduct);
                                         if (! empty($image)) {
-                                            $text[] = ['<image>' . htmlspecialchars($image, ENT_XML1, 'UTF-8') . '</image>', 5];
+                                            $text[] = ['<image>' . $this->escapeXmlString($image) . '</image>', 5];
                                         }
 
                                         $text[] = ['</variant>', 4];
@@ -439,7 +439,7 @@ class Generator
 
                                 $image = $this->getProductImage($siteId, $mediaUrl, $product, $product);
                                 if (! empty($image)) {
-                                    $text[] = ['<image>' . htmlspecialchars($image, ENT_XML1, 'UTF-8') . '</image>', 5];
+                                    $text[] = ['<image>' . $this->escapeXmlString($image) . '</image>', 5];
                                 }
 
                                 $text[] = ['</variant>', 4];
@@ -786,5 +786,10 @@ class Generator
             $route_path,
             $route_params
         );
+    }
+
+    protected function escapeXmlString($value)
+    {
+        return htmlspecialchars($value, ENT_XML1, 'UTF-8');
     }
 }
