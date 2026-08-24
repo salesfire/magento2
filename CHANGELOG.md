@@ -1,5 +1,11 @@
 # Changelog
 
+### Salesfire v1.5.22
+Released on 2026-08-21
+Released notes:
+
+- Fixed image URL feed issue
+
 ### Salesfire v1.5.21
 Released on 2026-08-05
 Released notes:
