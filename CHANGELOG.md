@@ -1,5 +1,12 @@
 # Changelog
 
+### Salesfire v1.6.0
+Released on 2026-11-20
+Released notes:
+
+- Fixed the product feed exporting every product on page 1 and again on later pages, which doubled feed size and run time.
+- Product feed pages are now written to disk in one write instead of one write per line, so generation is much faster on shared storage.
+
 ### Salesfire v1.5.22
 Released on 2026-08-21
 Released notes:
