@@ -7,7 +7,7 @@ namespace Salesfire\Salesfire\Helper\Feed;
  *
  * @category   Salesfire
  * @package    Salesfire_Salesfire
- * @version    1.5.22
+ * @version    1.6.0
  */
 class Generator
 {
@@ -27,6 +27,8 @@ class Generator
     private $_logger;
 
     private $mediaPath;
+
+    private $lineBuffer = [];
 
     private $urlFinder;
 
@@ -98,7 +100,18 @@ class Generator
     {
         $regex = '/[^\x09\x0A\x0D\x20-\xD7FF\xE000-\xFFFD\x10000-x10FFFF]/';
 
-        $this->_file->filePutContents($this->getMediaPath() . $siteId . '.temp.xml', str_repeat("\t", $tab) . preg_replace($regex, '', $text) . "\n", FILE_APPEND);
+        $this->lineBuffer[$siteId][] = str_repeat("\t", $tab) . preg_replace($regex, '', $text) . "\n";
+    }
+
+    // Writes the buffered lines with one append instead of one append per line
+    public function flushLines($siteId)
+    {
+        if (empty($this->lineBuffer[$siteId])) {
+            return;
+        }
+
+        $this->_file->filePutContents($this->getMediaPath() . $siteId . '.temp.xml', implode('', $this->lineBuffer[$siteId]), FILE_APPEND);
+        unset($this->lineBuffer[$siteId]);
     }
 
     public function printLines($siteId, $text)
@@ -175,6 +188,8 @@ class Generator
                 $this->_file->deleteFile($this->getMediaPath() . $siteId . '.temp.xml');
             }
 
+            unset($this->lineBuffer[$siteId]);
+
             $baseUrl = $this->_storeManager->getStore($storeId)->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB);
             $this->printLine($siteId, '<?xml version="1.0" encoding="utf-8" ?>', 0);
             $this->printLine($siteId, '<productfeed site="'.$baseUrl.'" generator="salesfire/magento2" date-generated="'.gmdate('c').'" version="' . $this->_helperData->getVersion() . '">', 0);
@@ -245,6 +260,11 @@ class Generator
 
                 for ($current_page = 1; $current_page <= $total_pages; $current_page++) {
                     $products->setCurPage($current_page);
+
+                    // addMediaGalleryData() loads the collection and sets a one-off flag, so call it per page
+                    // here (page size and current page are set) instead of loading every product on page 1.
+                    $products->setFlag('media_gallery_added', false);
+                    $products->addMediaGalleryData();
 
                     foreach ($products as $product) {
                         try {
@@ -457,6 +477,8 @@ class Generator
                         }
                     }
 
+                    $this->flushLines($siteId);
+
                     $products->clear();
                 }
             } catch (\Exception $e) {
@@ -468,6 +490,7 @@ class Generator
             $this->printLine($siteId, '</products>', 1);
 
             $this->printLine($siteId, '</productfeed>', 0);
+            $this->flushLines($siteId);
 
             if ($this->_file->isExists($this->getMediaPath() . $siteId . '.xml')) {
                 $this->_logger->info('- Removing existing export');
@@ -535,7 +558,7 @@ class Generator
             ->setStoreId($storeId)
             ->addStoreFilter($storeId)
             ->addMinimalPrice()
-            ->addMediaGalleryData()
+            ->setOrder('entity_id', \Magento\Framework\Data\Collection::SORT_ORDER_ASC)
             ->setPageSize($chunk_size);
 
         return $collection;
