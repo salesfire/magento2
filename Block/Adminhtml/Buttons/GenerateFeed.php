@@ -48,9 +48,12 @@ class GenerateFeed extends \Magento\Config\Block\System\Config\Form\Field
         );
 
         /** @var \Magento\Backend\Block\Template $block */
-        $block = $this->_layout->createBlock('\Salesfire\Salesfire\Block\Adminhtml\Buttons\GenerateFeed');
-        $block->setTemplate('Salesfire_Salesfire::generate_feed.phtml')
-            ->setChild('button', $button)
+        $block = $this->_layout->createBlock(
+            self::class,
+            '',
+            ['data' => ['template' => 'Salesfire_Salesfire::generate_feed.phtml']]
+        );
+        $block->setChild('button', $button)
             ->setData('select_html', parent::_getElementHtml($element));
 
         return $block->toHtml();

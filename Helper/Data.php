@@ -99,6 +99,7 @@ class Data extends AbstractHelper
             return [$store];
         }
 
+        $stores = [];
         foreach ($this->storeManager->getStores() as $store) {
             $storeId = $store->getId();
             $store = new \stdClass;
